@@ -1,16 +1,19 @@
 import 'package:material_ui/material_ui.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(const SayadGanjApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class SayadGanjApp extends StatelessWidget {
+  const SayadGanjApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(body: Center(child: Text('Hello World!'))),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      builder: (context, child) =>
+          Directionality(textDirection: TextDirection.rtl, child: child!),
+      home: Scaffold(appBar: AppBar(title: Text("SayadGanj"))),
     );
   }
 }
