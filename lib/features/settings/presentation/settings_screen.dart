@@ -13,13 +13,14 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final fontScale = ref.watch(fontScaleProvider);
+    final wordCountAsync = ref.watch(totalWordCountProvider);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
       appBar: AppBar(title: const Text('تنظیمات')),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
         children: [
           Text('ظاهری رنگ ءُ تھیم', style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
@@ -63,11 +64,26 @@ class SettingsScreen extends ConsumerWidget {
                 'نبشتانک ءِ کساس (Font Size)',
                 style: theme.textTheme.labelMedium,
               ),
-              Text(
-                '${(fontScale * 100).round()}%',
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: colorScheme.primary,
-                ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (fontScale != 1.0)
+                    TextButton(
+                      onPressed: () =>
+                          ref.read(fontScaleProvider.notifier).reset(),
+                      style: TextButton.styleFrom(
+                        visualDensity: VisualDensity.compact,
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                      ),
+                      child: const Text('پدا ۱۰۰٪'),
+                    ),
+                  Text(
+                    '${(fontScale * 100).round()}%',
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -150,6 +166,93 @@ class SettingsScreen extends ConsumerWidget {
                   );
                 }
               },
+            ),
+          ),
+          const SizedBox(height: 22),
+          Text('بابت ءِ ایپ', style: theme.textTheme.labelMedium),
+          const SizedBox(height: 10),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: colorScheme.secondary,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          LucideIcons.bookOpenText,
+                          size: 22,
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'سیدگنج — بلوچی لبزبلد',
+                              style: theme.textTheme.titleMedium,
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              'نسخہ ۱.۰.۰ • ۱۰۰٪ آفلاین',
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                color: colorScheme.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  const Divider(),
+                  const SizedBox(height: 14),
+                  Text(
+                    'بلوچی ءَ پہ بلوچی سرجمیں لبزبلد کہ بید ء انٹرنیٹ ءَ کار کنت ءُ لبزانی مانا، اعراب ءُ تشریح ءَ پیش داریت۔',
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: colorScheme.secondary,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          LucideIcons.database,
+                          size: 16,
+                          color: colorScheme.primary,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          wordCountAsync.when(
+                            data: (count) => 'کل لبز: $count',
+                            loading: () => 'کل لبز: ...',
+                            error: (_, __) => 'کل لبز: —',
+                          ),
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            color: colorScheme.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

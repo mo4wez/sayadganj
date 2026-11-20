@@ -1,12 +1,21 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/navigation/main_shell_screen.dart';
+import 'core/services/preferences_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_mode_provider.dart';
 
-void main() {
-  runApp(const ProviderScope(child: SayadGanjApp()));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  runApp(
+    ProviderScope(
+      overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      child: const SayadGanjApp(),
+    ),
+  );
 }
 
 class SayadGanjApp extends ConsumerWidget {

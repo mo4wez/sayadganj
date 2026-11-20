@@ -120,4 +120,10 @@ class DictionaryDbService {
     if (rows.isEmpty) return null;
     return WordEntry.fromMap(rows.first);
   }
+
+  Future<int> getTotalWordCount() async {
+    final db = await database;
+    final result = await db.rawQuery('SELECT COUNT(*) AS total FROM sayadganj');
+    return (result.first['total'] as num?)?.toInt() ?? 0;
+  }
 }

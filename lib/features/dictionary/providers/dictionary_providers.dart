@@ -70,3 +70,7 @@ final searchHistoryControllerProvider =
 final wordOfTheDayProvider = FutureProvider<WordEntry?>((ref) async {
   return DictionaryDbService.instance.getWordOfTheDay();
 });
+
+final totalWordCountProvider = FutureProvider<int>((ref) async {
+  return DictionaryDbService.instance.getTotalWordCount();
+});
