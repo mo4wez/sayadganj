@@ -29,3 +29,10 @@ final searchResultsProvider = FutureProvider<List<WordEntry>>((ref) async {
 
   return DictionaryDbService.instance.searchWords(query);
 });
+
+final wordDetailProvider = FutureProvider.family<WordEntry?, int>((
+  ref,
+  wordId,
+) async {
+  return DictionaryDbService.instance.getWordById(wordId);
+});

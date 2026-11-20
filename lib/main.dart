@@ -1,9 +1,9 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/navigation/main_shell_screen.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_mode_provider.dart';
-import 'features/dictionary/presentation/dictionary_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: SayadGanjApp()));
@@ -24,7 +24,7 @@ class SayadGanjApp extends ConsumerWidget {
       themeMode: themeMode,
       builder: (context, child) =>
           Directionality(textDirection: TextDirection.rtl, child: child!),
-      home: const DictionaryScreen(),
+      home: const MainShellScreen(),
     );
   }
 }
