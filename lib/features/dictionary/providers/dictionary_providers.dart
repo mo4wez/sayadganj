@@ -66,3 +66,7 @@ final searchHistoryControllerProvider =
     AsyncNotifierProvider<SearchHistoryController, void>(
       SearchHistoryController.new,
     );
+
+final wordOfTheDayProvider = FutureProvider<WordEntry?>((ref) async {
+  return DictionaryDbService.instance.getWordOfTheDay();
+});

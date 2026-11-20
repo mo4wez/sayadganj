@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../bookmarks/providers/bookmarks_provider.dart';
 import '../../settings/providers/settings_provider.dart';
@@ -72,6 +73,21 @@ class WordDetailScreen extends ConsumerWidget {
                               content: Text('لبز ءُ مانا نقل بوت انت'),
                               behavior: SnackBarBehavior.floating,
                               duration: Duration(seconds: 2),
+                            ),
+                          );
+                        },
+                      ),
+                      IconButton(
+                        tooltip: 'بهر کنگ',
+                        icon: const Icon(LucideIcons.share2, size: 20),
+                        onPressed: () {
+                          final headword = word.fullWordWithSymbols.isNotEmpty
+                              ? word.fullWordWithSymbols
+                              : word.fullWord;
+                          SharePlus.instance.share(
+                            ShareParams(
+                              text:
+                                  '$headword\n\n${word.definition}\n\n— سیدگنج بلوچی لبزبلد',
                             ),
                           );
                         },

@@ -91,4 +91,33 @@ class DictionaryDbService {
 
     return WordEntry.fromMap(rows.first);
   }
+
+  Future<WordEntry?> getWordOfTheDay() async {
+    final db = await database;
+
+    final countResult = await db.rawQuery(
+      'SELECT COUNT(*) AS total FROM sayadganj',
+    );
+    final total = (countResult.first['total'] as num?)?.toInt() ?? 0;
+    if (total == 0) return null;
+
+    // Deterministic daily index based on year, month, and day
+    final now = DateTime.now();
+    final daySeed = now.year * 10000 + now.month * 100 + now.day;
+    final offset = daySeed % total;
+
+    final rows = await db.query('sayadganj', limit: 1, offset: offset);
+
+    if (rows.isEmpty) return null;
+    return WordEntry.fromMap(rows.first);
+  }
+
+  Future<WordEntry?> getRandomWord() async {
+    final db = await database;
+
+    final rows = await db.query('sayadganj', orderBy: 'RANDOM()', limit: 1);
+
+    if (rows.isEmpty) return null;
+    return WordEntry.fromMap(rows.first);
+  }
 }

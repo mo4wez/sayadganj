@@ -7,6 +7,7 @@ import '../../../core/theme/theme_mode_provider.dart';
 import '../providers/dictionary_providers.dart';
 import '../widgets/word_card.dart';
 import 'word_detail_screen.dart';
+import 'widgets/word_of_the_day_card.dart';
 
 class DictionaryScreen extends ConsumerStatefulWidget {
   const DictionaryScreen({super.key});
@@ -198,59 +199,62 @@ class _IdleDictionaryView extends StatelessWidget {
       orElse: () => const <String>[],
     );
 
-    if (recents.isEmpty) {
-      return const _EmptyPromptState(
-        icon: LucideIcons.sparkles,
-        title: 'بلوچی لبزبلد',
-        subtitle: 'پہ شوهاز کنگ ءَ یک لبزے بُرز ءَ نبیس',
-      );
-    }
-
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  LucideIcons.history,
-                  size: 16,
-                  color: colorScheme.onSurfaceVariant,
+        const WordOfTheDayCard(),
+        if (recents.isNotEmpty) ...[
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    LucideIcons.history,
+                    size: 16,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 6),
+                  Text('تازگیں شوهاز', style: theme.textTheme.labelMedium),
+                ],
+              ),
+              TextButton(
+                onPressed: onClearAll,
+                style: TextButton.styleFrom(
+                  visualDensity: VisualDensity.compact,
+                  foregroundColor: colorScheme.primary,
                 ),
-                const SizedBox(width: 6),
-                Text('تازگیں شوهاز', style: theme.textTheme.labelMedium),
-              ],
-            ),
-            TextButton(
-              onPressed: onClearAll,
-              style: TextButton.styleFrom(
-                visualDensity: VisualDensity.compact,
-                foregroundColor: colorScheme.primary,
+                child: const Text('پاک کنگ'),
               ),
-              child: const Text('پاک کنگ'),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: recents.map((term) {
-            return InputChip(
-              label: Text(term),
-              onPressed: () => onSelectTerm(term),
-              onDeleted: () => onRemoveTerm(term),
-              deleteIcon: const Icon(LucideIcons.x, size: 14),
-              backgroundColor: colorScheme.surface,
-              side: BorderSide(color: colorScheme.outline),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(100),
-              ),
-            );
-          }).toList(),
-        ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: recents.map((term) {
+              return InputChip(
+                label: Text(term),
+                onPressed: () => onSelectTerm(term),
+                onDeleted: () => onRemoveTerm(term),
+                deleteIcon: const Icon(LucideIcons.x, size: 14),
+                backgroundColor: colorScheme.surface,
+                side: BorderSide(color: colorScheme.outline),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100),
+                ),
+              );
+            }).toList(),
+          ),
+        ] else ...[
+          const SizedBox(height: 36),
+          const _EmptyPromptState(
+            icon: LucideIcons.search,
+            title: 'بلوچی لبزبلد',
+            subtitle: 'پہ شوهاز کنگ ءَ یک لبزے بُرز ءَ نبیس',
+          ),
+        ],
       ],
     );
   }
