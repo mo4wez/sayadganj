@@ -3,6 +3,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../bookmarks/providers/bookmarks_provider.dart';
+import '../../settings/providers/settings_provider.dart';
 import '../providers/dictionary_providers.dart';
 
 class WordDetailScreen extends ConsumerWidget {
@@ -13,6 +15,8 @@ class WordDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final wordAsync = ref.watch(wordDetailProvider(wordId));
+    final isSaved = ref.watch(isBookmarkedProvider(wordId));
+    final fontScale = ref.watch(fontScaleProvider);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -23,23 +27,56 @@ class WordDetailScreen extends ConsumerWidget {
           wordAsync.maybeWhen(
             data: (word) => word == null
                 ? const SizedBox.shrink()
-                : IconButton(
-                    tooltip: 'نقل کنگ',
-                    icon: const Icon(LucideIcons.copy, size: 20),
-                    onPressed: () {
-                      Clipboard.setData(
-                        ClipboardData(
-                          text:
-                              '${word.fullWordWithSymbols}\n${word.definition}',
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        tooltip: isSaved ? 'نشان دور کنگ' : 'نشان کنگ',
+                        icon: Icon(
+                          isSaved
+                              ? LucideIcons.bookmarkCheck
+                              : LucideIcons.bookmark,
+                          size: 21,
+                          color: isSaved ? colorScheme.primary : null,
                         ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('لبز ءُ مانا نقل بوت انت'),
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
-                    },
+                        onPressed: () async {
+                          final added = await ref
+                              .read(bookmarkControllerProvider.notifier)
+                              .toggle(word);
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                added
+                                    ? 'لبز نشان کنگ بوت'
+                                    : 'لبز چہ نشاناں دور کنگ بوت',
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                        },
+                      ),
+                      IconButton(
+                        tooltip: 'نقل کنگ',
+                        icon: const Icon(LucideIcons.copy, size: 20),
+                        onPressed: () {
+                          Clipboard.setData(
+                            ClipboardData(
+                              text:
+                                  '${word.fullWordWithSymbols}\n${word.definition}',
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('لبز ءُ مانا نقل بوت انت'),
+                              behavior: SnackBarBehavior.floating,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
             orElse: () => const SizedBox.shrink(),
           ),
@@ -116,7 +153,9 @@ class WordDetailScreen extends ConsumerWidget {
                         const SizedBox(height: 14),
                         SelectableText(
                           word.definition,
-                          style: theme.textTheme.bodyLarge,
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            fontSize: 16 * fontScale,
+                          ),
                         ),
                       ],
                     ),

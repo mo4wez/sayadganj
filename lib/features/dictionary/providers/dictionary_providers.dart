@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/dictionary_db_service.dart';
+import '../../../core/database/user_db_service.dart';
 import '../domain/word_entry.dart';
 
 class SearchQueryNotifier extends Notifier<String> {
@@ -36,3 +37,32 @@ final wordDetailProvider = FutureProvider.family<WordEntry?, int>((
 ) async {
   return DictionaryDbService.instance.getWordById(wordId);
 });
+
+final recentSearchesProvider = FutureProvider<List<String>>((ref) async {
+  return UserDbService.instance.getRecentSearches();
+});
+
+class SearchHistoryController extends AsyncNotifier<void> {
+  @override
+  Future<void> build() async {}
+
+  Future<void> save(String query) async {
+    await UserDbService.instance.addSearchQuery(query);
+    ref.invalidate(recentSearchesProvider);
+  }
+
+  Future<void> remove(String query) async {
+    await UserDbService.instance.removeSearchQuery(query);
+    ref.invalidate(recentSearchesProvider);
+  }
+
+  Future<void> clearAll() async {
+    await UserDbService.instance.clearSearchHistory();
+    ref.invalidate(recentSearchesProvider);
+  }
+}
+
+final searchHistoryControllerProvider =
+    AsyncNotifierProvider<SearchHistoryController, void>(
+      SearchHistoryController.new,
+    );
