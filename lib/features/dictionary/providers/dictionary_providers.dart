@@ -74,3 +74,46 @@ final wordOfTheDayProvider = FutureProvider<WordEntry?>((ref) async {
 final totalWordCountProvider = FutureProvider<int>((ref) async {
   return DictionaryDbService.instance.getTotalWordCount();
 });
+
+class SelectedLetterNotifier extends Notifier<String?> {
+  @override
+  String? build() => null;
+
+  void select(String? letter) {
+    if (state == letter) {
+      state = null; // Tapping the active letter toggles it off
+      return;
+    }
+    state = letter;
+  }
+
+  void clear() {
+    if (state == null) return;
+    state = null;
+  }
+}
+
+final selectedLetterProvider =
+    NotifierProvider<SelectedLetterNotifier, String?>(
+      SelectedLetterNotifier.new,
+    );
+
+final letterBucketsProvider = FutureProvider<List<LetterBucket>>((ref) async {
+  return DictionaryDbService.instance.getLetterBuckets();
+});
+
+final letterWordsProvider = FutureProvider<List<WordEntry>>((ref) async {
+  final letter = ref.watch(selectedLetterProvider);
+  if (letter == null || letter.isEmpty) return const [];
+
+  return DictionaryDbService.instance.getWordsByLetter(letter);
+});
+
+final letterSampleWordsProvider =
+    FutureProvider.family<List<WordEntry>, String>((ref, letter) async {
+      if (letter.isEmpty) return const [];
+      return DictionaryDbService.instance.getSampleWordsByLetter(
+        letter,
+        limit: 3,
+      );
+    });

@@ -3,7 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../dictionary/widgets/word_card.dart';
+import '../../dictionary/presentation/widgets/word_card.dart';
 import '../../dictionary/presentation/word_detail_screen.dart';
 import '../providers/bookmarks_provider.dart';
 

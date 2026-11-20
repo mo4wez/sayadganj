@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../domain/word_entry.dart';
+import '../../domain/word_entry.dart';
 
 class WordCard extends StatelessWidget {
   final WordEntry word;
