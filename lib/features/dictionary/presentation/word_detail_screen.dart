@@ -9,8 +9,8 @@ import '../../settings/providers/settings_provider.dart';
 import '../providers/dictionary_providers.dart';
 import './widgets/cross_reference_section.dart';
 import 'widgets/notations/entry_notations_section.dart';
-import 'widgets/notations/notation_rich_text.dart';
 import 'widgets/activity/record_word_view_tracker.dart';
+import 'widgets/definition/structured_definition_card.dart';
 
 class WordDetailScreen extends ConsumerWidget {
   final int wordId;
@@ -160,28 +160,10 @@ class WordDetailScreen extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'مانا ءُ تشریح',
-                            style: theme.textTheme.labelMedium,
-                          ),
-                          const SizedBox(height: 12),
-                          const Divider(),
-                          const SizedBox(height: 14),
-                          NotationRichText(
-                            text: word.definition,
-                            style: theme.textTheme.bodyLarge?.copyWith(
-                              fontSize: 16 * fontScale,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  StructuredDefinitionCard(
+                    headword: word.fullWord,
+                    definition: word.definition,
+                    fontScale: fontScale,
                   ),
                   CrossReferenceSection(definition: word.definition),
                   EntryNotationsSection(
