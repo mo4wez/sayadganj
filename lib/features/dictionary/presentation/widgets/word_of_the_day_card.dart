@@ -51,7 +51,7 @@ class _WordOfTheDayCardState extends ConsumerState<WordOfTheDayCard> {
               carouselController: _carouselController,
               itemCount: slides.length,
               options: CarouselOptions(
-                height: 204,
+                height: 222,
                 viewportFraction: 1.0,
                 enableInfiniteScroll: slides.length > 1,
                 onPageChanged: (index, _) {

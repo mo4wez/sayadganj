@@ -14,15 +14,36 @@ class FeaturedWordSlide extends StatelessWidget {
     required this.onShuffleLucky,
   });
 
+  String _cleanPreviewDefinition(String headword, String rawDefinition) {
+    final trimmed = rawDefinition.trim();
+    final colonIndex = trimmed.indexOf(':');
+    if (colonIndex > 0 && colonIndex <= 32) {
+      final prefix = trimmed.substring(0, colonIndex).trim();
+      if (prefix == headword.trim()) {
+        return trimmed.substring(colonIndex + 1).trim();
+      }
+    }
+    return trimmed;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
     final word = item.word;
 
     final displayWord = word.fullWordWithSymbols.isNotEmpty
         ? word.fullWordWithSymbols
         : word.fullWord;
+    final previewMeaning = _cleanPreviewDefinition(
+      word.fullWord,
+      word.definition,
+    );
+
+    final gradientStartAlpha = isDark
+        ? (item.isWordOfTheDay ? 0.16 : 0.11)
+        : (item.isWordOfTheDay ? 0.08 : 0.05);
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -40,17 +61,16 @@ class FeaturedWordSlide extends StatelessWidget {
               begin: AlignmentDirectional.topStart,
               end: AlignmentDirectional.bottomEnd,
               colors: [
-                item.isWordOfTheDay
-                    ? colorScheme.primary.withValues(alpha: 0.12)
-                    : colorScheme.secondary.withValues(alpha: 0.85),
+                colorScheme.primary.withValues(alpha: gradientStartAlpha),
                 colorScheme.surface,
               ],
             ),
           ),
           padding: const EdgeInsets.all(16),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Top badge + shuffle action
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -60,9 +80,7 @@ class FeaturedWordSlide extends StatelessWidget {
                       vertical: 5,
                     ),
                     decoration: BoxDecoration(
-                      color: item.isWordOfTheDay
-                          ? colorScheme.secondary
-                          : colorScheme.primary.withValues(alpha: 0.12),
+                      color: colorScheme.secondary,
                       borderRadius: BorderRadius.circular(100),
                     ),
                     child: Row(
@@ -98,25 +116,54 @@ class FeaturedWordSlide extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
+
+              // Headword
               Text(
                 displayWord,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   color: colorScheme.primary,
+                  fontSize: 24,
+                  height: 1.35,
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 8),
+
+              // High-contrast meaning surface box
               Expanded(
-                child: Text(
-                  word.definition,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.bodyMedium,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: colorScheme.surface.withValues(
+                      alpha: isDark ? 0.72 : 0.90,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: colorScheme.outlineVariant,
+                      width: 1,
+                    ),
+                  ),
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(
+                    previewMeaning,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      fontSize: 14,
+                      height: 1.55,
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 8),
+
+              // Bottom CTA
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
