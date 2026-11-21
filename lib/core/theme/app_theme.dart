@@ -19,7 +19,7 @@ class AppTheme {
   static const Color _darkTextPrimary = Color(0xFFF1F3F5);
   static const Color _darkTextSecondary = Color(0xFF949CA8);
 
-  static ThemeData get light => _buildTheme(
+  static ThemeData light({String? fontFamily}) => _buildTheme(
     brightness: Brightness.light,
     primary: _lightPrimary,
     background: _lightBackground,
@@ -27,9 +27,10 @@ class AppTheme {
     border: _lightBorder,
     textPrimary: _lightTextPrimary,
     textSecondary: _lightTextSecondary,
+    fontFamily: fontFamily,
   );
 
-  static ThemeData get dark => _buildTheme(
+  static ThemeData dark({String? fontFamily}) => _buildTheme(
     brightness: Brightness.dark,
     primary: _darkPrimary,
     background: _darkBackground,
@@ -37,6 +38,7 @@ class AppTheme {
     border: _darkBorder,
     textPrimary: _darkTextPrimary,
     textSecondary: _darkTextSecondary,
+    fontFamily: fontFamily,
   );
 
   static ThemeData _buildTheme({
@@ -47,6 +49,7 @@ class AppTheme {
     required Color border,
     required Color textPrimary,
     required Color textSecondary,
+    String? fontFamily,
   }) {
     final isDark = brightness == Brightness.dark;
 
@@ -68,6 +71,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: brightness,
+      fontFamily: fontFamily,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: background,
 

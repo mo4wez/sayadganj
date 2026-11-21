@@ -1,7 +1,9 @@
+import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../../core/theme/font_family_provider.dart';
 import '../../../core/theme/theme_mode_provider.dart';
 import '../../dictionary/providers/dictionary_providers.dart';
 import '../providers/settings_provider.dart';
@@ -12,6 +14,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
+    final selectedFont = ref.watch(fontFamilyProvider);
     final fontScale = ref.watch(fontScaleProvider);
     final wordCountAsync = ref.watch(totalWordCountProvider);
     final theme = Theme.of(context);
@@ -57,6 +60,31 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 22),
+
+          // --- Font Family Selector with Live Specimen Preview ---
+          Text(
+            'خط ءُ نبشتانک ءِ دروشم (Font)',
+            style: theme.textTheme.labelMedium,
+          ),
+          const SizedBox(height: 10),
+          ...AppFont.values.map((font) {
+            final isSelected = selectedFont == font;
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: _FontPreviewCard(
+                font: font,
+                fontScale: fontScale,
+                selected: isSelected,
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  ref.read(fontFamilyProvider.notifier).setFont(font);
+                },
+              ),
+            );
+          }),
+          const SizedBox(height: 12),
+
+          // --- Reading Font Size Slider ---
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -122,6 +150,8 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 22),
+
+          // --- Data & Search History ---
           Text('داتا ءُ تاریخچہ', style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
           Card(
@@ -169,6 +199,8 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 22),
+
+          // --- About App Card ---
           Text('بابت ءِ ایپ', style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
           Card(
@@ -256,6 +288,147 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _FontPreviewCard extends StatelessWidget {
+  final AppFont font;
+  final double fontScale;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _FontPreviewCard({
+    required this.font,
+    required this.fontScale,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: selected ? colorScheme.primary : colorScheme.outline,
+          width: selected ? 1.8 : 1,
+        ),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: selected
+                          ? colorScheme.primary
+                          : colorScheme.secondary,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      LucideIcons.type,
+                      size: 18,
+                      color: selected
+                          ? colorScheme.onPrimary
+                          : colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          font.title,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontSize: 15,
+                            color: selected
+                                ? colorScheme.primary
+                                : colorScheme.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          font.subtitle,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontSize: 12.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(
+                    selected ? LucideIcons.circleCheck : LucideIcons.circle,
+                    size: 20,
+                    color: selected
+                        ? colorScheme.primary
+                        : colorScheme.onSurfaceVariant,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              // Live Balochi Specimen Box rendered in this exact font
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  color: selected
+                      ? colorScheme.secondary.withValues(alpha: 0.65)
+                      : theme.scaffoldBackgroundColor,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: selected
+                        ? colorScheme.primary.withValues(alpha: 0.28)
+                        : colorScheme.outline,
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'سَیّدگَنج — گُل، ڑ، ٹ، ڈ، ژ، ء',
+                      style: TextStyle(
+                        fontFamily: font.fontFamily,
+                        fontSize: 17 * fontScale,
+                        fontWeight: FontWeight.w700,
+                        color: colorScheme.primary,
+                        height: 1.5,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'بلوچی زبان مئے پجّار اِنت؛ هر لبزے وتی جتائیں مانا ءُ دروشمے داریت۔',
+                      style: TextStyle(
+                        fontFamily: font.fontFamily,
+                        fontSize: 14.5 * fontScale,
+                        fontWeight: FontWeight.w400,
+                        color: colorScheme.onSurface,
+                        height: 1.75,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
