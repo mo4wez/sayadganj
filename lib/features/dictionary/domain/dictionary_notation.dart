@@ -88,7 +88,7 @@ class DictionaryNotationRegistry {
     DictionaryNotation(
       num: '۱',
       short: 'اک',
-      long: 'انچوس کہ',
+      long: 'انچوش کہ',
       category: NotationCategory.abbreviation,
     ),
     DictionaryNotation(
