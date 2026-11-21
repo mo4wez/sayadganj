@@ -7,7 +7,7 @@ import '../domain/word_entry.dart';
 import '../providers/dictionary_providers.dart';
 import 'widgets/alphabet_dial_sheet.dart';
 import 'widgets/idle_dictionary_view.dart';
-import 'widgets/search_tools_bar.dart';
+import 'widgets/animated_search_tools.dart';
 import 'widgets/word_card.dart';
 import 'word_detail_screen.dart';
 
@@ -18,14 +18,17 @@ class DictionaryScreen extends ConsumerStatefulWidget {
   ConsumerState<DictionaryScreen> createState() => _DictionaryScreenState();
 }
 
-class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
+class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
+    with WidgetsBindingObserver {
   late final TextEditingController _controller;
   late final FocusNode _searchFocusNode;
   bool _isSearchFocused = false;
+  double _lastBottomInset = 0.0;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _controller = TextEditingController();
     _searchFocusNode = FocusNode()
       ..addListener(() {
@@ -37,9 +40,29 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _controller.dispose();
     _searchFocusNode.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    final bottomInset =
+        WidgetsBinding
+            .instance
+            .platformDispatcher
+            .implicitView
+            ?.viewInsets
+            .bottom ??
+        0.0;
+
+    // Unfocus search field automatically when the soft keyboard is dismissed
+    if (_lastBottomInset > 0 && bottomInset == 0 && _searchFocusNode.hasFocus) {
+      _searchFocusNode.unfocus();
+    }
+    _lastBottomInset = bottomInset;
   }
 
   void _insertSpecialChar(String char) {
@@ -130,55 +153,69 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
-            child: Row(
+          TapRegion(
+            onTapOutside: (_) {
+              if (_searchFocusNode.hasFocus) {
+                _searchFocusNode.unfocus();
+              }
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    focusNode: _searchFocusNode,
-                    textInputAction: TextInputAction.search,
-                    decoration: InputDecoration(
-                      hintText: 'لبزے بہ شوهاز...',
-                      prefixIcon: const Icon(LucideIcons.search, size: 20),
-                      suffixIcon: query.isNotEmpty
-                          ? IconButton(
-                              icon: const Icon(LucideIcons.x, size: 18),
-                              onPressed: () {
-                                _controller.clear();
-                                ref.read(searchQueryProvider.notifier).clear();
-                              },
-                            )
-                          : null,
-                    ),
-                    onChanged: (text) {
-                      if (text.isNotEmpty && hasLetterFilter) {
-                        ref.read(selectedLetterProvider.notifier).clear();
-                      }
-                      ref.read(searchQueryProvider.notifier).update(text);
-                    },
-                    onSubmitted: (text) {
-                      ref
-                          .read(searchHistoryControllerProvider.notifier)
-                          .save(text);
-                    },
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _controller,
+                          focusNode: _searchFocusNode,
+                          textInputAction: TextInputAction.search,
+                          decoration: InputDecoration(
+                            hintText: 'لبزے بہ شوهاز...',
+                            prefixIcon: const Icon(
+                              LucideIcons.search,
+                              size: 20,
+                            ),
+                            suffixIcon: query.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(LucideIcons.x, size: 18),
+                                    onPressed: () {
+                                      _controller.clear();
+                                      ref
+                                          .read(searchQueryProvider.notifier)
+                                          .clear();
+                                    },
+                                  )
+                                : null,
+                          ),
+                          onChanged: (text) {
+                            if (text.isNotEmpty && hasLetterFilter) {
+                              ref.read(selectedLetterProvider.notifier).clear();
+                            }
+                            ref.read(searchQueryProvider.notifier).update(text);
+                          },
+                          onSubmitted: (text) {
+                            ref
+                                .read(searchHistoryControllerProvider.notifier)
+                                .save(text);
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      _AlphabetDialButton(
+                        activeLetter: selectedLetter,
+                        onTap: () => _openAlphabetDial(selectedLetter),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 10),
-                _AlphabetDialButton(
-                  activeLetter: selectedLetter,
-                  onTap: () => _openAlphabetDial(selectedLetter),
+                AnimatedSearchTools(
+                  visible: showSearchTools,
+                  onInsertChar: _insertSpecialChar,
                 ),
               ],
             ),
-          ),
-          AnimatedSize(
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeOutCubic,
-            child: showSearchTools
-                ? SearchToolsBar(onInsertChar: _insertSpecialChar)
-                : const SizedBox.shrink(),
           ),
           Expanded(
             child: hasSearchQuery
@@ -280,6 +317,8 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
     required bool saveQueryOnTap,
     String queryToSave = '',
   }) {
+    final scope = ref.watch(searchScopeProvider);
+
     return asyncWords.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, _) => _EmptyPromptState(
@@ -302,7 +341,6 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
           separatorBuilder: (_, __) => const SizedBox(height: 10),
           itemBuilder: (context, index) {
             final word = words[index];
-            final scope = ref.watch(searchScopeProvider);
             return WordCard(
                   word: word,
                   highlightQuery: saveQueryOnTap ? queryToSave : '',
