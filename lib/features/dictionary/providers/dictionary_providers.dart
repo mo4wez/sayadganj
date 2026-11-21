@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/database/dictionary_db_service.dart';
 import '../../../core/database/user_db_service.dart';
 import '../domain/word_entry.dart';
+import '../domain/search_scope.dart';
 
 class SearchQueryNotifier extends Notifier<String> {
   @override
@@ -22,14 +23,6 @@ class SearchQueryNotifier extends Notifier<String> {
 final searchQueryProvider = NotifierProvider<SearchQueryNotifier, String>(
   SearchQueryNotifier.new,
 );
-
-final searchResultsProvider = FutureProvider<List<WordEntry>>((ref) async {
-  final query = ref.watch(searchQueryProvider);
-
-  if (query.trim().isEmpty) return const [];
-
-  return DictionaryDbService.instance.searchWords(query);
-});
 
 final wordDetailProvider = FutureProvider.family<WordEntry?, int>((
   ref,
@@ -117,3 +110,26 @@ final letterSampleWordsProvider =
         limit: 3,
       );
     });
+
+class SearchScopeNotifier extends Notifier<SearchScope> {
+  @override
+  SearchScope build() => SearchScope.containsHeadword;
+
+  void setScope(SearchScope scope) {
+    if (state == scope) return;
+    state = scope;
+  }
+}
+
+final searchScopeProvider = NotifierProvider<SearchScopeNotifier, SearchScope>(
+  SearchScopeNotifier.new,
+);
+
+final searchResultsProvider = FutureProvider<List<WordEntry>>((ref) async {
+  final query = ref.watch(searchQueryProvider);
+  final scope = ref.watch(searchScopeProvider);
+
+  if (query.trim().isEmpty) return const [];
+
+  return DictionaryDbService.instance.searchWords(query, scope: scope);
+});
