@@ -28,10 +28,15 @@ class WordCard extends StatelessWidget {
         ? word.fullWordWithSymbols
         : word.fullWord;
 
-    final isDefinitionSearch = scope == SearchScope.inDefinitions;
+    final hasQuery = highlightQuery.trim().isNotEmpty;
+    final isDefinitionSearch = hasQuery && scope == SearchScope.inDefinitions;
     final previewDefinition = isDefinitionSearch
         ? QuizQuestion.formatOptionDefinition(word)
         : word.definition;
+
+    final headwordStyle = theme.textTheme.titleMedium?.copyWith(
+      color: colorScheme.primary,
+    );
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -45,27 +50,35 @@ class WordCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    HighlightedText(
-                      text: headword,
-                      query: isDefinitionSearch ? '' : highlightQuery,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: colorScheme.primary,
+                    if (!hasQuery || isDefinitionSearch)
+                      Text(headword, style: headwordStyle)
+                    else
+                      HighlightedText(
+                        text: headword,
+                        query: highlightQuery,
+                        style: headwordStyle,
+                        highlightColor: colorScheme.onPrimary,
+                        highlightBackgroundColor: colorScheme.primary,
                       ),
-                      highlightColor: colorScheme.onPrimary,
-                      highlightBackgroundColor: colorScheme.primary,
-                    ),
                     const SizedBox(height: 6),
-                    HighlightedText(
-                      text: previewDefinition,
-                      query: isDefinitionSearch ? highlightQuery : '',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodyMedium,
-                      highlightColor: colorScheme.primary,
-                      highlightBackgroundColor: colorScheme.primary.withValues(
-                        alpha: 0.16,
+                    if (!isDefinitionSearch)
+                      Text(
+                        previewDefinition,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodyMedium,
+                      )
+                    else
+                      HighlightedText(
+                        text: previewDefinition,
+                        query: highlightQuery,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodyMedium,
+                        highlightColor: colorScheme.primary,
+                        highlightBackgroundColor: colorScheme.primary
+                            .withValues(alpha: 0.16),
                       ),
-                    ),
                   ],
                 ),
               ),

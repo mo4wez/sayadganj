@@ -67,6 +67,8 @@ class DictionaryDbService {
   Future<List<WordEntry>> searchWords(
     String query, {
     SearchScope scope = SearchScope.containsHeadword,
+    int limit = 40,
+    int offset = 0,
   }) async {
     final trimmed = query.trim();
     if (trimmed.isEmpty) return [];
@@ -86,20 +88,19 @@ class DictionaryDbService {
     ) = switch (scope) {
       SearchScope.startsWith => (
         r"full_word LIKE ? ESCAPE '\' OR full_word_with_symbols LIKE ? ESCAPE '\'",
-        ['$escaped%', '$escaped%'],
+        ['$escaped\%', '$escaped%'],
         'full_word ASC',
       ),
       SearchScope.containsHeadword => (
         r"full_word LIKE ? ESCAPE '\' OR full_word_with_symbols LIKE ? ESCAPE '\'",
-        ['%$escaped%', '%$escaped%'],
+        ['%$escaped\%', '\%$escaped%'],
         'full_word ASC',
       ),
       SearchScope.inDefinitions => (
-        // Match inside the meaning text after ':', excluding words whose headword itself is the query
         r"SUBSTR(definition, INSTR(definition, ':') + 1) LIKE ? ESCAPE '\' "
             r"AND full_word NOT LIKE ? ESCAPE '\' "
             r"AND full_word_with_symbols NOT LIKE ? ESCAPE '\'",
-        ['%$escaped%', '%$escaped%', '%$escaped%'],
+        ['%$escaped%', '%$escaped\%', '\%$escaped%'],
         'full_word ASC',
       ),
     };
@@ -109,7 +110,8 @@ class DictionaryDbService {
       where: whereClause,
       whereArgs: whereArgs,
       orderBy: orderBy,
-      limit: 60,
+      limit: limit,
+      offset: offset,
     );
 
     return rows.map((row) => WordEntry.fromMap(row)).toList();
@@ -247,7 +249,8 @@ class DictionaryDbService {
 
   Future<List<WordEntry>> getWordsByLetter(
     String letter, {
-    int limit = 150,
+    int limit = 40,
+    int offset = 0,
   }) async {
     final db = await database;
 
@@ -269,6 +272,7 @@ class DictionaryDbService {
       whereArgs: variants,
       orderBy: 'full_word ASC',
       limit: limit,
+      offset: offset,
     );
 
     return rows.map((row) => WordEntry.fromMap(row)).toList();

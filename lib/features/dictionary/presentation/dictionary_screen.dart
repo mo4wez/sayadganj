@@ -1,14 +1,13 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../domain/word_entry.dart';
 import '../providers/dictionary_providers.dart';
+import '../providers/paginated_words_provider.dart';
 import 'widgets/alphabet_dial_sheet.dart';
-import 'widgets/idle_dictionary_view.dart';
 import 'widgets/animated_search_tools.dart';
-import 'widgets/word_card.dart';
+import 'widgets/idle_dictionary_view.dart';
+import 'widgets/paginated_word_list_view.dart';
 import 'word_detail_screen.dart';
 
 class DictionaryScreen extends ConsumerStatefulWidget {
@@ -58,7 +57,6 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
             .bottom ??
         0.0;
 
-    // Unfocus search field automatically when the soft keyboard is dismissed
     if (_lastBottomInset > 0 && bottomInset == 0 && _searchFocusNode.hasFocus) {
       _searchFocusNode.unfocus();
     }
@@ -119,9 +117,10 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
   @override
   Widget build(BuildContext context) {
     final query = ref.watch(searchQueryProvider);
+    final scope = ref.watch(searchScopeProvider);
     final selectedLetter = ref.watch(selectedLetterProvider);
-    final resultsAsync = ref.watch(searchResultsProvider);
-    final letterWordsAsync = ref.watch(letterWordsProvider);
+    final searchPageAsync = ref.watch(paginatedSearchWordsProvider);
+    final letterPageAsync = ref.watch(paginatedLetterWordsProvider);
     final recentAsync = ref.watch(recentSearchesProvider);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -219,13 +218,28 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
           ),
           Expanded(
             child: hasSearchQuery
-                ? _buildWordList(
-                    asyncWords: resultsAsync,
+                ? PaginatedWordListView(
+                    asyncState: searchPageAsync,
+                    onLoadMore: () => ref
+                        .read(paginatedSearchWordsProvider.notifier)
+                        .loadMore(),
+                    highlightQuery: query,
+                    scope: scope,
                     emptyIcon: LucideIcons.searchX,
                     emptyTitle: 'هچ لبزے دست نہ کپت',
                     emptySubtitle: 'دگہ لبزے یا کسانیں بھرے بہ شوهاز',
-                    saveQueryOnTap: true,
-                    queryToSave: query,
+                    onTapWord: (word) {
+                      if (query.trim().isNotEmpty) {
+                        ref
+                            .read(searchHistoryControllerProvider.notifier)
+                            .save(query);
+                      }
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => WordDetailScreen(wordId: word.id),
+                        ),
+                      );
+                    },
                   )
                 : hasLetterFilter
                 ? Column(
@@ -283,12 +297,22 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                         ),
                       ),
                       Expanded(
-                        child: _buildWordList(
-                          asyncWords: letterWordsAsync,
+                        child: PaginatedWordListView(
+                          asyncState: letterPageAsync,
+                          onLoadMore: () => ref
+                              .read(paginatedLetterWordsProvider.notifier)
+                              .loadMore(),
                           emptyIcon: LucideIcons.bookX,
                           emptyTitle: 'هچ لبزے دست نہ کپت',
                           emptySubtitle: 'اے حرف ءَ هچ لبز نیست',
-                          saveQueryOnTap: false,
+                          onTapWord: (word) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    WordDetailScreen(wordId: word.id),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],
@@ -306,64 +330,6 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildWordList({
-    required AsyncValue<List<WordEntry>> asyncWords,
-    required IconData emptyIcon,
-    required String emptyTitle,
-    required String emptySubtitle,
-    required bool saveQueryOnTap,
-    String queryToSave = '',
-  }) {
-    final scope = ref.watch(searchScopeProvider);
-
-    return asyncWords.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, _) => _EmptyPromptState(
-        icon: LucideIcons.circleAlert,
-        title: 'ردی یے بوت',
-        subtitle: '$err',
-      ),
-      data: (words) {
-        if (words.isEmpty) {
-          return _EmptyPromptState(
-            icon: emptyIcon,
-            title: emptyTitle,
-            subtitle: emptySubtitle,
-          );
-        }
-
-        return ListView.separated(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
-          itemCount: words.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 10),
-          itemBuilder: (context, index) {
-            final word = words[index];
-            return WordCard(
-                  word: word,
-                  highlightQuery: saveQueryOnTap ? queryToSave : '',
-                  scope: scope,
-                  onTap: () {
-                    if (saveQueryOnTap && queryToSave.trim().isNotEmpty) {
-                      ref
-                          .read(searchHistoryControllerProvider.notifier)
-                          .save(queryToSave);
-                    }
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => WordDetailScreen(wordId: word.id),
-                      ),
-                    );
-                  },
-                )
-                .animate()
-                .fadeIn(duration: 180.ms)
-                .slideY(begin: 0.03, end: 0, duration: 180.ms);
-          },
-        );
-      },
     );
   }
 }
@@ -416,55 +382,6 @@ class _AlphabetDialButton extends StatelessWidget {
                     ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _EmptyPromptState extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-
-  const _EmptyPromptState({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                color: colorScheme.secondary,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, size: 30, color: colorScheme.primary),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              title,
-              style: theme.textTheme.titleMedium,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 6),
-            Text(
-              subtitle,
-              style: theme.textTheme.bodyMedium,
-              textAlign: TextAlign.center,
-            ),
-          ],
         ),
       ),
     );
