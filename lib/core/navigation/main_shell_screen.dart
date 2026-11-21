@@ -7,6 +7,8 @@ import '../../features/bookmarks/presentation/bookmarks_screen.dart';
 import '../../features/dictionary/presentation/dictionary_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../theme/font_family_provider.dart';
+import '../theme/theme_appearance_provider.dart';
+import '../theme/theme_settings.dart';
 
 class SelectedTabNotifier extends Notifier<int> {
   @override
@@ -35,46 +37,84 @@ class MainShellScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(selectedTabProvider);
     final selectedFont = ref.watch(fontFamilyProvider);
+    final appearance = ref.watch(themeAppearanceProvider);
     final colorScheme = Theme.of(context).colorScheme;
+    final isFloating = appearance.bottomBarStyle == BottomBarStyle.floating;
+
+    final navBar = GNav(
+      selectedIndex: currentIndex,
+      onTabChange: (index) =>
+          ref.read(selectedTabProvider.notifier).setTab(index),
+      gap: 8,
+      iconSize: 21,
+      padding: EdgeInsets.symmetric(
+        horizontal: isFloating ? 16 : 18,
+        vertical: isFloating ? 10 : 12,
+      ),
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
+      color: colorScheme.onSurfaceVariant,
+      activeColor: colorScheme.primary,
+      tabBackgroundColor: colorScheme.secondary,
+      tabBorderRadius: 100,
+      textStyle: TextStyle(
+        fontFamily: selectedFont.fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.w700,
+        color: colorScheme.primary,
+      ),
+      tabs: const [
+        GButton(icon: LucideIcons.bookOpen, text: 'لبزبلد'),
+        GButton(icon: LucideIcons.bookmark, text: 'نشان کتگیں'),
+        GButton(icon: LucideIcons.settings, text: 'تنظیمات'),
+      ],
+    );
 
     return Scaffold(
+      extendBody: isFloating,
       body: IndexedStack(index: currentIndex, children: _screens),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          border: Border(top: BorderSide(color: colorScheme.outline, width: 1)),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: GNav(
-              selectedIndex: currentIndex,
-              onTabChange: (index) =>
-                  ref.read(selectedTabProvider.notifier).setTab(index),
-              gap: 8,
-              iconSize: 21,
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-              duration: const Duration(milliseconds: 280),
-              curve: Curves.easeOutCubic,
-              color: colorScheme.onSurfaceVariant,
-              activeColor: colorScheme.primary,
-              tabBackgroundColor: colorScheme.secondary,
-              tabBorderRadius: 100,
-              textStyle: TextStyle(
-                fontFamily: selectedFont.fontFamily,
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-                color: colorScheme.primary,
+      bottomNavigationBar: isFloating
+          ? SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: colorScheme.surface,
+                    borderRadius: BorderRadius.circular(100),
+                    border: Border.all(color: colorScheme.outline, width: 1.2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.12),
+                        blurRadius: 18,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: navBar,
+                ),
               ),
-              tabs: const [
-                GButton(icon: LucideIcons.bookOpen, text: 'لبزبلد'),
-                GButton(icon: LucideIcons.bookmark, text: 'نشان کتگیں'),
-                GButton(icon: LucideIcons.settings, text: 'تنظیمات'),
-              ],
+            )
+          : Container(
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                border: Border(
+                  top: BorderSide(color: colorScheme.outline, width: 1),
+                ),
+              ),
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  child: navBar,
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

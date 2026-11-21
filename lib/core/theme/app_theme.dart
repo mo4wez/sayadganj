@@ -1,63 +1,119 @@
 import 'package:material_ui/material_ui.dart';
 
+import 'theme_settings.dart';
+
 class AppTheme {
   AppTheme._();
 
-  // Brand & Surface Tokens — Light
-  static const Color _lightPrimary = Color(0xFF0F766E); // Deep Jade Teal
+  // Base Surface Tokens — Light
   static const Color _lightBackground = Color(0xFFF7F7F5); // Warm Paper
   static const Color _lightSurface = Color(0xFFFFFFFF);
   static const Color _lightBorder = Color(0xFFE4E6EA);
   static const Color _lightTextPrimary = Color(0xFF14171A);
   static const Color _lightTextSecondary = Color(0xFF5C6470);
 
-  // Brand & Surface Tokens — Dark
-  static const Color _darkPrimary = Color(0xFF2DD4BF); // Soft Mint Teal
+  // Base Surface Tokens — Dark (Standard)
   static const Color _darkBackground = Color(0xFF0E1116); // Obsidian Slate
   static const Color _darkSurface = Color(0xFF161B22); // Elevated Card
   static const Color _darkBorder = Color(0xFF262C36);
   static const Color _darkTextPrimary = Color(0xFFF1F3F5);
   static const Color _darkTextSecondary = Color(0xFF949CA8);
 
-  static ThemeData light({String? fontFamily}) => _buildTheme(
+  // Base Surface Tokens — Pure Black (AMOLED)
+  static const Color _amoledBackground = Color(0xFF000000);
+  static const Color _amoledSurface = Color(0xFF0C0E12);
+  static const Color _amoledBorder = Color(0xFF1F242D);
+
+  static ThemeData light({
+    String? fontFamily,
+    ThemeAppearanceState appearance = const ThemeAppearanceState(),
+  }) => _buildTheme(
     brightness: Brightness.light,
-    primary: _lightPrimary,
-    background: _lightBackground,
-    surface: _lightSurface,
-    border: _lightBorder,
-    textPrimary: _lightTextPrimary,
-    textSecondary: _lightTextSecondary,
+    appearance: appearance,
     fontFamily: fontFamily,
   );
 
-  static ThemeData dark({String? fontFamily}) => _buildTheme(
+  static ThemeData dark({
+    String? fontFamily,
+    ThemeAppearanceState appearance = const ThemeAppearanceState(),
+  }) => _buildTheme(
     brightness: Brightness.dark,
-    primary: _darkPrimary,
-    background: _darkBackground,
-    surface: _darkSurface,
-    border: _darkBorder,
-    textPrimary: _darkTextPrimary,
-    textSecondary: _darkTextSecondary,
+    appearance: appearance,
     fontFamily: fontFamily,
   );
+
+  static Color _resolvePrimary({
+    required bool isDark,
+    required AppAccentColor accent,
+    required AppColorStyle style,
+  }) {
+    final base = isDark ? accent.darkColor : accent.lightColor;
+
+    return switch (style) {
+      AppColorStyle.vivid => base,
+      AppColorStyle.soft => Color.lerp(
+        base,
+        isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+        0.32,
+      )!,
+      AppColorStyle.tinted => base,
+      AppColorStyle.monochrome =>
+        isDark ? const Color(0xFFE2E8F0) : const Color(0xFF1E293B),
+    };
+  }
 
   static ThemeData _buildTheme({
     required Brightness brightness,
-    required Color primary,
-    required Color background,
-    required Color surface,
-    required Color border,
-    required Color textPrimary,
-    required Color textSecondary,
+    required ThemeAppearanceState appearance,
     String? fontFamily,
   }) {
     final isDark = brightness == Brightness.dark;
+    final style = appearance.colorStyle;
+    final primary = _resolvePrimary(
+      isDark: isDark,
+      accent: appearance.accentColor,
+      style: style,
+    );
+
+    Color background = isDark
+        ? (appearance.isPureBlack ? _amoledBackground : _darkBackground)
+        : _lightBackground;
+    Color surface = isDark
+        ? (appearance.isPureBlack ? _amoledSurface : _darkSurface)
+        : _lightSurface;
+    Color border = isDark
+        ? (appearance.isPureBlack ? _amoledBorder : _darkBorder)
+        : _lightBorder;
+
+    if (style == AppColorStyle.tinted) {
+      if (isDark) {
+        if (!appearance.isPureBlack) {
+          background = Color.lerp(background, primary, 0.05)!;
+        }
+        surface = Color.lerp(surface, primary, 0.08)!;
+        border = Color.lerp(border, primary, 0.18)!;
+      } else {
+        background = Color.lerp(background, primary, 0.045)!;
+        surface = Color.lerp(surface, primary, 0.025)!;
+        border = Color.lerp(border, primary, 0.16)!;
+      }
+    }
+
+    final textPrimary = isDark ? _darkTextPrimary : _lightTextPrimary;
+    final textSecondary = isDark ? _darkTextSecondary : _lightTextSecondary;
+
+    final secondaryAlpha = switch (style) {
+      AppColorStyle.vivid => 0.14,
+      AppColorStyle.soft => 0.10,
+      AppColorStyle.tinted => 0.17,
+      AppColorStyle.monochrome => isDark ? 0.12 : 0.08,
+    };
 
     final colorScheme = ColorScheme(
       brightness: brightness,
       primary: primary,
-      onPrimary: isDark ? const Color(0xFF062825) : Colors.white,
-      secondary: primary.withValues(alpha: 0.14),
+      onPrimary: isDark ? const Color(0xFF0A0D10) : Colors.white,
+      secondary: primary.withValues(alpha: secondaryAlpha),
       onSecondary: primary,
       surface: surface,
       onSurface: textPrimary,
@@ -119,8 +175,6 @@ class AppTheme {
       colorScheme: colorScheme,
       scaffoldBackgroundColor: background,
       textTheme: baseTextTheme,
-
-      // AppBar title inherits the selected font family
       appBarTheme: AppBarTheme(
         backgroundColor: background,
         foregroundColor: textPrimary,
@@ -134,7 +188,6 @@ class AppTheme {
           color: textPrimary,
         ),
       ),
-
       cardTheme: CardThemeData(
         color: surface,
         elevation: 0,
@@ -144,7 +197,6 @@ class AppTheme {
           side: BorderSide(color: border, width: 1),
         ),
       ),
-
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: surface,
@@ -172,9 +224,7 @@ class AppTheme {
           borderSide: BorderSide(color: primary, width: 1.6),
         ),
       ),
-
       dividerTheme: DividerThemeData(color: border, thickness: 1, space: 1),
-
       iconTheme: IconThemeData(color: textSecondary, size: 22),
     );
   }

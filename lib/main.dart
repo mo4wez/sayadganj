@@ -6,6 +6,7 @@ import 'core/navigation/main_shell_screen.dart';
 import 'core/services/preferences_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/font_family_provider.dart';
+import 'core/theme/theme_appearance_provider.dart';
 import 'core/theme/theme_mode_provider.dart';
 
 Future<void> main() async {
@@ -26,12 +27,19 @@ class SayadGanjApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final selectedFont = ref.watch(fontFamilyProvider);
+    final appearance = ref.watch(themeAppearanceProvider);
 
     return MaterialApp(
       title: 'سیدگنج',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light(fontFamily: selectedFont.fontFamily),
-      darkTheme: AppTheme.dark(fontFamily: selectedFont.fontFamily),
+      theme: AppTheme.light(
+        fontFamily: selectedFont.fontFamily,
+        appearance: appearance,
+      ),
+      darkTheme: AppTheme.dark(
+        fontFamily: selectedFont.fontFamily,
+        appearance: appearance,
+      ),
       themeMode: themeMode,
       builder: (context, child) =>
           Directionality(textDirection: TextDirection.rtl, child: child!),

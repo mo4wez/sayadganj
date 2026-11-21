@@ -4,9 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../core/theme/font_family_provider.dart';
+import '../../../core/theme/theme_appearance_provider.dart';
 import '../../../core/theme/theme_mode_provider.dart';
 import '../../dictionary/providers/dictionary_providers.dart';
 import '../providers/settings_provider.dart';
+import 'theme/theme_settings_screen.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -14,11 +16,18 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
+    final appearance = ref.watch(themeAppearanceProvider);
     final selectedFont = ref.watch(fontFamilyProvider);
     final fontScale = ref.watch(fontScaleProvider);
     final wordCountAsync = ref.watch(totalWordCountProvider);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+
+    final modeLabel = switch (themeMode) {
+      ThemeMode.system => 'سیستم',
+      ThemeMode.light => 'روچ',
+      ThemeMode.dark => appearance.isPureBlack ? 'پُرتہاریں شپ' : 'شپ',
+    };
 
     return Scaffold(
       appBar: AppBar(title: const Text('تنظیمات')),
@@ -28,35 +37,56 @@ class SettingsScreen extends ConsumerWidget {
           Text('ظاهری رنگ ءُ تھیم', style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
           Card(
-            child: Column(
-              children: [
-                _ThemeOptionTile(
-                  icon: LucideIcons.smartphone,
-                  title: 'سیستم ءِ حساب ءَ',
-                  selected: themeMode == ThemeMode.system,
-                  onTap: () => ref
-                      .read(themeModeProvider.notifier)
-                      .setThemeMode(ThemeMode.system),
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 6,
+              ),
+              leading: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: colorScheme.secondary,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                const Divider(),
-                _ThemeOptionTile(
-                  icon: LucideIcons.sun,
-                  title: 'روشنیں رنگ (Light)',
-                  selected: themeMode == ThemeMode.light,
-                  onTap: () => ref
-                      .read(themeModeProvider.notifier)
-                      .setThemeMode(ThemeMode.light),
+                child: Icon(
+                  LucideIcons.palette,
+                  color: colorScheme.primary,
+                  size: 20,
                 ),
-                const Divider(),
-                _ThemeOptionTile(
-                  icon: LucideIcons.moon,
-                  title: 'تاریکیں رنگ (Dark)',
-                  selected: themeMode == ThemeMode.dark,
-                  onTap: () => ref
-                      .read(themeModeProvider.notifier)
-                      .setThemeMode(ThemeMode.dark),
-                ),
-              ],
+              ),
+              title: const Text('ظاهری رنگ ءُ دروشم'),
+              subtitle: Text(
+                '$modeLabel • ${appearance.accentColor.label} • ${appearance.colorStyle.title.split(' ').first}',
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 16,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(
+                    LucideIcons.chevronLeft,
+                    size: 18,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ],
+              ),
+              onTap: () {
+                HapticFeedback.selectionClick();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const ThemeSettingsScreen(),
+                  ),
+                );
+              },
             ),
           ),
           const SizedBox(height: 22),
@@ -430,37 +460,6 @@ class _FontPreviewCard extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _ThemeOptionTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _ThemeOptionTile({
-    required this.icon,
-    required this.title,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return ListTile(
-      onTap: onTap,
-      leading: Icon(
-        icon,
-        color: selected ? colorScheme.primary : colorScheme.onSurfaceVariant,
-      ),
-      title: Text(title),
-      trailing: selected
-          ? Icon(LucideIcons.check, color: colorScheme.primary, size: 20)
-          : null,
     );
   }
 }
