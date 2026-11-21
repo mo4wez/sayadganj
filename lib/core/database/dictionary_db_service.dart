@@ -8,6 +8,7 @@ import '../../features/dictionary/domain/word_entry.dart';
 import '../../features/dictionary/domain/quiz_question.dart';
 import '../../features/dictionary/domain/search_scope.dart';
 import '../../features/dictionary/domain/cross_reference_parser.dart';
+import '../../features/dictionary/domain/discovery_category.dart';
 
 class LetterBucket {
   final String letter;
@@ -343,5 +344,67 @@ class DictionaryDbService {
     }
 
     return null;
+  }
+
+  Future<List<WordEntry>> getDiscoveryWords(
+    DiscoveryCategory category, {
+    int limit = 50,
+  }) async {
+    final db = await database;
+
+    switch (category) {
+      case DiscoveryCategory.richDefinitions:
+        final rows = await db.query(
+          'sayadganj',
+          where: "TRIM(full_word) != '' AND LENGTH(TRIM(definition)) >= 140",
+          orderBy: 'LENGTH(definition) DESC',
+          limit: limit,
+        );
+        return rows.map((row) => WordEntry.fromMap(row)).toList();
+
+      case DiscoveryCategory.vocalizedWords:
+        final rows = await db.query(
+          'sayadganj',
+          where:
+              "TRIM(full_word_with_symbols) != '' "
+              'AND TRIM(full_word_with_symbols) != TRIM(full_word)',
+          orderBy: 'RANDOM()',
+          limit: limit,
+        );
+        return rows.map((row) => WordEntry.fromMap(row)).toList();
+
+      case DiscoveryCategory.proverbsAndSources:
+        final rows = await db.query(
+          'sayadganj',
+          where:
+              "definition LIKE '%بَت%' "
+              "OR definition LIKE '%شیرازی%' "
+              "OR definition LIKE '%ب۔ق%' "
+              "OR full_word_with_symbols LIKE '%★%' "
+              "OR full_word_with_symbols LIKE '%✪%'",
+          orderBy: 'full_word ASC',
+          limit: limit,
+        );
+        return rows.map((row) => WordEntry.fromMap(row)).toList();
+
+      case DiscoveryCategory.pastWeekWords:
+        final total = await getTotalWordCount();
+        if (total <= 0) return const [];
+
+        final now = DateTime.now();
+        final todayDays =
+            DateTime(now.year, now.month, now.day).millisecondsSinceEpoch ~/
+            Duration.millisecondsPerDay;
+
+        final results = <WordEntry>[];
+        for (int i = 1; i <= 7; i++) {
+          final offset = (todayDays - i).abs() % total;
+          final rows = await db.query('sayadganj', limit: 1, offset: offset);
+          if (rows.isNotEmpty) {
+            results.add(WordEntry.fromMap(rows.first));
+          }
+        }
+        return results;
+    }
   }
 }

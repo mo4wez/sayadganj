@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'quiz/daily_quiz_card.dart';
 import 'word_of_the_day_card.dart';
 import 'activity/reading_streak_card.dart';
+import 'discovery/editorial_discovery_grid.dart';
 
 class IdleDictionaryView extends StatelessWidget {
   final AsyncValue<List<String>> recentAsync;
@@ -35,6 +36,8 @@ class IdleDictionaryView extends StatelessWidget {
         const WordOfTheDayCard(),
         const SizedBox(height: 16),
         const ReadingStreakCard(),
+        const SizedBox(height: 18),
+        const EditorialDiscoveryGrid(),
         if (recents.isNotEmpty) ...[
           const SizedBox(height: 18),
           Row(
