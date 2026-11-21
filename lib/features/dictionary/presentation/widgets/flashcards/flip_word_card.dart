@@ -10,8 +10,9 @@ import '../../word_detail_screen.dart';
 
 class FlipWordCard extends StatefulWidget {
   final WordEntry word;
+  final VoidCallback? onInactiveTap;
 
-  const FlipWordCard({super.key, required this.word});
+  const FlipWordCard({super.key, required this.word, this.onInactiveTap});
 
   @override
   State<FlipWordCard> createState() => _FlipWordCardState();
@@ -51,7 +52,13 @@ class _FlipWordCardState extends State<FlipWordCard>
     super.dispose();
   }
 
-  void _toggleFlip() {
+  void _handleTap() {
+    if (widget.onInactiveTap != null) {
+      HapticFeedback.selectionClick();
+      widget.onInactiveTap!();
+      return;
+    }
+
     HapticFeedback.selectionClick();
     if (_isFront) {
       _controller.forward();
@@ -64,7 +71,7 @@ class _FlipWordCardState extends State<FlipWordCard>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _toggleFlip,
+      onTap: _handleTap,
       child: AnimatedBuilder(
         animation: _flipAnimation,
         builder: (context, _) {

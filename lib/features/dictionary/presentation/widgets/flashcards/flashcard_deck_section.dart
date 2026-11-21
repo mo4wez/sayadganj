@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -16,30 +17,9 @@ class FlashcardDeckSection extends ConsumerStatefulWidget {
 }
 
 class _FlashcardDeckSectionState extends ConsumerState<FlashcardDeckSection> {
-  late final PageController _pageController;
+  final CarouselSliderController _carouselController =
+      CarouselSliderController();
   int _currentIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  void _goToPage(int index, int total) {
-    if (index < 0 || index >= total) return;
-    HapticFeedback.selectionClick();
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 260),
-      curve: Curves.easeOutCubic,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,128 +33,162 @@ class _FlashcardDeckSectionState extends ConsumerState<FlashcardDeckSection> {
       data: (deck) {
         if (deck.words.isEmpty) return const SizedBox.shrink();
 
-        final safeIndex = _currentIndex.clamp(0, deck.words.length - 1);
+        final total = deck.words.length;
+        final safeIndex = _currentIndex.clamp(0, total - 1);
+        final hasMultiple = total > 1;
 
         return Card(
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(vertical: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Header Row
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: colorScheme.secondary,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            LucideIcons.layers,
-                            size: 14,
-                            color: colorScheme.primary,
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            'لبزانی تاکدیم',
-                            style: theme.textTheme.labelMedium?.copyWith(
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: colorScheme.secondary,
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              LucideIcons.layers,
+                              size: 14,
                               color: colorScheme.primary,
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      deck.isFromBookmarks ? 'نشان کتگیں' : 'گچین کتگیں',
-                      style: theme.textTheme.bodyMedium?.copyWith(fontSize: 12),
-                    ),
-                    const Spacer(),
-                    Text(
-                      '${safeIndex + 1} / ${deck.words.length}',
-                      style: theme.textTheme.labelMedium?.copyWith(
-                        color: colorScheme.primary,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 14),
-
-                // Swipeable 3D Flashcard Viewport
-                SizedBox(
-                  height: 205,
-                  child: PageView.builder(
-                    controller: _pageController,
-                    itemCount: deck.words.length,
-                    onPageChanged: (index) {
-                      setState(() => _currentIndex = index);
-                    },
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2),
-                        child: FlipWordCard(word: deck.words[index]),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 12),
-
-                // Bottom Controls (Prev / Refresh if random / Next)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton.outlined(
-                      tooltip: 'پێشتر',
-                      onPressed: safeIndex > 0
-                          ? () => _goToPage(safeIndex - 1, deck.words.length)
-                          : null,
-                      style: IconButton.styleFrom(
-                        visualDensity: VisualDensity.compact,
-                      ),
-                      icon: const Icon(LucideIcons.chevronRight, size: 18),
-                    ),
-                    if (!deck.isFromBookmarks)
-                      TextButton.icon(
-                        onPressed: () {
-                          HapticFeedback.selectionClick();
-                          setState(() => _currentIndex = 0);
-                          if (_pageController.hasClients) {
-                            _pageController.jumpToPage(0);
-                          }
-                          ref.invalidate(flashcardDeckProvider);
-                        },
-                        style: TextButton.styleFrom(
-                          visualDensity: VisualDensity.compact,
-                          foregroundColor: colorScheme.primary,
+                            const SizedBox(width: 6),
+                            Text(
+                              'لبزانی تاکدیم',
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                color: colorScheme.primary,
+                              ),
+                            ),
+                          ],
                         ),
-                        icon: const Icon(LucideIcons.shuffle, size: 15),
-                        label: const Text('نوکیں تاکدیم'),
-                      )
-                    else
+                      ),
+                      const SizedBox(width: 8),
                       Text(
-                        'پہ دیمتر ءَ کشّ یا بہ ٹپّ',
+                        deck.isFromBookmarks ? 'نشان کتگیں' : 'گچین کتگیں',
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontSize: 12,
                         ),
                       ),
-                    IconButton.outlined(
-                      tooltip: 'دیمتر',
-                      onPressed: safeIndex < deck.words.length - 1
-                          ? () => _goToPage(safeIndex + 1, deck.words.length)
-                          : null,
-                      style: IconButton.styleFrom(
-                        visualDensity: VisualDensity.compact,
+                      const Spacer(),
+                      Text(
+                        '${safeIndex + 1} / $total',
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          color: colorScheme.primary,
+                        ),
                       ),
-                      icon: const Icon(LucideIcons.chevronLeft, size: 18),
-                    ),
-                  ],
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 14),
+
+                // CarouselSlider 3D Flashcard Deck
+                CarouselSlider.builder(
+                  carouselController: _carouselController,
+                  itemCount: total,
+                  options: CarouselOptions(
+                    height: 210,
+                    viewportFraction: hasMultiple ? 0.85 : 0.92,
+                    enlargeCenterPage: hasMultiple,
+                    enlargeFactor: 0.16,
+                    enableInfiniteScroll: hasMultiple,
+                    onPageChanged: (index, _) {
+                      setState(() => _currentIndex = index);
+                    },
+                  ),
+                  itemBuilder: (context, index, _) {
+                    final isCenter = index == safeIndex;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: FlipWordCard(
+                        word: deck.words[index],
+                        onInactiveTap: isCenter
+                            ? null
+                            : () => _carouselController.animateToPage(
+                                index,
+                                duration: const Duration(milliseconds: 280),
+                                curve: Curves.easeOutCubic,
+                              ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 12),
+
+                // Bottom Controls
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton.outlined(
+                        tooltip: 'پێشتر',
+                        onPressed: hasMultiple
+                            ? () {
+                                HapticFeedback.selectionClick();
+                                _carouselController.previousPage(
+                                  duration: const Duration(milliseconds: 280),
+                                  curve: Curves.easeOutCubic,
+                                );
+                              }
+                            : null,
+                        style: IconButton.styleFrom(
+                          visualDensity: VisualDensity.compact,
+                        ),
+                        icon: const Icon(LucideIcons.chevronRight, size: 18),
+                      ),
+                      if (!deck.isFromBookmarks)
+                        TextButton.icon(
+                          onPressed: () {
+                            HapticFeedback.selectionClick();
+                            setState(() => _currentIndex = 0);
+                            _carouselController.jumpToPage(0);
+                            ref.invalidate(flashcardDeckProvider);
+                          },
+                          style: TextButton.styleFrom(
+                            visualDensity: VisualDensity.compact,
+                            foregroundColor: colorScheme.primary,
+                          ),
+                          icon: const Icon(LucideIcons.shuffle, size: 15),
+                          label: const Text('نوکیں تاکدیم'),
+                        )
+                      else
+                        Text(
+                          'پہ دیمتر ءَ کشّ یا بہ ٹپّ',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontSize: 12,
+                          ),
+                        ),
+                      IconButton.outlined(
+                        tooltip: 'دیمتر',
+                        onPressed: hasMultiple
+                            ? () {
+                                HapticFeedback.selectionClick();
+                                _carouselController.nextPage(
+                                  duration: const Duration(milliseconds: 280),
+                                  curve: Curves.easeOutCubic,
+                                );
+                              }
+                            : null,
+                        style: IconButton.styleFrom(
+                          visualDensity: VisualDensity.compact,
+                        ),
+                        icon: const Icon(LucideIcons.chevronLeft, size: 18),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
