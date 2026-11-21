@@ -2,17 +2,27 @@ import 'package:material_ui/material_ui.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../domain/word_entry.dart';
+import 'highlighted_text.dart';
 
 class WordCard extends StatelessWidget {
   final WordEntry word;
   final VoidCallback onTap;
+  final String highlightQuery;
 
-  const WordCard({super.key, required this.word, required this.onTap});
+  const WordCard({
+    super.key,
+    required this.word,
+    required this.onTap,
+    this.highlightQuery = '',
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final headword = word.fullWordWithSymbols.isNotEmpty
+        ? word.fullWordWithSymbols
+        : word.fullWord;
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -26,20 +36,26 @@ class WordCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      word.fullWordWithSymbols.isNotEmpty
-                          ? word.fullWordWithSymbols
-                          : word.fullWord,
+                    HighlightedText(
+                      text: headword,
+                      query: highlightQuery,
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: colorScheme.primary,
                       ),
+                      highlightColor: colorScheme.onPrimary,
+                      highlightBackgroundColor: colorScheme.primary,
                     ),
                     const SizedBox(height: 6),
-                    Text(
-                      word.definition,
+                    HighlightedText(
+                      text: word.definition,
+                      query: highlightQuery,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodyMedium,
+                      highlightColor: colorScheme.primary,
+                      highlightBackgroundColor: colorScheme.primary.withValues(
+                        alpha: 0.16,
+                      ),
                     ),
                   ],
                 ),

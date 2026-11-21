@@ -98,55 +98,44 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-            child: TextField(
-              controller: _controller,
-              textInputAction: TextInputAction.search,
-              decoration: InputDecoration(
-                hintText: 'لبزے بہ شوهاز...',
-                prefixIcon: const Icon(LucideIcons.search, size: 20),
-                suffixIcon: query.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(LucideIcons.x, size: 18),
-                        onPressed: () {
-                          _controller.clear();
-                          ref.read(searchQueryProvider.notifier).clear();
-                        },
-                      )
-                    : Padding(
-                        padding: const EdgeInsetsDirectional.only(end: 8),
-                        child: TextButton.icon(
-                          onPressed: () => _openAlphabetDial(selectedLetter),
-                          style: TextButton.styleFrom(
-                            backgroundColor: colorScheme.secondary,
-                            foregroundColor: colorScheme.primary,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          icon: const Icon(LucideIcons.compass, size: 16),
-                          label: const Text(
-                            'آب ءُ ب',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                      ),
-              ),
-              onChanged: (text) {
-                if (text.isNotEmpty && hasLetterFilter) {
-                  ref.read(selectedLetterProvider.notifier).clear();
-                }
-                ref.read(searchQueryProvider.notifier).update(text);
-              },
-              onSubmitted: (text) {
-                ref.read(searchHistoryControllerProvider.notifier).save(text);
-              },
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    textInputAction: TextInputAction.search,
+                    decoration: InputDecoration(
+                      hintText: 'لبزے بہ شوهاز...',
+                      prefixIcon: const Icon(LucideIcons.search, size: 20),
+                      suffixIcon: query.isNotEmpty
+                          ? IconButton(
+                              icon: const Icon(LucideIcons.x, size: 18),
+                              onPressed: () {
+                                _controller.clear();
+                                ref.read(searchQueryProvider.notifier).clear();
+                              },
+                            )
+                          : null,
+                    ),
+                    onChanged: (text) {
+                      if (text.isNotEmpty && hasLetterFilter) {
+                        ref.read(selectedLetterProvider.notifier).clear();
+                      }
+                      ref.read(searchQueryProvider.notifier).update(text);
+                    },
+                    onSubmitted: (text) {
+                      ref
+                          .read(searchHistoryControllerProvider.notifier)
+                          .save(text);
+                    },
+                  ),
+                ),
+                const SizedBox(width: 10),
+                _AlphabetDialButton(
+                  activeLetter: selectedLetter,
+                  onTap: () => _openAlphabetDial(selectedLetter),
+                ),
+              ],
             ),
           ),
           Expanded(
@@ -273,6 +262,7 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
             final word = words[index];
             return WordCard(
                   word: word,
+                  highlightQuery: saveQueryOnTap ? queryToSave : '',
                   onTap: () {
                     if (saveQueryOnTap && queryToSave.trim().isNotEmpty) {
                       ref
@@ -292,6 +282,60 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
           },
         );
       },
+    );
+  }
+}
+
+class _AlphabetDialButton extends StatelessWidget {
+  final String? activeLetter;
+  final VoidCallback onTap;
+
+  const _AlphabetDialButton({required this.activeLetter, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isActive = activeLetter != null && activeLetter!.isNotEmpty;
+
+    return Tooltip(
+      message: 'چرخِ آب ءُ ب',
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: 52,
+        height: 52,
+        decoration: BoxDecoration(
+          color: isActive ? colorScheme.primary : colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isActive ? colorScheme.primary : colorScheme.outline,
+            width: isActive ? 1.6 : 1,
+          ),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(16),
+            child: Center(
+              child: isActive
+                  ? Text(
+                      activeLetter == 'ا' ? 'ا/آ' : activeLetter!,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontSize: activeLetter == 'ا' ? 15 : 20,
+                        fontWeight: FontWeight.w800,
+                        color: colorScheme.onPrimary,
+                      ),
+                    )
+                  : Icon(
+                      LucideIcons.compass,
+                      size: 22,
+                      color: colorScheme.primary,
+                    ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
