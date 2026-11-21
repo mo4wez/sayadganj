@@ -6,8 +6,9 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../domain/word_entry.dart';
 import '../providers/dictionary_providers.dart';
 import 'widgets/alphabet_dial_sheet.dart';
-import 'widgets/word_card.dart';
 import 'widgets/idle_dictionary_view.dart';
+import 'widgets/search_tools_bar.dart';
+import 'widgets/word_card.dart';
 import 'word_detail_screen.dart';
 
 class DictionaryScreen extends ConsumerStatefulWidget {
@@ -19,17 +20,48 @@ class DictionaryScreen extends ConsumerStatefulWidget {
 
 class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
   late final TextEditingController _controller;
+  late final FocusNode _searchFocusNode;
+  bool _isSearchFocused = false;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    _searchFocusNode = FocusNode()
+      ..addListener(() {
+        if (_isSearchFocused != _searchFocusNode.hasFocus) {
+          setState(() => _isSearchFocused = _searchFocusNode.hasFocus);
+        }
+      });
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
+  }
+
+  void _insertSpecialChar(String char) {
+    if (ref.read(selectedLetterProvider) != null) {
+      ref.read(selectedLetterProvider.notifier).clear();
+    }
+
+    final text = _controller.text;
+    final selection = _controller.selection;
+    final start = selection.isValid ? selection.start : text.length;
+    final end = selection.isValid ? selection.end : text.length;
+
+    final updated = text.replaceRange(start, end, char);
+    _controller.value = TextEditingValue(
+      text: updated,
+      selection: TextSelection.collapsed(offset: start + char.length),
+    );
+
+    if (!_searchFocusNode.hasFocus) {
+      _searchFocusNode.requestFocus();
+    }
+    ref.read(searchQueryProvider.notifier).update(updated);
   }
 
   void _applyRecentSearch(String term) {
@@ -41,6 +73,7 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
   }
 
   void _handleLetterSelected(String? letter) {
+    _searchFocusNode.unfocus();
     if (_controller.text.isNotEmpty) {
       _controller.clear();
     }
@@ -72,6 +105,7 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
 
     final hasSearchQuery = query.trim().isNotEmpty;
     final hasLetterFilter = selectedLetter != null && selectedLetter.isNotEmpty;
+    final showSearchTools = _isSearchFocused || query.isNotEmpty;
 
     return Scaffold(
       appBar: AppBar(
@@ -97,12 +131,13 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _controller,
+                    focusNode: _searchFocusNode,
                     textInputAction: TextInputAction.search,
                     decoration: InputDecoration(
                       hintText: 'لبزے بہ شوهاز...',
@@ -137,6 +172,13 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
                 ),
               ],
             ),
+          ),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOutCubic,
+            child: showSearchTools
+                ? SearchToolsBar(onInsertChar: _insertSpecialChar)
+                : const SizedBox.shrink(),
           ),
           Expanded(
             child: hasSearchQuery

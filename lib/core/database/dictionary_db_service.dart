@@ -6,6 +6,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../../features/dictionary/domain/word_entry.dart';
 import '../../features/dictionary/domain/quiz_question.dart';
+import '../../features/dictionary/domain/search_scope.dart';
 
 class LetterBucket {
   final String letter;
@@ -61,25 +62,50 @@ class DictionaryDbService {
     _db = null;
   }
 
-  Future<List<WordEntry>> searchWords(String query) async {
+  Future<List<WordEntry>> searchWords(
+    String query, {
+    SearchScope scope = SearchScope.containsHeadword,
+  }) async {
     final trimmed = query.trim();
+    if (trimmed.isEmpty) return [];
+
     final escaped = trimmed
         .replaceAll(r'\', r'\\')
         .replaceAll('%', r'\%')
         .replaceAll('_', r'\_')
         .replaceAll("'", "''");
-    // If the search box is empty, return an empty list right away
-    if (trimmed.isEmpty) return [];
 
     final db = await database;
 
+    final (
+      String whereClause,
+      List<Object?> whereArgs,
+      String orderBy,
+    ) = switch (scope) {
+      SearchScope.startsWith => (
+        r"full_word LIKE ? ESCAPE '\' OR full_word_with_symbols LIKE ? ESCAPE '\'",
+        ['$escaped%', '$escaped%'],
+        'full_word ASC',
+      ),
+      SearchScope.containsHeadword => (
+        r"full_word LIKE ? ESCAPE '\' OR full_word_with_symbols LIKE ? ESCAPE '\'",
+        ['%$escaped%', '%$escaped%'],
+        "CASE WHEN full_word LIKE '$escaped%' ESCAPE '\\' THEN 0 ELSE 1 END, full_word ASC",
+      ),
+      SearchScope.inDefinitions => (
+        r"full_word LIKE ? ESCAPE '\' OR full_word_with_symbols LIKE ? ESCAPE '\' OR definition LIKE ? ESCAPE '\'",
+        ['%$escaped%', '%$escaped%', '%$escaped%'],
+        "CASE WHEN full_word LIKE '$escaped%' ESCAPE '\\' THEN 0 "
+            "WHEN full_word LIKE '%$escaped%' ESCAPE '\\' THEN 1 ELSE 2 END, full_word ASC",
+      ),
+    };
+
     final rows = await db.query(
       'sayadganj',
-      where: 'full_word LIKE ? OR full_word_with_symbols LIKE ?',
-      whereArgs: ['%$trimmed%', '%$trimmed%'],
-      orderBy:
-          "CASE WHEN full_word LIKE '$escaped%' ESCAPE '\\' THEN 0 ELSE 1 END, full_word ASC",
-      limit: 50,
+      where: whereClause,
+      whereArgs: whereArgs,
+      orderBy: orderBy,
+      limit: 60,
     );
 
     return rows.map((row) => WordEntry.fromMap(row)).toList();
