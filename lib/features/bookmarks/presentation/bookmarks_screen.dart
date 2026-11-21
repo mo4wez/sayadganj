@@ -1,23 +1,72 @@
+import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../dictionary/domain/word_entry.dart';
 import '../../dictionary/presentation/widgets/word_card.dart';
 import '../../dictionary/presentation/word_detail_screen.dart';
 import '../providers/bookmarks_provider.dart';
+import 'widgets/bookmarks_carousel_view.dart';
 
-class BookmarksScreen extends ConsumerWidget {
+class BookmarksScreen extends ConsumerStatefulWidget {
   const BookmarksScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<BookmarksScreen> createState() => _BookmarksScreenState();
+}
+
+class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
+  bool _isCarouselMode = false;
+
+  void _removeWithUndo(WordEntry word) {
+    ref.read(bookmarkControllerProvider.notifier).remove(word.id);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('«${word.fullWord}» چہ نشاناں دور کنگ بوت'),
+        behavior: SnackBarBehavior.floating,
+        action: SnackBarAction(
+          label: 'پدا بیار',
+          onPressed: () {
+            ref.read(bookmarkControllerProvider.notifier).toggle(word);
+          },
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final bookmarksAsync = ref.watch(bookmarksProvider);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final hasBookmarks = bookmarksAsync.maybeWhen(
+      data: (list) => list.isNotEmpty,
+      orElse: () => false,
+    );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('نشان کتگیں لبز')),
+      appBar: AppBar(
+        title: const Text('نشان کتگیں لبز'),
+        actions: [
+          if (hasBookmarks)
+            IconButton(
+              tooltip: _isCarouselMode ? 'لڑ ءِ دروشم' : 'تاکدیم ءِ دروشم',
+              icon: Icon(
+                _isCarouselMode
+                    ? LucideIcons.list
+                    : LucideIcons.galleryHorizontalEnd,
+                size: 20,
+              ),
+              onPressed: () {
+                HapticFeedback.selectionClick();
+                setState(() => _isCarouselMode = !_isCarouselMode);
+              },
+            ),
+          const SizedBox(width: 8),
+        ],
+      ),
       body: bookmarksAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, _) => Center(child: Text('ردی یے بوت: $err')),
@@ -59,6 +108,13 @@ class BookmarksScreen extends ConsumerWidget {
             );
           }
 
+          if (_isCarouselMode) {
+            return BookmarksCarouselView(
+              words: words,
+              onRemoveWord: _removeWithUndo,
+            );
+          }
+
           return ListView.separated(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
             itemCount: words.length,
@@ -78,23 +134,7 @@ class BookmarksScreen extends ConsumerWidget {
                   ),
                   child: Icon(LucideIcons.trash2, color: colorScheme.error),
                 ),
-                onDismissed: (_) {
-                  ref.read(bookmarkControllerProvider.notifier).remove(word.id);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('«${word.fullWord}» چہ نشاناں دور کنگ بوت'),
-                      behavior: SnackBarBehavior.floating,
-                      action: SnackBarAction(
-                        label: 'پدا بیار',
-                        onPressed: () {
-                          ref
-                              .read(bookmarkControllerProvider.notifier)
-                              .toggle(word);
-                        },
-                      ),
-                    ),
-                  );
-                },
+                onDismissed: (_) => _removeWithUndo(word),
                 child: WordCard(
                   word: word,
                   onTap: () {
