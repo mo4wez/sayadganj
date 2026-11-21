@@ -5,6 +5,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../features/dictionary/domain/word_entry.dart';
+import '../../features/dictionary/domain/quiz_question.dart';
 
 class LetterBucket {
   final String letter;
@@ -248,5 +249,24 @@ class DictionaryDbService {
     int limit = 3,
   }) async {
     return getWordsByLetter(letter, limit: limit);
+  }
+
+  Future<QuizQuestion?> getRandomQuizQuestion() async {
+    final db = await database;
+
+    final rows = await db.query(
+      'sayadganj',
+      where: "TRIM(full_word) != '' AND LENGTH(TRIM(definition)) >= 8",
+      orderBy: 'RANDOM()',
+      limit: 4,
+    );
+
+    if (rows.length < 4) return null;
+
+    final entries = rows.map((row) => WordEntry.fromMap(row)).toList();
+    final target = entries.first;
+    final shuffledOptions = List<WordEntry>.of(entries)..shuffle();
+
+    return QuizQuestion(targetWord: target, options: shuffledOptions);
   }
 }
