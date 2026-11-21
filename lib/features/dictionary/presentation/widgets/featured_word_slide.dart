@@ -14,12 +14,18 @@ class FeaturedWordSlide extends StatelessWidget {
     required this.onShuffleLucky,
   });
 
+  static final RegExp _diacriticsRegex = RegExp(r'[\u064B-\u065F\u0670★✷✪]');
+
   String _cleanPreviewDefinition(String headword, String rawDefinition) {
     final trimmed = rawDefinition.trim();
     final colonIndex = trimmed.indexOf(':');
     if (colonIndex > 0 && colonIndex <= 32) {
-      final prefix = trimmed.substring(0, colonIndex).trim();
-      if (prefix == headword.trim()) {
+      final cleanPrefix = trimmed
+          .substring(0, colonIndex)
+          .replaceAll(_diacriticsRegex, '')
+          .trim();
+      final cleanHeadword = headword.replaceAll(_diacriticsRegex, '').trim();
+      if (cleanPrefix == cleanHeadword) {
         return trimmed.substring(colonIndex + 1).trim();
       }
     }

@@ -43,29 +43,41 @@ class _WordOfTheDayCardState extends ConsumerState<WordOfTheDayCard> {
         if (slides.isEmpty) return const SizedBox.shrink();
 
         final safeIndex = _activeIndex.clamp(0, slides.length - 1);
+        final hasMultiple = slides.length > 1;
 
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CarouselSlider.builder(
-              carouselController: _carouselController,
-              itemCount: slides.length,
-              options: CarouselOptions(
-                height: 222,
-                viewportFraction: 1.0,
-                enableInfiniteScroll: slides.length > 1,
-                onPageChanged: (index, _) {
-                  setState(() => _activeIndex = index);
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: CarouselSlider.builder(
+                carouselController: _carouselController,
+                itemCount: slides.length,
+                options: CarouselOptions(
+                  height: 222,
+                  viewportFraction: hasMultiple ? 1.03 : 1.0,
+                  enlargeCenterPage: hasMultiple,
+                  enlargeFactor: 0.06,
+                  enableInfiniteScroll: hasMultiple,
+                  onPageChanged: (index, _) {
+                    setState(() => _activeIndex = index);
+                  },
+                ),
+                itemBuilder: (context, index, _) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: hasMultiple ? 5 : 0,
+                    ),
+                    child: FeaturedWordSlide(
+                      item: slides[index],
+                      onShuffleLucky: () =>
+                          _shuffleAndJumpToLucky(slides.length),
+                    ),
+                  );
                 },
               ),
-              itemBuilder: (context, index, _) {
-                return FeaturedWordSlide(
-                  item: slides[index],
-                  onShuffleLucky: () => _shuffleAndJumpToLucky(slides.length),
-                );
-              },
             ),
-            if (slides.length > 1) ...[
+            if (hasMultiple) ...[
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
