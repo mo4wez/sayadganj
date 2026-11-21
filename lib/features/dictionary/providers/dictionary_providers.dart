@@ -133,3 +133,10 @@ final searchResultsProvider = FutureProvider<List<WordEntry>>((ref) async {
 
   return DictionaryDbService.instance.searchWords(query, scope: scope);
 });
+
+final crossReferenceWordProvider = FutureProvider.family<WordEntry?, String>((
+  ref,
+  targetWord,
+) async {
+  return DictionaryDbService.instance.findWordByHeadword(targetWord);
+});

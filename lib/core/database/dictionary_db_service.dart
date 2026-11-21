@@ -7,6 +7,7 @@ import 'package:sqflite/sqflite.dart';
 import '../../features/dictionary/domain/word_entry.dart';
 import '../../features/dictionary/domain/quiz_question.dart';
 import '../../features/dictionary/domain/search_scope.dart';
+import '../../features/dictionary/domain/cross_reference_parser.dart';
 
 class LetterBucket {
   final String letter;
@@ -296,5 +297,51 @@ class DictionaryDbService {
     final shuffledOptions = List<WordEntry>.of(entries)..shuffle();
 
     return QuizQuestion(targetWord: target, options: shuffledOptions);
+  }
+
+  Future<WordEntry?> findWordByHeadword(String target) async {
+    final trimmed = target.trim();
+    if (trimmed.isEmpty) return null;
+
+    final db = await database;
+
+    // 1. Exact match against vocalized or plain headword
+    final exactRows = await db.query(
+      'sayadganj',
+      where: 'TRIM(full_word_with_symbols) = ? OR TRIM(full_word) = ?',
+      whereArgs: [trimmed, trimmed],
+      limit: 1,
+    );
+    if (exactRows.isNotEmpty) {
+      return WordEntry.fromMap(exactRows.first);
+    }
+
+    // 2. Normalized match (e.g. "هڑونگّ" -> "هڑونگ")
+    final normalized = CrossReferenceParser.normalizeHeadword(trimmed);
+    if (normalized.isEmpty) return null;
+
+    final normalizedRows = await db.query(
+      'sayadganj',
+      where: 'TRIM(full_word) = ? OR TRIM(full_word_with_symbols) = ?',
+      whereArgs: [normalized, normalized],
+      limit: 1,
+    );
+    if (normalizedRows.isNotEmpty) {
+      return WordEntry.fromMap(normalizedRows.first);
+    }
+
+    // 3. Closest prefix fallback
+    final prefixRows = await db.query(
+      'sayadganj',
+      where: 'TRIM(full_word) LIKE ?',
+      whereArgs: ['$normalized%'],
+      orderBy: 'LENGTH(full_word) ASC',
+      limit: 1,
+    );
+    if (prefixRows.isNotEmpty) {
+      return WordEntry.fromMap(prefixRows.first);
+    }
+
+    return null;
   }
 }

@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../bookmarks/providers/bookmarks_provider.dart';
 import '../../settings/providers/settings_provider.dart';
 import '../providers/dictionary_providers.dart';
+import './widgets/cross_reference_section.dart';
 
 class WordDetailScreen extends ConsumerWidget {
   final int wordId;
@@ -177,6 +178,7 @@ class WordDetailScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
+                CrossReferenceSection(definition: word.definition),
               ],
             ),
           );
