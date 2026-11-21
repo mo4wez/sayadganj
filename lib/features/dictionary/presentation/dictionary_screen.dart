@@ -7,7 +7,6 @@ import '../domain/word_entry.dart';
 import '../providers/dictionary_providers.dart';
 import 'widgets/alphabet_dial_sheet.dart';
 import 'widgets/word_card.dart';
-import 'widgets/word_of_the_day_card.dart';
 import 'widgets/idle_dictionary_view.dart';
 import 'word_detail_screen.dart';
 
