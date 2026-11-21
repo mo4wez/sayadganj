@@ -28,7 +28,8 @@ class WordCard extends StatelessWidget {
         ? word.fullWordWithSymbols
         : word.fullWord;
 
-    final previewDefinition = scope == SearchScope.inDefinitions
+    final isDefinitionSearch = scope == SearchScope.inDefinitions;
+    final previewDefinition = isDefinitionSearch
         ? QuizQuestion.formatOptionDefinition(word)
         : word.definition;
 
@@ -46,9 +47,7 @@ class WordCard extends StatelessWidget {
                   children: [
                     HighlightedText(
                       text: headword,
-                      query: scope == SearchScope.inDefinitions
-                          ? ''
-                          : highlightQuery,
+                      query: isDefinitionSearch ? '' : highlightQuery,
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: colorScheme.primary,
                       ),
@@ -58,7 +57,7 @@ class WordCard extends StatelessWidget {
                     const SizedBox(height: 6),
                     HighlightedText(
                       text: previewDefinition,
-                      query: highlightQuery,
+                      query: isDefinitionSearch ? highlightQuery : '',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodyMedium,
