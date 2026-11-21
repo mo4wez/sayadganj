@@ -154,7 +154,7 @@ class DictionaryNotationRegistry {
     DictionaryNotation(
       num: '۳',
       short: '✪',
-      long: 'ھماگال کہ سید ھاشمی ءَ بنشتگ انت بلے بزانت نبشتگ نہ کرتگ انت آیانی گُڈ سرَ اے ٹِک جنگ بوتگ',
+      long: 'ھما گال کہ سیدھاشمی ءَ نبشتگ انت بلے بزانت نبشتگ نہ کرتگ انت آیانی گُڈ سر ءَ اے ٹِک جنگ بوتگ',
       category: NotationCategory.symbol,
     ),
   ];
