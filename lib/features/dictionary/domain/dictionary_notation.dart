@@ -14,11 +14,16 @@ class DictionaryNotation {
   final String long;
   final NotationCategory category;
 
+  /// True when [short] can also appear as an ordinary Balochi word in prose
+  /// (e.g. "سند", "پا") and should only match inside notation brackets/punctuation.
+  final bool requiresNotationContext;
+
   const DictionaryNotation({
     required this.num,
     required this.short,
     required this.long,
     required this.category,
+    this.requiresNotationContext = false,
   });
 
   bool get isSymbol => category == NotationCategory.symbol;
@@ -39,6 +44,7 @@ class DictionaryNotationRegistry {
       short: 'پا',
       long: 'پارسی',
       category: NotationCategory.language,
+      requiresNotationContext: true,
     ),
     DictionaryNotation(
       num: '۳',
@@ -57,12 +63,14 @@ class DictionaryNotationRegistry {
       short: 'سن',
       long: 'سنسکرت',
       category: NotationCategory.language,
+      requiresNotationContext: true,
     ),
     DictionaryNotation(
       num: '۶',
       short: 'سند',
       long: 'سندی',
       category: NotationCategory.language,
+      requiresNotationContext: true,
     ),
     DictionaryNotation(
       num: '۷',
@@ -135,6 +143,7 @@ class DictionaryNotationRegistry {
       short: 'طب',
       long: 'طبری (واژنامہ طبری)',
       category: NotationCategory.source,
+      requiresNotationContext: true,
     ),
   ];
 
@@ -154,7 +163,7 @@ class DictionaryNotationRegistry {
     DictionaryNotation(
       num: '۳',
       short: '✪',
-      long: 'ھما گال کہ سیدھاشمی ءَ نبشتگ انت بلے بزانت نبشتگ نہ کرتگ انت آیانی گُڈ سر ءَ اے ٹِک جنگ بوتگ',
+      long: 'ھماگال کہ سید ھاشمی ءَ بنشتگ انت بلے بزانت نبشتگ نہ کرتگ انت آیانی گُڈ سرَ اے ٹِک جنگ بوتگ',
       category: NotationCategory.symbol,
     ),
   ];
@@ -168,12 +177,10 @@ class DictionaryNotationRegistry {
 
   static final RegExp _diacriticsRegex = RegExp(r'[\u064B-\u065F\u0670]');
 
-  /// Normalizes Arabic/Balochi character variants and diacritics for matching.
+  /// Strips diacritics while preserving distinct Balochi letters (ھ vs ه/ہ).
   static String normalize(String input) {
     return input
         .replaceAll(_diacriticsRegex, '')
-        .replaceAll('ه', 'ھ')
-        .replaceAll('ہ', 'ھ')
         .replaceAll('ي', 'ی')
         .replaceAll('ك', 'ک')
         .replaceAll('.', '۔')
@@ -185,7 +192,7 @@ class DictionaryNotationRegistry {
     for (final item in all) normalize(item.short): item,
   };
 
-  /// Regex matching standalone word tokens (including multi-word "پ ک", "ب۔ق") or symbols.
+  /// Regex matching standalone word tokens (including "پ ک", "س م", "ب۔ق") or symbols.
   static final RegExp tokenPattern = RegExp(
     r'[★✷✪]|'
     r'(?<![\u0600-\u06FF])'
@@ -196,8 +203,52 @@ class DictionaryNotationRegistry {
     r'(?![\u0600-\u06FF])',
   );
 
-  static DictionaryNotation? matchToken(String rawToken) {
-    return _normalizedLookup[normalize(rawToken)];
+  static bool _hasDelimitedNotationContext(
+    String fullText,
+    int start,
+    int end,
+  ) {
+    final before = fullText.substring(0, start).trimRight();
+    final after = fullText.substring(end).trimLeft();
+
+    final openedWithBracket =
+        before.endsWith('(') ||
+        before.endsWith('{') ||
+        before.endsWith('[') ||
+        before.endsWith('«');
+
+    final closedWithNotationPunct =
+        after.startsWith(')') ||
+        after.startsWith('}') ||
+        after.startsWith(']') ||
+        after.startsWith('»') ||
+        after.startsWith(':') ||
+        after.startsWith('：') ||
+        after.startsWith('۔') ||
+        after.startsWith('.');
+
+    return openedWithBracket || closedWithNotationPunct;
+  }
+
+  static DictionaryNotation? matchToken(
+    String rawToken, {
+    String? fullText,
+    int? start,
+    int? end,
+  }) {
+    final notation = _normalizedLookup[normalize(rawToken)];
+    if (notation == null) return null;
+
+    if (notation.requiresNotationContext &&
+        fullText != null &&
+        start != null &&
+        end != null) {
+      if (!_hasDelimitedNotationContext(fullText, start, end)) {
+        return null;
+      }
+    }
+
+    return notation;
   }
 
   /// Finds all unique notations present in a headword and/or definition.
@@ -212,7 +263,12 @@ class DictionaryNotationRegistry {
     for (final match in tokenPattern.allMatches(combined)) {
       final token = match.group(0);
       if (token == null) continue;
-      final notation = matchToken(token);
+      final notation = matchToken(
+        token,
+        fullText: combined,
+        start: match.start,
+        end: match.end,
+      );
       if (notation != null && seenShorts.add(notation.short)) {
         found.add(notation);
       }

@@ -45,7 +45,12 @@ class _NotationRichTextState extends State<NotationRichText> {
       final token = match.group(0);
       if (token == null) continue;
 
-      final notation = DictionaryNotationRegistry.matchToken(token);
+      final notation = DictionaryNotationRegistry.matchToken(
+        token,
+        fullText: text,
+        start: match.start,
+        end: match.end,
+      );
       if (notation == null) continue;
 
       if (match.start > cursor) {
