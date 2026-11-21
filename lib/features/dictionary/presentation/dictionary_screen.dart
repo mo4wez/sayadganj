@@ -3,7 +3,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../core/theme/theme_mode_provider.dart';
 import '../domain/word_entry.dart';
 import '../providers/dictionary_providers.dart';
 import 'widgets/alphabet_dial_sheet.dart';
@@ -70,7 +69,6 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
     final recentAsync = ref.watch(recentSearchesProvider);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
 
     final hasSearchQuery = query.trim().isNotEmpty;
     final hasLetterFilter = selectedLetter != null && selectedLetter.isNotEmpty;
@@ -95,21 +93,6 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
             const Text('سیدگنج'),
           ],
         ),
-        actions: [
-          IconButton(
-            tooltip: isDark ? 'روشنیں رنگ' : 'تاریکیں رنگ',
-            icon: Icon(isDark ? LucideIcons.sun : LucideIcons.moon),
-            onPressed: () {
-              final platformBrightness = MediaQuery.platformBrightnessOf(
-                context,
-              );
-              ref
-                  .read(themeModeProvider.notifier)
-                  .toggleTheme(platformBrightness);
-            },
-          ),
-          const SizedBox(width: 8),
-        ],
       ),
       body: Column(
         children: [

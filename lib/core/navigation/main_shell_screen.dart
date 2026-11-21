@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../features/bookmarks/presentation/bookmarks_screen.dart';
 import '../../features/dictionary/presentation/dictionary_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
+import '../theme/font_family_provider.dart';
 
 class SelectedTabNotifier extends Notifier<int> {
   @override
@@ -33,10 +34,10 @@ class MainShellScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(selectedTabProvider);
+    final selectedFont = ref.watch(fontFamilyProvider);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      // IndexedStack keeps search text and scroll position alive across tab switches
       body: IndexedStack(index: currentIndex, children: _screens),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -58,8 +59,9 @@ class MainShellScreen extends ConsumerWidget {
               color: colorScheme.onSurfaceVariant,
               activeColor: colorScheme.primary,
               tabBackgroundColor: colorScheme.secondary,
-              tabBorderRadius: 100, // Full pill/bubble shape
+              tabBorderRadius: 100,
               textStyle: TextStyle(
+                fontFamily: selectedFont.fontFamily,
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
                 color: colorScheme.primary,

@@ -68,53 +68,59 @@ class AppTheme {
       onError: Colors.white,
     );
 
+    final baseTextTheme = TextTheme(
+      headlineMedium: TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 26,
+        fontWeight: FontWeight.w700,
+        color: textPrimary,
+        height: 1.5,
+      ),
+      titleLarge: TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+        color: textPrimary,
+        height: 1.4,
+      ),
+      titleMedium: TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 17,
+        fontWeight: FontWeight.w600,
+        color: textPrimary,
+        height: 1.5,
+      ),
+      bodyLarge: TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: textPrimary,
+        height: 1.75,
+      ),
+      bodyMedium: TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: textSecondary,
+        height: 1.65,
+      ),
+      labelMedium: TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        color: textSecondary,
+      ),
+    );
+
     return ThemeData(
       useMaterial3: true,
       brightness: brightness,
       fontFamily: fontFamily,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: background,
+      textTheme: baseTextTheme,
 
-      // Typography tuned for Balochi RTL script & diacritics
-      textTheme: TextTheme(
-        headlineMedium: TextStyle(
-          fontSize: 26,
-          fontWeight: FontWeight.w700,
-          color: textPrimary,
-          height: 1.5,
-        ),
-        titleLarge: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-          color: textPrimary,
-          height: 1.4,
-        ),
-        titleMedium: TextStyle(
-          fontSize: 17,
-          fontWeight: FontWeight.w600,
-          color: textPrimary,
-          height: 1.5,
-        ),
-        bodyLarge: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-          color: textPrimary,
-          height: 1.75,
-        ),
-        bodyMedium: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w400,
-          color: textSecondary,
-          height: 1.65,
-        ),
-        labelMedium: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: textSecondary,
-        ),
-      ),
-
-      // Flat, borderless minimal AppBar
+      // AppBar title inherits the selected font family
       appBarTheme: AppBarTheme(
         backgroundColor: background,
         foregroundColor: textPrimary,
@@ -122,13 +128,13 @@ class AppTheme {
         scrolledUnderElevation: 0,
         centerTitle: false,
         titleTextStyle: TextStyle(
+          fontFamily: fontFamily,
           fontSize: 22,
           fontWeight: FontWeight.w700,
           color: textPrimary,
         ),
       ),
 
-      // Minimal hairline cards instead of heavy shadows
       cardTheme: CardThemeData(
         color: surface,
         elevation: 0,
@@ -139,11 +145,14 @@ class AppTheme {
         ),
       ),
 
-      // Modern pill-rounded search & text inputs
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: surface,
-        hintStyle: TextStyle(color: textSecondary, fontSize: 15),
+        hintStyle: TextStyle(
+          fontFamily: fontFamily,
+          color: textSecondary,
+          fontSize: 15,
+        ),
         prefixIconColor: textSecondary,
         suffixIconColor: textSecondary,
         contentPadding: const EdgeInsets.symmetric(
