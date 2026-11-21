@@ -90,13 +90,15 @@ class DictionaryDbService {
       SearchScope.containsHeadword => (
         r"full_word LIKE ? ESCAPE '\' OR full_word_with_symbols LIKE ? ESCAPE '\'",
         ['%$escaped%', '%$escaped%'],
-        "CASE WHEN full_word LIKE '$escaped%' ESCAPE '\\' THEN 0 ELSE 1 END, full_word ASC",
+        'full_word ASC',
       ),
       SearchScope.inDefinitions => (
-        r"full_word LIKE ? ESCAPE '\' OR full_word_with_symbols LIKE ? ESCAPE '\' OR definition LIKE ? ESCAPE '\'",
+        // Match inside the meaning text after ':', excluding words whose headword itself is the query
+        r"SUBSTR(definition, INSTR(definition, ':') + 1) LIKE ? ESCAPE '\' "
+            r"AND full_word NOT LIKE ? ESCAPE '\' "
+            r"AND full_word_with_symbols NOT LIKE ? ESCAPE '\'",
         ['%$escaped%', '%$escaped%', '%$escaped%'],
-        "CASE WHEN full_word LIKE '$escaped%' ESCAPE '\\' THEN 0 "
-            "WHEN full_word LIKE '%$escaped%' ESCAPE '\\' THEN 1 ELSE 2 END, full_word ASC",
+        'full_word ASC',
       ),
     };
 

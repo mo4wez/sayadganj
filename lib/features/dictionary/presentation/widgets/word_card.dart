@@ -1,6 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../domain/quiz_question.dart';
+import '../../domain/search_scope.dart';
 import '../../domain/word_entry.dart';
 import 'highlighted_text.dart';
 
@@ -8,12 +10,14 @@ class WordCard extends StatelessWidget {
   final WordEntry word;
   final VoidCallback onTap;
   final String highlightQuery;
+  final SearchScope scope;
 
   const WordCard({
     super.key,
     required this.word,
     required this.onTap,
     this.highlightQuery = '',
+    this.scope = SearchScope.containsHeadword,
   });
 
   @override
@@ -23,6 +27,10 @@ class WordCard extends StatelessWidget {
     final headword = word.fullWordWithSymbols.isNotEmpty
         ? word.fullWordWithSymbols
         : word.fullWord;
+
+    final previewDefinition = scope == SearchScope.inDefinitions
+        ? QuizQuestion.formatOptionDefinition(word)
+        : word.definition;
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -38,7 +46,9 @@ class WordCard extends StatelessWidget {
                   children: [
                     HighlightedText(
                       text: headword,
-                      query: highlightQuery,
+                      query: scope == SearchScope.inDefinitions
+                          ? ''
+                          : highlightQuery,
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: colorScheme.primary,
                       ),
@@ -47,7 +57,7 @@ class WordCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     HighlightedText(
-                      text: word.definition,
+                      text: previewDefinition,
                       query: highlightQuery,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,

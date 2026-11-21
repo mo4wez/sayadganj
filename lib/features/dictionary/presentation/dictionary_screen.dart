@@ -302,9 +302,11 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen> {
           separatorBuilder: (_, __) => const SizedBox(height: 10),
           itemBuilder: (context, index) {
             final word = words[index];
+            final scope = ref.watch(searchScopeProvider);
             return WordCard(
                   word: word,
                   highlightQuery: saveQueryOnTap ? queryToSave : '',
+                  scope: scope,
                   onTap: () {
                     if (saveQueryOnTap && queryToSave.trim().isNotEmpty) {
                       ref
