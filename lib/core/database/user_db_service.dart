@@ -2,6 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../features/dictionary/domain/word_entry.dart';
+import '../../features/dictionary/domain/reading_activity.dart';
 
 class UserDbService {
   UserDbService._();
@@ -131,5 +132,128 @@ class UserDbService {
   Future<void> clearSearchHistory() async {
     final db = await database;
     await db.delete('search_history');
+  }
+
+  bool _activityTablesReady = false;
+
+  Future<void> _ensureActivityTables(Database db) async {
+    if (_activityTablesReady) return;
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS viewed_words (
+        word_id INTEGER PRIMARY KEY,
+        full_word TEXT NOT NULL,
+        full_word_with_symbols TEXT NOT NULL,
+        viewed_at INTEGER NOT NULL
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS reading_days (
+        day_key TEXT PRIMARY KEY,
+        views_count INTEGER NOT NULL DEFAULT 1
+      )
+    ''');
+
+    _activityTablesReady = true;
+  }
+
+  static String _dayKey(DateTime dt) {
+    final y = dt.year.toString().padLeft(4, '0');
+    final m = dt.month.toString().padLeft(2, '0');
+    final d = dt.day.toString().padLeft(2, '0');
+    return '$y-$m-$d';
+  }
+
+  Future<void> recordWordView(WordEntry word) async {
+    final db = await database;
+    await _ensureActivityTables(db);
+
+    final now = DateTime.now();
+    final today = _dayKey(now);
+
+    await db.insert('viewed_words', {
+      'word_id': word.id,
+      'full_word': word.fullWord,
+      'full_word_with_symbols': word.fullWordWithSymbols,
+      'viewed_at': now.millisecondsSinceEpoch,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+
+    await db.rawInsert(
+      '''
+      INSERT INTO reading_days (day_key, views_count)
+      VALUES (?, 1)
+      ON CONFLICT(day_key) DO UPDATE SET views_count = views_count + 1
+      ''',
+      [today],
+    );
+  }
+
+  Future<ReadingActivitySummary> getReadingActivity({
+    int recentLimit = 10,
+  }) async {
+    final db = await database;
+    await _ensureActivityTables(db);
+
+    final recentRows = await db.query(
+      'viewed_words',
+      orderBy: 'viewed_at DESC',
+      limit: recentLimit,
+    );
+    final recentWords = recentRows
+        .map((row) => ViewedWordEntry.fromMap(row))
+        .toList();
+
+    final countRow = await db.rawQuery(
+      'SELECT COUNT(*) AS total FROM viewed_words',
+    );
+    final totalUnique = (countRow.first['total'] as num?)?.toInt() ?? 0;
+
+    final dayRows = await db.query('reading_days', orderBy: 'day_key DESC');
+
+    final now = DateTime.now();
+    final todayKey = _dayKey(now);
+    final yesterdayKey = _dayKey(now.subtract(const Duration(days: 1)));
+
+    int todayCount = 0;
+    final activeDays = <String>{};
+
+    for (final row in dayRows) {
+      final key = (row['day_key'] as String?) ?? '';
+      final count = (row['views_count'] as num?)?.toInt() ?? 0;
+      if (key.isNotEmpty && count > 0) {
+        activeDays.add(key);
+        if (key == todayKey) {
+          todayCount = count;
+        }
+      }
+    }
+
+    int streak = 0;
+    DateTime? cursor;
+    if (activeDays.contains(todayKey)) {
+      cursor = DateTime(now.year, now.month, now.day);
+    } else if (activeDays.contains(yesterdayKey)) {
+      final y = now.subtract(const Duration(days: 1));
+      cursor = DateTime(y.year, y.month, y.day);
+    }
+
+    while (cursor != null && activeDays.contains(_dayKey(cursor))) {
+      streak++;
+      cursor = cursor.subtract(const Duration(days: 1));
+    }
+
+    return ReadingActivitySummary(
+      streakDays: streak,
+      todayCount: todayCount,
+      totalUniqueCount: totalUnique,
+      recentWords: recentWords,
+    );
+  }
+
+  Future<void> clearViewedWords() async {
+    final db = await database;
+    await _ensureActivityTables(db);
+    await db.delete('viewed_words');
   }
 }

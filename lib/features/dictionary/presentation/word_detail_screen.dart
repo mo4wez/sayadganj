@@ -10,6 +10,7 @@ import '../providers/dictionary_providers.dart';
 import './widgets/cross_reference_section.dart';
 import 'widgets/notations/entry_notations_section.dart';
 import 'widgets/notations/notation_rich_text.dart';
+import 'widgets/activity/record_word_view_tracker.dart';
 
 class WordDetailScreen extends ConsumerWidget {
   final int wordId;
@@ -114,80 +115,83 @@ class WordDetailScreen extends ConsumerWidget {
               word.fullWordWithSymbols.isNotEmpty &&
               word.fullWordWithSymbols != word.fullWord;
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          word.fullWordWithSymbols.isNotEmpty
-                              ? word.fullWordWithSymbols
-                              : word.fullWord,
-                          style: theme.textTheme.headlineMedium?.copyWith(
-                            color: colorScheme.primary,
+          return RecordWordViewTracker(
+            word: word,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            word.fullWordWithSymbols.isNotEmpty
+                                ? word.fullWordWithSymbols
+                                : word.fullWord,
+                            style: theme.textTheme.headlineMedium?.copyWith(
+                              color: colorScheme.primary,
+                            ),
                           ),
-                        ),
-                        if (hasSymbols) ...[
-                          const SizedBox(height: 10),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: colorScheme.secondary,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              'سادگیں نبشتانک: ${word.fullWord}',
-                              style: theme.textTheme.labelMedium?.copyWith(
-                                color: colorScheme.primary,
+                          if (hasSymbols) ...[
+                            const SizedBox(height: 10),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
                               ),
+                              decoration: BoxDecoration(
+                                color: colorScheme.secondary,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                'سادگیں نبشتانک: ${word.fullWord}',
+                                style: theme.textTheme.labelMedium?.copyWith(
+                                  color: colorScheme.primary,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'مانا ءُ تشریح',
+                            style: theme.textTheme.labelMedium,
+                          ),
+                          const SizedBox(height: 12),
+                          const Divider(),
+                          const SizedBox(height: 14),
+                          NotationRichText(
+                            text: word.definition,
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              fontSize: 16 * fontScale,
                             ),
                           ),
                         ],
-                      ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 14),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'مانا ءُ تشریح',
-                          style: theme.textTheme.labelMedium,
-                        ),
-                        const SizedBox(height: 12),
-                        const Divider(),
-                        const SizedBox(height: 14),
-                        NotationRichText(
-                          text: word.definition,
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            fontSize: 16 * fontScale,
-                          ),
-                        ),
-                      ],
-                    ),
+                  CrossReferenceSection(definition: word.definition),
+                  EntryNotationsSection(
+                    headword: word.fullWordWithSymbols.isNotEmpty
+                        ? word.fullWordWithSymbols
+                        : word.fullWord,
+                    definition: word.definition,
                   ),
-                ),
-                CrossReferenceSection(definition: word.definition),
-                EntryNotationsSection(
-                  headword: word.fullWordWithSymbols.isNotEmpty
-                      ? word.fullWordWithSymbols
-                      : word.fullWord,
-                  definition: word.definition,
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
