@@ -6,6 +6,7 @@ import 'quiz/daily_quiz_card.dart';
 import 'word_of_the_day_card.dart';
 import 'activity/reading_streak_card.dart';
 import 'discovery/editorial_discovery_grid.dart';
+import 'flashcards/flashcard_deck_section.dart';
 
 class IdleDictionaryView extends StatelessWidget {
   final AsyncValue<List<String>> recentAsync;
@@ -38,6 +39,8 @@ class IdleDictionaryView extends StatelessWidget {
         const ReadingStreakCard(),
         const SizedBox(height: 18),
         const EditorialDiscoveryGrid(),
+        const SizedBox(height: 18),
+        const FlashcardDeckSection(),
         if (recents.isNotEmpty) ...[
           const SizedBox(height: 18),
           Row(

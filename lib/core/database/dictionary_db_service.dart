@@ -407,4 +407,17 @@ class DictionaryDbService {
         return results;
     }
   }
+
+  Future<List<WordEntry>> getRandomWords({int limit = 10}) async {
+    final db = await database;
+
+    final rows = await db.query(
+      'sayadganj',
+      where: "TRIM(full_word) != '' AND LENGTH(TRIM(definition)) >= 8",
+      orderBy: 'RANDOM()',
+      limit: limit,
+    );
+
+    return rows.map((row) => WordEntry.fromMap(row)).toList();
+  }
 }
