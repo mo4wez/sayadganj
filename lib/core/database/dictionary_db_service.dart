@@ -290,16 +290,24 @@ class DictionaryDbService {
 
     final rows = await db.query(
       'sayadganj',
-      where: "TRIM(full_word) != '' AND LENGTH(TRIM(definition)) >= 8",
+      where:
+          "TRIM(full_word) != '' "
+          'AND LENGTH(TRIM(definition)) >= 10 '
+          "AND full_word_with_symbols NOT LIKE '%✪%'",
       orderBy: 'RANDOM()',
-      limit: 4,
+      limit: 24,
     );
 
-    if (rows.length < 4) return null;
+    final eligible = rows
+        .map((row) => WordEntry.fromMap(row))
+        .where(QuizQuestion.isQuizEligible)
+        .take(4)
+        .toList();
 
-    final entries = rows.map((row) => WordEntry.fromMap(row)).toList();
-    final target = entries.first;
-    final shuffledOptions = List<WordEntry>.of(entries)..shuffle();
+    if (eligible.length < 4) return null;
+
+    final target = eligible.first;
+    final shuffledOptions = List<WordEntry>.of(eligible)..shuffle();
 
     return QuizQuestion(targetWord: target, options: shuffledOptions);
   }
