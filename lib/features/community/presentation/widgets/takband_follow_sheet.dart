@@ -29,25 +29,25 @@ class TakbandFollowSheet extends StatelessWidget {
 
   static const List<_SocialItem> _items = [
     _SocialItem(
-      label: 'تیلیگرام',
+      label: 'تلگرام',
       subtitle: 'Telegram',
       url: 'https://t.me/takband_qandeel',
       icon: LucideIcons.send,
     ),
     _SocialItem(
-      label: 'انسٹاگرام',
+      label: 'اینستاگرام',
       subtitle: 'Instagram',
       url: 'https://www.instagram.com/takband.qandeel',
       icon: LucideIcons.camera,
     ),
     _SocialItem(
-      label: 'یوٹیوب',
+      label: 'یوتیوب',
       subtitle: 'YouTube',
       url: 'https://www.youtube.com/@takband_qandeel',
       icon: LucideIcons.video,
     ),
     _SocialItem(
-      label: 'کسٹ‌باکس',
+      label: 'کست باکس',
       subtitle: 'CastBox',
       url: 'https://castbox.fm/va/7074852',
       icon: LucideIcons.headphones,
@@ -92,7 +92,7 @@ class TakbandFollowSheet extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('لینک کاپی بوت'),
+            content: Text('لینک کُپی بوت'),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -145,13 +145,13 @@ class TakbandFollowSheet extends StatelessWidget {
           const SizedBox(height: 14),
 
           Text(
-            'تکبند قندیل ءِ همراه بہ بئے',
+            'تاکبندکندیل ءِ همراه بہ بئے',
             style: theme.textTheme.titleMedium?.copyWith(fontSize: 17),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 6),
           Text(
-            'اگاں سیدگنج پہ تو کارآمد بوتگ، مئے کسانیں لبزانکی ٹولی ءِ تاک ءُ پڈکاسٹاں هم بچار دانکہ بلوچی زبان ءِ نوکیں کاراں سرپد بہ بئے.',
+            'اگاں سیدگنج پہ تو کارآمد بوتگ، مئے کسانیں لبزانکی گَبل ءِ تاک ءُ پادکستاں هم بچار دانکہ بلوچی زبان ءِ نوکیں کاراں سرپد بہ بئے.',
             style: theme.textTheme.bodyMedium?.copyWith(height: 1.65),
             textAlign: TextAlign.center,
           ),

@@ -264,7 +264,7 @@ class SettingsScreen extends ConsumerWidget {
                       LucideIcons.feather,
                       color: colorScheme.primary,
                     ),
-                    title: const Text('تستِ تکبند قندیل (Bottom Sheet)'),
+                    title: const Text('تستِ تاکبندکندیل (Bottom Sheet)'),
                     subtitle: const Text('پیش‌نمایش مستقیم شیت معرفی کانال‌ها'),
                     onTap: () {
                       HapticFeedback.selectionClick();
@@ -285,7 +285,7 @@ class SettingsScreen extends ConsumerWidget {
                       LucideIcons.rotateCcw,
                       color: colorScheme.primary,
                     ),
-                    title: const Text('ریستِ شمارنده تکبند قندیل'),
+                    title: const Text('ریستِ شمارنده تاکبندکندیل'),
                     subtitle: const Text(
                       'پاک کردن تعداد نشست‌ها و وضعیت عدم نمایش',
                     ),
@@ -297,7 +297,7 @@ class SettingsScreen extends ConsumerWidget {
                       if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('شمارنده تکبند قندیل ریست شد'),
+                          content: Text('شمارنده تاکبندکندیل ریست شد'),
                           behavior: SnackBarBehavior.floating,
                         ),
                       );
