@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:timezone/data/latest_all.dart' as tz_data;
@@ -15,13 +17,12 @@ class WordNotificationService {
 
   static final WordNotificationService instance = WordNotificationService._();
 
-  static const String _channelId = 'sayadganj_word_of_day';
-  static const String _channelName = 'روچ ءِ لبز (Word of the Day)';
-  static const String _channelDesc =
-      'هر روچ یک نوکیں بلوچی لبزے گوں آئی ءِ مانا ءَ';
+  static const MethodChannel _rtlChannel = MethodChannel(
+    'com.example.sayadganj/rtl_notifications',
+  );
+
   static const int _baseNotificationId = 4100;
   static const int _queueDays = 7;
-  String _rtlText(String text) => '\u200F\u202B$text\u202C';
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
@@ -39,7 +40,6 @@ class WordNotificationService {
     tz_data.initializeTimeZones();
 
     const androidSettings = AndroidInitializationSettings('ic_stat_sayadganj');
-
     const darwinSettings = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
@@ -54,11 +54,27 @@ class WordNotificationService {
       onDidReceiveNotificationResponse: _handleNotificationResponse,
     );
 
-    // Check if the app was cold-launched by tapping a Word of the Day notification
-    final launchDetails = await _plugin.getNotificationAppLaunchDetails();
-    final payload = launchDetails?.notificationResponse?.payload;
-    if ((launchDetails?.didNotificationLaunchApp ?? false) && payload != null) {
-      _pendingWordId = _parseWordId(payload);
+    if (Platform.isAndroid) {
+      _rtlChannel.setMethodCallHandler((call) async {
+        if (call.method == 'onNotificationTapped') {
+          final wordId = call.arguments as int?;
+          if (wordId != null && wordId > 0) {
+            _navigateToWord(wordId);
+          }
+        }
+      });
+
+      final initialId = await _rtlChannel.invokeMethod<int>('getInitialWordId');
+      if (initialId != null && initialId > 0) {
+        _pendingWordId = initialId;
+      }
+    } else {
+      final launchDetails = await _plugin.getNotificationAppLaunchDetails();
+      final payload = launchDetails?.notificationResponse?.payload;
+      if ((launchDetails?.didNotificationLaunchApp ?? false) &&
+          payload != null) {
+        _pendingWordId = _parseWordId(payload);
+      }
     }
 
     _initialized = true;
@@ -133,16 +149,6 @@ class WordNotificationService {
     final words = await _pickDailyWords(_queueDays);
     if (words.isEmpty) return;
 
-    final androidImpl = _plugin
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >();
-    final canExact =
-        await androidImpl?.canScheduleExactNotifications() ?? false;
-    final scheduleMode = canExact
-        ? AndroidScheduleMode.exactAllowWhileIdle
-        : AndroidScheduleMode.inexactAllowWhileIdle;
-
     final now = DateTime.now();
     var firstSlot = DateTime(now.year, now.month, now.day, hour, minute);
     if (!firstSlot.isAfter(now.add(const Duration(minutes: 1)))) {
@@ -152,48 +158,41 @@ class WordNotificationService {
     for (int i = 0; i < words.length; i++) {
       final entry = words[i];
       final slotLocal = firstSlot.add(Duration(days: i));
-      final scheduledTz = tz.TZDateTime.from(slotLocal.toUtc(), tz.UTC);
-
       final headword = entry.fullWordWithSymbols.isNotEmpty
           ? entry.fullWordWithSymbols
           : entry.fullWord;
       final cleanMeaning = QuizQuestion.formatOptionDefinition(entry);
+      final titleText = 'روچ ءِ لبز: $headword';
 
-      final titleText = _rtlText('روچ ءِ لبز: $headword');
-      final bodyText = _rtlText(cleanMeaning);
-      final summaryText = _rtlText('سیدگنج');
-
-      final androidDetails = AndroidNotificationDetails(
-        _channelId,
-        _channelName,
-        channelDescription: _channelDesc,
-        importance: Importance.defaultImportance,
-        priority: Priority.defaultPriority,
-        styleInformation: BigTextStyleInformation(
-          bodyText,
-          contentTitle: titleText,
-          summaryText: summaryText,
-        ),
-      );
-
-      const darwinDetails = DarwinNotificationDetails();
-
-      await _plugin.zonedSchedule(
-        id: _baseNotificationId + i,
-        title: titleText,
-        body: bodyText,
-        scheduledDate: scheduledTz,
-        notificationDetails: NotificationDetails(
-          android: androidDetails,
-          iOS: darwinDetails,
-        ),
-        payload: 'word:${entry.id}',
-        androidScheduleMode: scheduleMode,
-      );
+      if (Platform.isAndroid) {
+        await _rtlChannel.invokeMethod<void>('scheduleNotification', {
+          'id': _baseNotificationId + i,
+          'wordId': entry.id,
+          'title': titleText,
+          'body': cleanMeaning,
+          'triggerAtMillis': slotLocal.millisecondsSinceEpoch,
+          'isTest': false,
+        });
+      } else {
+        final scheduledTz = tz.TZDateTime.from(slotLocal.toUtc(), tz.UTC);
+        const darwinDetails = DarwinNotificationDetails();
+        await _plugin.zonedSchedule(
+          id: _baseNotificationId + i,
+          title: titleText,
+          body: cleanMeaning,
+          scheduledDate: scheduledTz,
+          notificationDetails: const NotificationDetails(iOS: darwinDetails),
+          payload: 'word:${entry.id}',
+          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        );
+      }
     }
   }
 
   Future<void> cancelAll() async {
+    if (Platform.isAndroid) {
+      await _rtlChannel.invokeMethod<void>('cancelAll');
+    }
     for (int i = 0; i < _queueDays; i++) {
       await _plugin.cancel(id: _baseNotificationId + i);
     }
@@ -233,42 +232,35 @@ class WordNotificationService {
           ? entry.fullWordWithSymbols
           : entry.fullWord;
       final cleanMeaning = QuizQuestion.formatOptionDefinition(entry);
-      final scheduledTz = tz.TZDateTime.from(
-        DateTime.now().add(delay).toUtc(),
-        tz.UTC,
-      );
+      final titleText = 'روچ ءِ لبز: $headword';
+      final triggerTime = DateTime.now().add(delay);
 
-      final androidDetails = AndroidNotificationDetails(
-        '${_channelId}_test_v2',
-        '$_channelName (تست)',
-        channelDescription: _channelDesc,
-        importance: Importance.max,
-        priority: Priority.max,
-        styleInformation: BigTextStyleInformation(
-          cleanMeaning,
-          contentTitle: 'روچ ءِ لبز: $headword',
-          summaryText: 'سیدگنج (تست)',
-        ),
-      );
-
-      const darwinDetails = DarwinNotificationDetails(
-        presentAlert: true,
-        presentBanner: true,
-        presentSound: true,
-      );
-
-      await _plugin.zonedSchedule(
-        id: 9999,
-        title: 'روچ ءِ لبز: $headword',
-        body: cleanMeaning,
-        scheduledDate: scheduledTz,
-        notificationDetails: NotificationDetails(
-          android: androidDetails,
-          iOS: darwinDetails,
-        ),
-        payload: 'word:${entry.id}',
-        androidScheduleMode: AndroidScheduleMode.alarmClock,
-      );
+      if (Platform.isAndroid) {
+        await _rtlChannel.invokeMethod<void>('scheduleNotification', {
+          'id': 9999,
+          'wordId': entry.id,
+          'title': titleText,
+          'body': cleanMeaning,
+          'triggerAtMillis': triggerTime.millisecondsSinceEpoch,
+          'isTest': true,
+        });
+      } else {
+        final scheduledTz = tz.TZDateTime.from(triggerTime.toUtc(), tz.UTC);
+        const darwinDetails = DarwinNotificationDetails(
+          presentAlert: true,
+          presentBanner: true,
+          presentSound: true,
+        );
+        await _plugin.zonedSchedule(
+          id: 9999,
+          title: titleText,
+          body: cleanMeaning,
+          scheduledDate: scheduledTz,
+          notificationDetails: const NotificationDetails(iOS: darwinDetails),
+          payload: 'word:${entry.id}',
+          androidScheduleMode: AndroidScheduleMode.alarmClock,
+        );
+      }
 
       return null;
     } catch (e) {
