@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +7,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../core/theme/font_family_provider.dart';
 import '../../../core/theme/theme_appearance_provider.dart';
 import '../../../core/theme/theme_mode_provider.dart';
+import '../../community/presentation/widgets/takband_follow_sheet.dart';
+import '../../community/providers/community_prompt_provider.dart';
 import '../../dictionary/providers/dictionary_providers.dart';
 import '../providers/settings_provider.dart';
 import 'theme/theme_settings_screen.dart';
@@ -187,11 +190,13 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 22),
+
           // --- Notifications ---
           Text('یات‌دھانی (Notifications)', style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
           const NotificationSettingsCard(),
           const SizedBox(height: 22),
+
           // --- Data & Search History ---
           Text('دپتر', style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
@@ -245,6 +250,63 @@ class SettingsScreen extends ConsumerWidget {
           Text('مئے بابت ءَ', style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
           AboutAppCard(wordCountAsync: wordCountAsync),
+
+          if (kDebugMode) ...[
+            const SizedBox(height: 22),
+            Text('Debug Tools', style: theme.textTheme.labelMedium),
+            const SizedBox(height: 10),
+            Card(
+              clipBehavior: Clip.antiAlias,
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(
+                      LucideIcons.feather,
+                      color: colorScheme.primary,
+                    ),
+                    title: const Text('تستِ تکبند قندیل (Bottom Sheet)'),
+                    subtitle: const Text('پیش‌نمایش مستقیم شیت معرفی کانال‌ها'),
+                    onTap: () {
+                      HapticFeedback.selectionClick();
+                      TakbandFollowSheet.show(
+                        context,
+                        onDismissLater: () => ref
+                            .read(communityPromptProvider.notifier)
+                            .dismissForNow(),
+                        onDontShowAgain: () => ref
+                            .read(communityPromptProvider.notifier)
+                            .optOutPermanently(),
+                      );
+                    },
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    leading: Icon(
+                      LucideIcons.rotateCcw,
+                      color: colorScheme.primary,
+                    ),
+                    title: const Text('ریستِ شمارنده تکبند قندیل'),
+                    subtitle: const Text(
+                      'پاک کردن تعداد نشست‌ها و وضعیت عدم نمایش',
+                    ),
+                    onTap: () async {
+                      HapticFeedback.selectionClick();
+                      await ref
+                          .read(communityPromptProvider.notifier)
+                          .debugResetState();
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('شمارنده تکبند قندیل ریست شد'),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );

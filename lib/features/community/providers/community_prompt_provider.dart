@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/services/preferences_provider.dart';
@@ -60,6 +61,23 @@ class CommunityPromptController extends Notifier<bool> {
   Future<void> optOutPermanently() async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setBool(_optedOutKey, true);
+    state = false;
+  }
+
+  /// Debug helper: triggers the community sheet immediately, bypassing session/cooldown checks.
+  void debugForceTrigger() {
+    if (!kDebugMode) return;
+    state = true;
+  }
+
+  /// Debug helper: clears stored prompt counters and opt-out state.
+  Future<void> debugResetState() async {
+    if (!kDebugMode) return;
+    final prefs = ref.read(sharedPreferencesProvider);
+    await prefs.remove(_sessionsKey);
+    await prefs.remove(_wordsViewedKey);
+    await prefs.remove(_lastShownMsKey);
+    await prefs.remove(_optedOutKey);
     state = false;
   }
 }
