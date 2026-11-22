@@ -14,8 +14,8 @@ class DictionaryNotation {
   final String long;
   final NotationCategory category;
 
-  /// True when [short] can also appear as an ordinary Balochi word in prose
-  /// (e.g. "سند", "پا") and should only match inside notation brackets/punctuation.
+  /// True when [short] can also appear as an ordinary Balochi word or syllable
+  /// (e.g. "بَت", "سند", "پا") and should only match in notation contexts.
   final bool requiresNotationContext;
 
   const DictionaryNotation({
@@ -96,7 +96,7 @@ class DictionaryNotationRegistry {
     DictionaryNotation(
       num: '۱',
       short: 'اک',
-      long: 'انچوش کہ',
+      long: 'انچوس کہ',
       category: NotationCategory.abbreviation,
     ),
     DictionaryNotation(
@@ -116,6 +116,7 @@ class DictionaryNotationRegistry {
       short: 'بَت',
       long: 'بَتَل',
       category: NotationCategory.abbreviation,
+      requiresNotationContext: true,
     ),
   ];
 
@@ -203,11 +204,51 @@ class DictionaryNotationRegistry {
     r'(?![\u0600-\u06FF])',
   );
 
+  /// Returns true when the token sits inside a syllable/pronunciation breakdown
+  /// such as "(اَلْ - بَتّ )" or "(اَل + بَت)".
+  static bool _isInsideSyllableBreakdown(String fullText, int start, int end) {
+    final before = fullText.substring(0, start).trimRight();
+    final after = fullText.substring(end).trimLeft();
+
+    if (before.endsWith('-') ||
+        before.endsWith('–') ||
+        before.endsWith('—') ||
+        before.endsWith('+') ||
+        after.startsWith('-') ||
+        after.startsWith('–') ||
+        after.startsWith('—') ||
+        after.startsWith('+')) {
+      return true;
+    }
+
+    final openParen = before.lastIndexOf('(');
+    final closeParenBefore = before.lastIndexOf(')');
+    if (openParen != -1 && openParen > closeParenBefore) {
+      final closeParenAfter = after.indexOf(')');
+      if (closeParenAfter != -1) {
+        final insideParens =
+            '${before.substring(openParen + 1)} ${after.substring(0, closeParenAfter)}';
+        if (insideParens.contains('-') ||
+            insideParens.contains('–') ||
+            insideParens.contains('—') ||
+            insideParens.contains('+')) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
   static bool _hasDelimitedNotationContext(
     String fullText,
     int start,
     int end,
   ) {
+    if (_isInsideSyllableBreakdown(fullText, start, end)) {
+      return false;
+    }
+
     final before = fullText.substring(0, start).trimRight();
     final after = fullText.substring(end).trimLeft();
 
@@ -239,11 +280,16 @@ class DictionaryNotationRegistry {
     final notation = _normalizedLookup[normalize(rawToken)];
     if (notation == null) return null;
 
-    if (notation.requiresNotationContext &&
-        fullText != null &&
+    if (fullText != null &&
         start != null &&
-        end != null) {
-      if (!_hasDelimitedNotationContext(fullText, start, end)) {
+        end != null &&
+        !notation.isSymbol) {
+      if (_isInsideSyllableBreakdown(fullText, start, end)) {
+        return null;
+      }
+
+      if (notation.requiresNotationContext &&
+          !_hasDelimitedNotationContext(fullText, start, end)) {
         return null;
       }
     }
@@ -251,21 +297,33 @@ class DictionaryNotationRegistry {
     return notation;
   }
 
-  /// Finds all unique notations present in a headword and/or definition.
+  /// Finds all unique notations present in a headword (symbols) and definition.
   static List<DictionaryNotation> findInEntry({
     required String headword,
     required String definition,
   }) {
-    final combined = '$headword $definition';
     final found = <DictionaryNotation>[];
     final seenShorts = <String>{};
 
-    for (final match in tokenPattern.allMatches(combined)) {
+    // 1. Scan headword only for editorial symbols (★, ✷, ✪)
+    for (final match in tokenPattern.allMatches(headword)) {
+      final token = match.group(0);
+      if (token == null) continue;
+      final notation = matchToken(token);
+      if (notation != null &&
+          notation.isSymbol &&
+          seenShorts.add(notation.short)) {
+        found.add(notation);
+      }
+    }
+
+    // 2. Scan definition for all notations with full positional context
+    for (final match in tokenPattern.allMatches(definition)) {
       final token = match.group(0);
       if (token == null) continue;
       final notation = matchToken(
         token,
-        fullText: combined,
+        fullText: definition,
         start: match.start,
         end: match.end,
       );
