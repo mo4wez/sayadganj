@@ -9,6 +9,7 @@ import '../../../core/theme/theme_mode_provider.dart';
 import '../../dictionary/providers/dictionary_providers.dart';
 import '../providers/settings_provider.dart';
 import 'theme/theme_settings_screen.dart';
+import 'widgets/about_app_card.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -235,93 +236,10 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 22),
 
-          // --- About App Card ---
-          Text('بابت ءِ ایپ', style: theme.textTheme.labelMedium),
+          // --- About App & TakbandQandeel Card ---
+          Text('بابت ءِ ایپ ءُ مئے ٹولی', style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: colorScheme.secondary,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Icon(
-                          LucideIcons.bookOpenText,
-                          size: 22,
-                          color: colorScheme.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'سیدگنج — بلوچی لبزبلد',
-                              style: theme.textTheme.titleMedium,
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              'نسخہ ۱.۰.۰ • ۱۰۰٪ آفلاین',
-                              style: theme.textTheme.labelMedium?.copyWith(
-                                color: colorScheme.primary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-                  const Divider(),
-                  const SizedBox(height: 14),
-                  Text(
-                    'بلوچی ءَ پہ بلوچی سرجمیں لبزبلد کہ بید ء انٹرنیٹ ءَ کار کنت ءُ لبزانی مانا، اعراب ءُ تشریح ءَ پیش داریت۔',
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          LucideIcons.database,
-                          size: 16,
-                          color: colorScheme.primary,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          wordCountAsync.when(
-                            data: (count) => 'کل لبز: $count',
-                            loading: () => 'کل لبز: ...',
-                            error: (_, __) => 'کل لبز: —',
-                          ),
-                          style: theme.textTheme.labelMedium?.copyWith(
-                            color: colorScheme.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          AboutAppCard(wordCountAsync: wordCountAsync),
         ],
       ),
     );
