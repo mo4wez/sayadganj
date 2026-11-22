@@ -1,0 +1,56 @@
+name: Build Release APK
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build split-per-abi release APKs
+        run: flutter build apk --release --split-per-abi
+
+      - name: Upload APKs as Workflow Artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: sayadganj-release-apks
+          path: build/app/outputs/flutter-apk/*-release.apk
+          retention-days: 30
+
+      - name: Publish GitHub Release (on version tags)
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            build/app/outputs/flutter-apk/*-release.apk \
+            --title "SayadGanj ${GITHUB_REF_NAME}" \
+            --generate-notes
