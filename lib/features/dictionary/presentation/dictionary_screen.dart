@@ -130,95 +130,207 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
     final showSearchTools = _isSearchFocused || query.isNotEmpty;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: colorScheme.secondary,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                LucideIcons.bookOpenText,
-                size: 20,
-                color: colorScheme.primary,
-              ),
-            ),
-            const SizedBox(width: 10),
-            const Text('سیدگنج'),
-          ],
-        ),
-      ),
-      body: Column(
-        children: [
-          TapRegion(
-            onTapOutside: (_) {
-              if (_searchFocusNode.hasFocus) {
-                _searchFocusNode.unfocus();
-              }
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
-                  child: Row(
+      body: SafeArea(
+        bottom: false,
+        child: ClipRect(
+          child: NestedScrollView(
+            floatHeaderSlivers: true,
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                SliverAppBar(
+                  primary: false,
+                  floating: true,
+                  snap: true,
+                  elevation: 0,
+                  scrolledUnderElevation: 0,
+                  backgroundColor: theme.scaffoldBackgroundColor,
+                  title: Row(
                     children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _controller,
-                          focusNode: _searchFocusNode,
-                          textInputAction: TextInputAction.search,
-                          decoration: InputDecoration(
-                            hintText: 'لبزے بہ شوهاز...',
-                            prefixIcon: const Icon(
-                              LucideIcons.search,
-                              size: 20,
-                            ),
-                            suffixIcon: query.isNotEmpty
-                                ? IconButton(
-                                    icon: const Icon(LucideIcons.x, size: 18),
-                                    onPressed: () {
-                                      _controller.clear();
-                                      ref
-                                          .read(searchQueryProvider.notifier)
-                                          .clear();
-                                    },
-                                  )
-                                : null,
-                          ),
-                          onChanged: (text) {
-                            if (text.isNotEmpty && hasLetterFilter) {
-                              ref.read(selectedLetterProvider.notifier).clear();
-                            }
-                            ref.read(searchQueryProvider.notifier).update(text);
-                          },
-                          onSubmitted: (text) {
-                            ref
-                                .read(searchHistoryControllerProvider.notifier)
-                                .save(text);
-                          },
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: colorScheme.secondary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(
+                          LucideIcons.bookOpenText,
+                          size: 20,
+                          color: colorScheme.primary,
                         ),
                       ),
                       const SizedBox(width: 10),
-                      _AlphabetDialButton(
-                        activeLetter: selectedLetter,
-                        onTap: () => _openAlphabetDial(selectedLetter),
-                      ),
+                      const Text('سیدگنج'),
                     ],
                   ),
                 ),
-                AnimatedSearchTools(
-                  visible: showSearchTools,
-                  onInsertChar: _insertSpecialChar,
+                SliverOverlapAbsorber(
+                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                    context,
+                  ),
+                  sliver: PinnedHeaderSliver(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: theme.scaffoldBackgroundColor,
+                        border: innerBoxIsScrolled
+                            ? Border(
+                                bottom: BorderSide(
+                                  color: colorScheme.outlineVariant,
+                                  width: 1,
+                                ),
+                              )
+                            : null,
+                      ),
+                      child: TapRegion(
+                        onTapOutside: (_) {
+                          if (_searchFocusNode.hasFocus) {
+                            _searchFocusNode.unfocus();
+                          }
+                        },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: TextField(
+                                      controller: _controller,
+                                      focusNode: _searchFocusNode,
+                                      textInputAction: TextInputAction.search,
+                                      decoration: InputDecoration(
+                                        hintText: 'لبزے بہ شوهاز...',
+                                        prefixIcon: const Icon(
+                                          LucideIcons.search,
+                                          size: 20,
+                                        ),
+                                        suffixIcon: query.isNotEmpty
+                                            ? IconButton(
+                                                icon: const Icon(
+                                                  LucideIcons.x,
+                                                  size: 18,
+                                                ),
+                                                onPressed: () {
+                                                  _controller.clear();
+                                                  ref
+                                                      .read(
+                                                        searchQueryProvider
+                                                            .notifier,
+                                                      )
+                                                      .clear();
+                                                },
+                                              )
+                                            : null,
+                                      ),
+                                      onChanged: (text) {
+                                        if (text.isNotEmpty &&
+                                            hasLetterFilter) {
+                                          ref
+                                              .read(
+                                                selectedLetterProvider.notifier,
+                                              )
+                                              .clear();
+                                        }
+                                        ref
+                                            .read(searchQueryProvider.notifier)
+                                            .update(text);
+                                      },
+                                      onSubmitted: (text) {
+                                        ref
+                                            .read(
+                                              searchHistoryControllerProvider
+                                                  .notifier,
+                                            )
+                                            .save(text);
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  _AlphabetDialButton(
+                                    activeLetter: selectedLetter,
+                                    onTap: () =>
+                                        _openAlphabetDial(selectedLetter),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            AnimatedSearchTools(
+                              visible: showSearchTools,
+                              onInsertChar: _insertSpecialChar,
+                            ),
+                            if (!hasSearchQuery && hasLetterFilter)
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                  16,
+                                  0,
+                                  16,
+                                  10,
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 14,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: colorScheme.secondary,
+                                    borderRadius: BorderRadius.circular(14),
+                                    border: Border.all(
+                                      color: colorScheme.primary.withValues(
+                                        alpha: 0.3,
+                                      ),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        LucideIcons.compass,
+                                        size: 16,
+                                        color: colorScheme.primary,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          'حرف «${selectedLetter == 'ا' ? 'ا / آ' : selectedLetter}» ءِ لبز',
+                                          style: theme.textTheme.labelMedium
+                                              ?.copyWith(
+                                                color: colorScheme.primary,
+                                              ),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () =>
+                                            _openAlphabetDial(selectedLetter),
+                                        style: TextButton.styleFrom(
+                                          visualDensity: VisualDensity.compact,
+                                          foregroundColor: colorScheme.primary,
+                                        ),
+                                        child: const Text('بدل کن'),
+                                      ),
+                                      IconButton(
+                                        visualDensity: VisualDensity.compact,
+                                        icon: Icon(
+                                          LucideIcons.x,
+                                          size: 16,
+                                          color: colorScheme.primary,
+                                        ),
+                                        onPressed: () =>
+                                            _handleLetterSelected(null),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: hasSearchQuery
+              ];
+            },
+            body: hasSearchQuery
                 ? PaginatedWordListView(
+                    useSliverOverlap: true,
                     asyncState: searchPageAsync,
                     onLoadMore: () => ref
                         .read(paginatedSearchWordsProvider.notifier)
@@ -242,80 +354,22 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                     },
                   )
                 : hasLetterFilter
-                ? Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: colorScheme.secondary,
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(
-                              color: colorScheme.primary.withValues(alpha: 0.3),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                LucideIcons.compass,
-                                size: 16,
-                                color: colorScheme.primary,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  'حرف «${selectedLetter == 'ا' ? 'ا / آ' : selectedLetter}» ءِ لبز',
-                                  style: theme.textTheme.labelMedium?.copyWith(
-                                    color: colorScheme.primary,
-                                  ),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () =>
-                                    _openAlphabetDial(selectedLetter),
-                                style: TextButton.styleFrom(
-                                  visualDensity: VisualDensity.compact,
-                                  foregroundColor: colorScheme.primary,
-                                ),
-                                child: const Text('بدل کن'),
-                              ),
-                              IconButton(
-                                visualDensity: VisualDensity.compact,
-                                icon: Icon(
-                                  LucideIcons.x,
-                                  size: 16,
-                                  color: colorScheme.primary,
-                                ),
-                                onPressed: () => _handleLetterSelected(null),
-                              ),
-                            ],
-                          ),
+                ? PaginatedWordListView(
+                    useSliverOverlap: true,
+                    asyncState: letterPageAsync,
+                    onLoadMore: () => ref
+                        .read(paginatedLetterWordsProvider.notifier)
+                        .loadMore(),
+                    emptyIcon: LucideIcons.bookX,
+                    emptyTitle: 'هچ لبزے دست نہ کپت',
+                    emptySubtitle: 'اے حرف ءَ هچ لبز نیست',
+                    onTapWord: (word) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => WordDetailScreen(wordId: word.id),
                         ),
-                      ),
-                      Expanded(
-                        child: PaginatedWordListView(
-                          asyncState: letterPageAsync,
-                          onLoadMore: () => ref
-                              .read(paginatedLetterWordsProvider.notifier)
-                              .loadMore(),
-                          emptyIcon: LucideIcons.bookX,
-                          emptyTitle: 'هچ لبزے دست نہ کپت',
-                          emptySubtitle: 'اے حرف ءَ هچ لبز نیست',
-                          onTapWord: (word) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    WordDetailScreen(wordId: word.id),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+                      );
+                    },
                   )
                 : IdleDictionaryView(
                     recentAsync: recentAsync,
@@ -328,7 +382,7 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                         .clearAll(),
                   ),
           ),
-        ],
+        ),
       ),
     );
   }

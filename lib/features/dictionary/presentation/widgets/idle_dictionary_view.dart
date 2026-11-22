@@ -2,11 +2,11 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import 'quiz/daily_quiz_card.dart';
-import 'word_of_the_day_card.dart';
 import 'activity/reading_streak_card.dart';
 import 'discovery/editorial_discovery_grid.dart';
 import 'flashcards/flashcard_deck_section.dart';
+import 'quiz/daily_quiz_card.dart';
+import 'word_of_the_day_card.dart';
 
 class IdleDictionaryView extends StatelessWidget {
   final AsyncValue<List<String>> recentAsync;
@@ -32,63 +32,75 @@ class IdleDictionaryView extends StatelessWidget {
       orElse: () => const <String>[],
     );
 
-    return ListView(
-      padding: EdgeInsets.fromLTRB(16, 4, 16, 24 + bottomInset),
-      children: [
-        const WordOfTheDayCard(),
-        const SizedBox(height: 16),
-        const ReadingStreakCard(),
-        const SizedBox(height: 18),
-        const EditorialDiscoveryGrid(),
-        const SizedBox(height: 18),
-        const FlashcardDeckSection(),
-        if (recents.isNotEmpty) ...[
-          const SizedBox(height: 18),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return CustomScrollView(
+      slivers: [
+        SliverOverlapInjector(
+          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+        ),
+        SliverPadding(
+          padding: EdgeInsets.fromLTRB(16, 4, 16, 24 + bottomInset),
+          sliver: SliverList.list(
             children: [
-              Row(
-                children: [
-                  Icon(
-                    LucideIcons.history,
-                    size: 16,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(width: 6),
-                  Text('تازگیں شوهاز', style: theme.textTheme.labelMedium),
-                ],
-              ),
-              TextButton(
-                onPressed: onClearAll,
-                style: TextButton.styleFrom(
-                  visualDensity: VisualDensity.compact,
-                  foregroundColor: colorScheme.primary,
+              const WordOfTheDayCard(),
+              const SizedBox(height: 16),
+              const ReadingStreakCard(),
+              const SizedBox(height: 18),
+              const EditorialDiscoveryGrid(),
+              const SizedBox(height: 18),
+              const FlashcardDeckSection(),
+              if (recents.isNotEmpty) ...[
+                const SizedBox(height: 18),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          LucideIcons.history,
+                          size: 16,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          'تازگیں شوهاز',
+                          style: theme.textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
+                    TextButton(
+                      onPressed: onClearAll,
+                      style: TextButton.styleFrom(
+                        visualDensity: VisualDensity.compact,
+                        foregroundColor: colorScheme.primary,
+                      ),
+                      child: const Text('پاک کنگ'),
+                    ),
+                  ],
                 ),
-                child: const Text('پاک کنگ'),
-              ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: recents.map((term) {
+                    return InputChip(
+                      label: Text(term),
+                      onPressed: () => onSelectTerm(term),
+                      onDeleted: () => onRemoveTerm(term),
+                      deleteIcon: const Icon(LucideIcons.x, size: 14),
+                      backgroundColor: colorScheme.surface,
+                      side: BorderSide(color: colorScheme.outline),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+              const SizedBox(height: 18),
+              const DailyQuizCard(),
             ],
           ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: recents.map((term) {
-              return InputChip(
-                label: Text(term),
-                onPressed: () => onSelectTerm(term),
-                onDeleted: () => onRemoveTerm(term),
-                deleteIcon: const Icon(LucideIcons.x, size: 14),
-                backgroundColor: colorScheme.surface,
-                side: BorderSide(color: colorScheme.outline),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-        const SizedBox(height: 18),
-        const DailyQuizCard(),
+        ),
       ],
     );
   }

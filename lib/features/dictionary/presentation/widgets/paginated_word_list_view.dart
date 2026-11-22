@@ -8,7 +8,7 @@ import '../../domain/word_entry.dart';
 import '../../providers/paginated_words_provider.dart';
 import 'word_card.dart';
 
-class PaginatedWordListView extends StatefulWidget {
+class PaginatedWordListView extends StatelessWidget {
   final AsyncValue<PaginatedWordsState> asyncState;
   final VoidCallback onLoadMore;
   final ValueChanged<WordEntry> onTapWord;
@@ -17,6 +17,7 @@ class PaginatedWordListView extends StatefulWidget {
   final String emptySubtitle;
   final String highlightQuery;
   final SearchScope scope;
+  final bool useSliverOverlap;
 
   const PaginatedWordListView({
     super.key,
@@ -28,123 +29,117 @@ class PaginatedWordListView extends StatefulWidget {
     required this.emptySubtitle,
     this.highlightQuery = '',
     this.scope = SearchScope.containsHeadword,
+    this.useSliverOverlap = false,
   });
 
-  @override
-  State<PaginatedWordListView> createState() => _PaginatedWordListViewState();
-}
-
-class _PaginatedWordListViewState extends State<PaginatedWordListView> {
-  late final ScrollController _scrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController()..addListener(_onScroll);
-  }
-
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (!_scrollController.hasClients) return;
-    final position = _scrollController.position;
-    if (position.pixels >= position.maxScrollExtent - 320) {
-      widget.onLoadMore();
+  bool _handleScrollNotification(ScrollNotification notification) {
+    final metrics = notification.metrics;
+    if (metrics.axis == Axis.vertical &&
+        metrics.pixels >= metrics.maxScrollExtent - 320) {
+      onLoadMore();
     }
+    return false;
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
 
-    return widget.asyncState.when(
+    return asyncState.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, _) => _EmptyListPlaceholder(
         icon: LucideIcons.circleAlert,
         title: 'ردی یے بوت',
         subtitle: '$err',
+        useSliverOverlap: useSliverOverlap,
       ),
       data: (pageState) {
         final words = pageState.items;
         if (words.isEmpty) {
           return _EmptyListPlaceholder(
-            icon: widget.emptyIcon,
-            title: widget.emptyTitle,
-            subtitle: widget.emptySubtitle,
+            icon: emptyIcon,
+            title: emptyTitle,
+            subtitle: emptySubtitle,
+            useSliverOverlap: useSliverOverlap,
           );
         }
 
         final showFooter = pageState.isLoadingMore || !pageState.hasMore;
         final totalCount = words.length + (showFooter ? 1 : 0);
 
-        return Scrollbar(
-          controller: _scrollController,
-          interactive: true,
-          radius: const Radius.circular(100),
-          child: ListView.separated(
-            controller: _scrollController,
-            padding: EdgeInsets.fromLTRB(
-              16,
-              4,
-              16,
-              24 + MediaQuery.paddingOf(context).bottom,
-            ),
-            addAutomaticKeepAlives: false,
-            itemCount: totalCount,
-            separatorBuilder: (_, __) => const SizedBox(height: 10),
-            itemBuilder: (context, index) {
-              if (index >= words.length) {
-                if (pageState.isLoadingMore) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14),
-                    child: Center(
-                      child: SizedBox(
-                        width: 22,
-                        height: 22,
-                        child: CircularProgressIndicator(strokeWidth: 2.2),
-                      ),
-                    ),
-                  );
-                }
-
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Center(
-                    child: Text(
-                      'کل ${words.length} لبز پیش دارگ بوت انت',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontSize: 12,
-                        color: colorScheme.onSurfaceVariant,
-                      ),
+        return NotificationListener<ScrollNotification>(
+          onNotification: _handleScrollNotification,
+          child: Scrollbar(
+            interactive: true,
+            radius: const Radius.circular(100),
+            child: CustomScrollView(
+              slivers: [
+                if (useSliverOverlap)
+                  SliverOverlapInjector(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                      context,
                     ),
                   ),
-                );
-              }
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(16, 4, 16, 24 + bottomInset),
+                  sliver: SliverList.separated(
+                    addAutomaticKeepAlives: false,
+                    itemCount: totalCount,
+                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      if (index >= words.length) {
+                        if (pageState.isLoadingMore) {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 14),
+                            child: Center(
+                              child: SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.2,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
 
-              final word = words[index];
-              final card = WordCard(
-                word: word,
-                highlightQuery: widget.highlightQuery,
-                scope: widget.scope,
-                onTap: () => widget.onTapWord(word),
-              );
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Center(
+                            child: Text(
+                              'کل ${words.length} لبز پیش دارگ بوت انت',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                fontSize: 12,
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
 
-              if (index < 8) {
-                return card
-                    .animate()
-                    .fadeIn(duration: 180.ms)
-                    .slideY(begin: 0.03, end: 0, duration: 180.ms);
-              }
+                      final word = words[index];
+                      final card = WordCard(
+                        word: word,
+                        highlightQuery: highlightQuery,
+                        scope: scope,
+                        onTap: () => onTapWord(word),
+                      );
 
-              return card;
-            },
+                      if (index < 8) {
+                        return card
+                            .animate()
+                            .fadeIn(duration: 180.ms)
+                            .slideY(begin: 0.03, end: 0, duration: 180.ms);
+                      }
+
+                      return card;
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -156,11 +151,13 @@ class _EmptyListPlaceholder extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
+  final bool useSliverOverlap;
 
   const _EmptyListPlaceholder({
     required this.icon,
     required this.title,
     required this.subtitle,
+    this.useSliverOverlap = false,
   });
 
   @override
@@ -168,7 +165,7 @@ class _EmptyListPlaceholder extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Center(
+    final content = Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Column(
@@ -197,6 +194,17 @@ class _EmptyListPlaceholder extends StatelessWidget {
           ],
         ),
       ),
+    );
+
+    if (!useSliverOverlap) return content;
+
+    return CustomScrollView(
+      slivers: [
+        SliverOverlapInjector(
+          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+        ),
+        SliverFillRemaining(hasScrollBody: false, child: content),
+      ],
     );
   }
 }
