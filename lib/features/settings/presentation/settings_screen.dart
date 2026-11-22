@@ -14,6 +14,8 @@ import '../providers/settings_provider.dart';
 import 'theme/theme_settings_screen.dart';
 import 'widgets/about_app_card.dart';
 import 'widgets/notification_settings_card.dart';
+import '../../updates/presentation/update_widgets.dart';
+import '../../updates/providers/app_update_provider.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -250,6 +252,65 @@ class SettingsScreen extends ConsumerWidget {
           Text('مئے بابت ءَ', style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
           AboutAppCard(wordCountAsync: wordCountAsync),
+          const SizedBox(height: 10),
+          Builder(
+            builder: (context) {
+              final updateState = ref.watch(appUpdateProvider);
+              final update = updateState.availableUpdate;
+
+              return Card(
+                clipBehavior: Clip.antiAlias,
+                child: ListTile(
+                  leading: Icon(
+                    LucideIcons.refreshCw,
+                    color: colorScheme.primary,
+                  ),
+                  title: const Text('نوکیں ورژن ءِ پٹّ ءُ پول'),
+                  subtitle: Text(
+                    update != null
+                        ? 'نوکیں ورژن v${update.latestVersion} دست کپت!'
+                        : 'گڈّی ورژن ءَ چکّاس کن',
+                  ),
+                  trailing: updateState.isChecking
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : update != null
+                      ? Badge(label: Text('v${update.latestVersion}'))
+                      : Icon(
+                          LucideIcons.chevronLeft,
+                          size: 18,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                  onTap: updateState.isChecking
+                      ? null
+                      : () async {
+                          HapticFeedback.selectionClick();
+                          final result = await ref
+                              .read(appUpdateProvider.notifier)
+                              .check(silent: false);
+                          if (!context.mounted) return;
+
+                          if (result != null) {
+                            await showAppUpdateDialog(context, result);
+                          } else {
+                            final err = ref
+                                .read(appUpdateProvider)
+                                .errorMessage;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(err ?? 'تئی ایپ گڈّی ورژن اِنت'),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          }
+                        },
+                ),
+              );
+            },
+          ),
 
           if (kDebugMode) ...[
             const SizedBox(height: 22),

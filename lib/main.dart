@@ -12,6 +12,7 @@ import 'core/theme/theme_mode_provider.dart';
 import 'features/community/providers/community_prompt_provider.dart';
 import 'features/settings/providers/notification_settings_provider.dart';
 import 'features/splash/presentation/splash_screen.dart';
+import 'features/updates/providers/app_update_provider.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -48,6 +49,7 @@ class _SayadGanjAppState extends ConsumerState<SayadGanjApp> {
     super.initState();
     Future.microtask(() {
       ref.read(communityPromptProvider.notifier).recordAppSession();
+      ref.read(appUpdateProvider.notifier).check(silent: true);
 
       final notif = ref.read(notificationSettingsProvider);
       if (notif.enabled) {
