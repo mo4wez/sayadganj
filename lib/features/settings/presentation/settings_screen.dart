@@ -10,6 +10,7 @@ import '../../dictionary/providers/dictionary_providers.dart';
 import '../providers/settings_provider.dart';
 import 'theme/theme_settings_screen.dart';
 import 'widgets/about_app_card.dart';
+import 'widgets/notification_settings_card.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -186,7 +187,11 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 22),
-
+          // --- Notifications ---
+          Text('یات‌دھانی (Notifications)', style: theme.textTheme.labelMedium),
+          const SizedBox(height: 10),
+          const NotificationSettingsCard(),
+          const SizedBox(height: 22),
           // --- Data & Search History ---
           Text('دپتر', style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
