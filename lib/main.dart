@@ -8,6 +8,7 @@ import 'core/theme/app_theme.dart';
 import 'core/theme/font_family_provider.dart';
 import 'core/theme/theme_appearance_provider.dart';
 import 'core/theme/theme_mode_provider.dart';
+import 'features/splash/presentation/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,7 +44,7 @@ class SayadGanjApp extends ConsumerWidget {
       themeMode: themeMode,
       builder: (context, child) =>
           Directionality(textDirection: TextDirection.rtl, child: child!),
-      home: const MainShellScreen(),
+      home: const SplashScreen(nextScreen: MainShellScreen()),
     );
   }
 }
