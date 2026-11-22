@@ -7,13 +7,17 @@ class QuizOptionTile extends StatelessWidget {
   final String text;
   final QuizOptionState state;
   final VoidCallback? onTap;
+  final int? optionNumber;
 
   const QuizOptionTile({
     super.key,
     required this.text,
     required this.state,
     this.onTap,
+    this.optionNumber,
   });
+
+  static const List<String> _balochiDigits = ['۱', '۲', '۳', '۴'];
 
   @override
   Widget build(BuildContext context) {
@@ -47,40 +51,77 @@ class QuizOptionTile extends StatelessWidget {
         colorScheme.onSurfaceVariant,
       ),
       QuizOptionState.idle => (
-        theme.scaffoldBackgroundColor,
+        colorScheme.surface,
         colorScheme.outline,
         null,
         colorScheme.onSurfaceVariant,
       ),
     };
 
+    final digitLabel =
+        (optionNumber != null &&
+            optionNumber! >= 1 &&
+            optionNumber! <= _balochiDigits.length)
+        ? _balochiDigits[optionNumber! - 1]
+        : null;
+
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 180),
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOutCubic,
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: border,
-          width: state == QuizOptionState.idle ? 1 : 1.5,
+          width: state == QuizOptionState.idle ? 1 : 1.6,
         ),
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                if (digitLabel != null) ...[
+                  Container(
+                    width: 28,
+                    height: 28,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: state == QuizOptionState.correct
+                          ? successColor.withValues(alpha: 0.2)
+                          : state == QuizOptionState.wrong
+                          ? colorScheme.error.withValues(alpha: 0.2)
+                          : colorScheme.secondary,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      digitLabel,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: state == QuizOptionState.correct
+                            ? successColor
+                            : state == QuizOptionState.wrong
+                            ? colorScheme.error
+                            : colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                ],
                 Expanded(
                   child: Text(
                     text,
-                    maxLines: 2,
+                    maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.bodyMedium?.copyWith(
+                      fontSize: 14.5,
+                      height: 1.6,
                       color: state == QuizOptionState.dimmed
-                          ? colorScheme.onSurfaceVariant.withValues(alpha: 0.6)
+                          ? colorScheme.onSurfaceVariant.withValues(alpha: 0.55)
                           : colorScheme.onSurface,
                       fontWeight: state == QuizOptionState.correct
                           ? FontWeight.w600
@@ -90,7 +131,7 @@ class QuizOptionTile extends StatelessWidget {
                 ),
                 if (icon != null) ...[
                   const SizedBox(width: 10),
-                  Icon(icon, size: 18, color: iconColor),
+                  Icon(icon, size: 20, color: iconColor),
                 ],
               ],
             ),
