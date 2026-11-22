@@ -39,20 +39,33 @@ class WordNotificationService {
 
     tz_data.initializeTimeZones();
 
-    const androidSettings = AndroidInitializationSettings('ic_stat_sayadganj');
     const darwinSettings = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
       requestSoundPermission: false,
     );
 
-    await _plugin.initialize(
-      settings: const InitializationSettings(
-        android: androidSettings,
-        iOS: darwinSettings,
-      ),
-      onDidReceiveNotificationResponse: _handleNotificationResponse,
-    );
+    try {
+      await _plugin.initialize(
+        settings: const InitializationSettings(
+          android: AndroidInitializationSettings('ic_stat_sayadganj'),
+          iOS: darwinSettings,
+        ),
+        onDidReceiveNotificationResponse: _handleNotificationResponse,
+      );
+    } on PlatformException catch (e) {
+      if (e.code == 'invalid_icon') {
+        await _plugin.initialize(
+          settings: const InitializationSettings(
+            android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+            iOS: darwinSettings,
+          ),
+          onDidReceiveNotificationResponse: _handleNotificationResponse,
+        );
+      } else {
+        rethrow;
+      }
+    }
 
     if (Platform.isAndroid) {
       _rtlChannel.setMethodCallHandler((call) async {
