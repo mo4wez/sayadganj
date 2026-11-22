@@ -312,9 +312,16 @@ class DictionaryDbService {
     return QuizQuestion(targetWord: target, options: shuffledOptions);
   }
 
+  static String _escapeLike(String input) {
+    return input
+        .replaceAll(r'\', r'\\')
+        .replaceAll('%', r'\%')
+        .replaceAll('_', r'\_');
+  }
+
   Future<WordEntry?> findWordByHeadword(String target) async {
-    final trimmed = target.trim();
-    if (trimmed.isEmpty) return null;
+    final cleaned = CrossReferenceParser.cleanTarget(target);
+    if (cleaned.isEmpty) return null;
 
     final db = await database;
 
@@ -322,20 +329,22 @@ class DictionaryDbService {
     final exactRows = await db.query(
       'sayadganj',
       where: 'TRIM(full_word_with_symbols) = ? OR TRIM(full_word) = ?',
-      whereArgs: [trimmed, trimmed],
+      whereArgs: [cleaned, cleaned],
       limit: 1,
     );
     if (exactRows.isNotEmpty) {
       return WordEntry.fromMap(exactRows.first);
     }
 
-    // 2. Normalized match (e.g. "هڑونگّ" -> "هڑونگ")
-    final normalized = CrossReferenceParser.normalizeHeadword(trimmed);
+    // 2. Normalized match (strips diacritics, ZWNJ, symbols, and Arabic/Urdu variants)
+    final normalized = CrossReferenceParser.normalizeHeadword(cleaned);
     if (normalized.isEmpty) return null;
 
     final normalizedRows = await db.query(
       'sayadganj',
-      where: 'TRIM(full_word) = ? OR TRIM(full_word_with_symbols) = ?',
+      where:
+          "REPLACE(TRIM(full_word), '\u200C', '') = ? "
+          "OR REPLACE(TRIM(full_word_with_symbols), '\u200C', '') = ?",
       whereArgs: [normalized, normalized],
       limit: 1,
     );
@@ -343,16 +352,34 @@ class DictionaryDbService {
       return WordEntry.fromMap(normalizedRows.first);
     }
 
-    // 3. Closest prefix fallback
+    final escaped = _escapeLike(normalized);
+
+    // 3. Prefix match across both full_word and full_word_with_symbols
     final prefixRows = await db.query(
       'sayadganj',
-      where: 'TRIM(full_word) LIKE ?',
-      whereArgs: ['$normalized%'],
-      orderBy: 'LENGTH(full_word) ASC',
+      where:
+          r"REPLACE(TRIM(full_word), '\u200C', '') LIKE ? ESCAPE '\' "
+          r"OR REPLACE(TRIM(full_word_with_symbols), '\u200C', '') LIKE ? ESCAPE '\'",
+      whereArgs: ['$escaped%', '$escaped%'],
+      orderBy: 'LENGTH(TRIM(full_word)) ASC',
       limit: 1,
     );
     if (prefixRows.isNotEmpty) {
       return WordEntry.fromMap(prefixRows.first);
+    }
+
+    // 4. Contains fallback (matches searchWords behavior when a symbol/mark precedes the headword)
+    final containsRows = await db.query(
+      'sayadganj',
+      where:
+          r"REPLACE(full_word, '\u200C', '') LIKE ? ESCAPE '\' "
+          r"OR REPLACE(full_word_with_symbols, '\u200C', '') LIKE ? ESCAPE '\'",
+      whereArgs: ['%$escaped%', '%$escaped%'],
+      orderBy: 'LENGTH(TRIM(full_word)) ASC',
+      limit: 1,
+    );
+    if (containsRows.isNotEmpty) {
+      return WordEntry.fromMap(containsRows.first);
     }
 
     return null;
