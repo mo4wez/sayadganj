@@ -48,7 +48,7 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('نشان کتگیں لبز'),
+        title: const Text('نشان کتگیں گال'),
         actions: [
           if (hasBookmarks)
             IconButton(
@@ -92,13 +92,13 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'انگت هچ لبزے نشان نہ بوتگ',
+                      'انگت هچ گالے نشان نہ بوتگ',
                       style: theme.textTheme.titleMedium,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'وتی دوست داشتگیں لبزاں پہ زوت دست گرگ ءَ نشان بہ کن',
+                      'وتی دوست داشتگیں گالاں پہ زوت دست گرگ ءَ نشان بہ کن',
                       style: theme.textTheme.bodyMedium,
                       textAlign: TextAlign.center,
                     ),

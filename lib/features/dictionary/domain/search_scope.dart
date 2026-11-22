@@ -1,7 +1,7 @@
 enum SearchScope {
-  containsHeadword('لبز ءِ تها'),
+  containsHeadword('گال ءِ تہ ءَ'),
   startsWith('بندات گوں'),
-  inDefinitions('مانا ءِ تها');
+  inDefinitions('بزانت ءِ تہ ءَ');
 
   final String label;
   const SearchScope(this.label);

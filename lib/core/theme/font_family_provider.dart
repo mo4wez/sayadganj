@@ -7,19 +7,19 @@ enum AppFont {
     id: 'vazirmatn',
     fontFamily: 'Vazirmatn',
     title: 'وزیرمتن (Vazirmatn)',
-    subtitle: 'ساده، واناک ءُ مدرنیں خط پہ روچمرّگی وانگ ءَ',
+    subtitle: 'ساده، واناک ءُ مدرنیں کِشک پہ روچمرّگی وانگ ءَ',
   ),
   droshumBalochi(
     id: 'droshumBalochi',
     fontFamily: 'DroshumBalochi',
     title: 'دروشم بلوچی (Droshum Balochi)',
-    subtitle: 'بلوچی خاصیں خط پہ ادبی نبشتانک ءُ لبزبلد ءَ',
+    subtitle: 'بلوچی هاسیں کِشک پہ ادبی نبشتانک ءُ بزانت‌بلد ءَ',
   ),
   system(
     id: 'system',
     fontFamily: null,
-    title: 'سیستم ءِ وتی خط (Default)',
-    subtitle: 'موبائل ءِ بنیادی خط',
+    title: 'سیستم ءِ وتی کِشک (Default)',
+    subtitle: 'موبائل ءِ بنیادی کِشک',
   );
 
   final String id;

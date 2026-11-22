@@ -46,7 +46,7 @@ class ReadingStreakCard extends ConsumerWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'لبزے پچ کن دانکہ تئی وانگ ءِ رِد ءُ تازگیں دیستگیں لبز بنگیج بہ بنت',
+                      'گالے پچ کن دانکہ تئی وانگ ءِ رِد ءُ تازگیں دیستگیں گال بنگیج بہ بنت',
                       style: theme.textTheme.bodyMedium,
                     ),
                   ),
@@ -130,7 +130,7 @@ class ReadingStreakCard extends ConsumerWidget {
                             ),
                             const SizedBox(width: 6),
                             Text(
-                              'تازگیں دیستگیں لبز',
+                              'نوکیں دیستگیں گال',
                               style: theme.textTheme.labelMedium?.copyWith(
                                 color: colorScheme.primary,
                               ),
@@ -153,7 +153,7 @@ class ReadingStreakCard extends ConsumerWidget {
                               vertical: 2,
                             ),
                             child: Text(
-                              'پاک کنگ',
+                              'گار کنگ',
                               style: theme.textTheme.labelMedium,
                             ),
                           ),

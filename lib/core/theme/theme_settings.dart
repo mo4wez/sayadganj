@@ -9,7 +9,7 @@ enum AppAccentColor {
   ),
   emerald(
     id: 'emerald',
-    label: 'زمرد',
+    label: 'شونز/سبز',
     lightColor: Color(0xFF15803D),
     darkColor: Color(0xFF4ADE80),
   ),
@@ -21,25 +21,25 @@ enum AppAccentColor {
   ),
   violet(
     id: 'violet',
-    label: 'بنفش',
+    label: 'جَمو/وانگڑی',
     lightColor: Color(0xFF6D28D9),
     darkColor: Color(0xFFA78BFA),
   ),
   amber(
     id: 'amber',
-    label: 'زعفرانی',
+    label: 'زاپرانی',
     lightColor: Color(0xFFB45309),
     darkColor: Color(0xFFFBBF24),
   ),
   rose(
     id: 'rose',
-    label: 'مرجان',
+    label: 'گُلابی',
     lightColor: Color(0xFFBE123C),
     darkColor: Color(0xFFFB7185),
   ),
   ink(
     id: 'ink',
-    label: 'سیاہی',
+    label: 'سیاهی',
     lightColor: Color(0xFF334155),
     darkColor: Color(0xFFCBD5E1),
   );
@@ -68,7 +68,7 @@ enum AppColorStyle {
   vivid(
     id: 'vivid',
     title: 'روشن (Vivid)',
-    subtitle: 'صاف ءُ تچکیں رنگ پہ گیشتر زاہری ءَ',
+    subtitle: 'ساپ ءُ تچکیں رنگ پہ گیشتر زاهری ءَ',
   ),
   soft(
     id: 'soft',
@@ -82,7 +82,7 @@ enum AppColorStyle {
   ),
   monochrome(
     id: 'monochrome',
-    title: 'سادہ (Monochrome)',
+    title: 'سادگ (Monochrome)',
     subtitle: 'کاگد ءُ سیاہی ءِ سادگیں دروشم بید ء گیشیں رنگ ءَ',
   );
 
@@ -107,8 +107,8 @@ enum AppColorStyle {
 enum BottomBarStyle {
   docked(
     id: 'docked',
-    title: 'چسپتگیں (Docked)',
-    subtitle: 'چیر ءِ سیمسر ءَ چسپتگیں سرجمیں بار',
+    title: 'لِچّتگیں (Docked)',
+    subtitle: 'چیر ءِ سیمسر ءَ لِچّتگیں سرجمیں بار',
   ),
   floating(
     id: 'floating',

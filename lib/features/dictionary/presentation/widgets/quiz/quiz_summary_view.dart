@@ -22,7 +22,7 @@ class QuizSummaryView extends StatelessWidget {
     final ratio = roundCorrect / totalQuestions;
     if (ratio >= 0.8) return 'باز وش! تئی بلوچی زانت مزن اِنت';
     if (ratio >= 0.5) return 'شاباش! دیمتر ءَ انگت گهتر بئے';
-    return 'جهد ءَ برجاہ بدار، هر جستے نوکیں لبزے';
+    return 'جُهد ءَ برجاہ بدار، هر جستے نوکیں گالے';
   }
 
   @override
@@ -62,7 +62,7 @@ class QuizSummaryView extends StatelessWidget {
                     .fadeIn(duration: 220.ms),
                 const SizedBox(height: 18),
                 Text(
-                  'آزمائی سرجم بوت!',
+                  'چکّاس سرجم بوت!',
                   style: theme.textTheme.titleLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -120,7 +120,7 @@ class QuizSummaryView extends StatelessWidget {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              'کل امتیاز',
+                              'سرجمیں دَرَجَگ',
                               style: theme.textTheme.labelMedium,
                             ),
                           ],
@@ -145,7 +145,7 @@ class QuizSummaryView extends StatelessWidget {
                       ),
                     ),
                     icon: const Icon(LucideIcons.rotateCcw, size: 18),
-                    label: const Text('نوکیں دورے بندات کن'),
+                    label: const Text('نوکیں دَورے بندات کن'),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -160,7 +160,7 @@ class QuizSummaryView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    child: const Text('پدا پہ لبزبلد ءَ'),
+                    child: const Text('واتر پہ بزانت بلد ءَ'),
                   ),
                 ),
               ],

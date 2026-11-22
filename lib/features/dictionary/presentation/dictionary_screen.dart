@@ -199,7 +199,7 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                                       focusNode: _searchFocusNode,
                                       textInputAction: TextInputAction.search,
                                       decoration: InputDecoration(
-                                        hintText: 'لبزے بہ شوهاز...',
+                                        hintText: 'گالے بہ شوهاز...',
                                         prefixIcon: const Icon(
                                           LucideIcons.search,
                                           size: 20,
@@ -290,7 +290,7 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                                       const SizedBox(width: 8),
                                       Expanded(
                                         child: Text(
-                                          'حرف «${selectedLetter == 'ا' ? 'ا / آ' : selectedLetter}» ءِ لبز',
+                                          'آب «${selectedLetter == 'ا' ? 'ا / آ' : selectedLetter}» ءِ گال',
                                           style: theme.textTheme.labelMedium
                                               ?.copyWith(
                                                 color: colorScheme.primary,
@@ -338,8 +338,8 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                     highlightQuery: query,
                     scope: scope,
                     emptyIcon: LucideIcons.searchX,
-                    emptyTitle: 'هچ لبزے دست نہ کپت',
-                    emptySubtitle: 'دگہ لبزے یا کسانیں بھرے بہ شوهاز',
+                    emptyTitle: 'هچ گالے دست نہ کپت',
+                    emptySubtitle: 'دگہ گالے یا کسانیں بھرے بہ شوهاز',
                     onTapWord: (word) {
                       if (query.trim().isNotEmpty) {
                         ref
@@ -361,8 +361,8 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                         .read(paginatedLetterWordsProvider.notifier)
                         .loadMore(),
                     emptyIcon: LucideIcons.bookX,
-                    emptyTitle: 'هچ لبزے دست نہ کپت',
-                    emptySubtitle: 'اے حرف ءَ هچ لبز نیست',
+                    emptyTitle: 'هچ گالے دست نہ کپت',
+                    emptySubtitle: 'اے آب ءَ هچ گال نیست',
                     onTapWord: (word) {
                       Navigator.of(context).push(
                         MaterialPageRoute(

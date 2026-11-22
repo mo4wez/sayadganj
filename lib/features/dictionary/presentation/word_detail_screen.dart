@@ -27,7 +27,7 @@ class WordDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('لبز ءِ مانا'),
+        title: const Text('گال ءِ بزانت'),
         actions: [
           wordAsync.maybeWhen(
             data: (word) => word == null
@@ -53,8 +53,8 @@ class WordDetailScreen extends ConsumerWidget {
                             SnackBar(
                               content: Text(
                                 added
-                                    ? 'لبز نشان کنگ بوت'
-                                    : 'لبز چہ نشاناں دور کنگ بوت',
+                                    ? 'گال نشان کنگ بوت'
+                                    : 'گال چہ نشاناں دور کنگ بوت',
                               ),
                               behavior: SnackBarBehavior.floating,
                               duration: const Duration(seconds: 2),
@@ -63,7 +63,7 @@ class WordDetailScreen extends ConsumerWidget {
                         },
                       ),
                       IconButton(
-                        tooltip: 'نقل کنگ',
+                        tooltip: 'کپی کنگ',
                         icon: const Icon(LucideIcons.copy, size: 20),
                         onPressed: () {
                           Clipboard.setData(
@@ -74,7 +74,7 @@ class WordDetailScreen extends ConsumerWidget {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('لبز ءُ مانا نقل بوت انت'),
+                              content: Text('گال ءُ مانا کپی بوت انت'),
                               behavior: SnackBarBehavior.floating,
                               duration: Duration(seconds: 2),
                             ),
@@ -91,7 +91,7 @@ class WordDetailScreen extends ConsumerWidget {
                           SharePlus.instance.share(
                             ShareParams(
                               text:
-                                  '$headword\n\n${word.definition}\n\n— سیدگنج بلوچی لبزبلد',
+                                  '$headword\n\n${word.definition}\n\n— سیدگنج بلوچی بزانت‌بلد',
                             ),
                           );
                         },
@@ -108,7 +108,7 @@ class WordDetailScreen extends ConsumerWidget {
         error: (err, _) => Center(child: Text('ردی یے بوت: $err')),
         data: (word) {
           if (word == null) {
-            return const Center(child: Text('لبز دست نہ کپت'));
+            return const Center(child: Text('گال دست نہ کپت'));
           }
 
           final hasSymbols =

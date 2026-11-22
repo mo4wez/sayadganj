@@ -101,7 +101,7 @@ class FeaturedWordSlide extends StatelessWidget {
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          item.isWordOfTheDay ? 'روچ ءِ لبز' : 'بختاوریں لبز',
+                          item.isWordOfTheDay ? 'روچ ءِ گال' : 'پَدیمیں گال',
                           style: theme.textTheme.labelMedium?.copyWith(
                             color: colorScheme.primary,
                           ),
@@ -117,7 +117,7 @@ class FeaturedWordSlide extends StatelessWidget {
                     ),
                     icon: const Icon(LucideIcons.shuffle, size: 15),
                     label: Text(
-                      item.isWordOfTheDay ? 'بختاوریں لبز' : 'نوکیں لبز',
+                      item.isWordOfTheDay ? 'پَدیمیں گال' : 'نوکیں گال',
                     ),
                   ),
                 ],
@@ -174,7 +174,7 @@ class FeaturedWordSlide extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    'سرجمیں مانا ءَ بوان',
+                    'سرجمیں بزانت ءَ بوان',
                     style: theme.textTheme.labelMedium?.copyWith(
                       color: colorScheme.primary,
                     ),

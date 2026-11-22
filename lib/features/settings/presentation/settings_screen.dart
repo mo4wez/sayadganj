@@ -31,7 +31,7 @@ class SettingsScreen extends ConsumerWidget {
     };
 
     return Scaffold(
-      appBar: AppBar(title: const Text('تنظیمات')),
+      appBar: AppBar(title: const Text('کاربوج')),
       body: ListView(
         padding: EdgeInsets.fromLTRB(
           16,
@@ -40,7 +40,7 @@ class SettingsScreen extends ConsumerWidget {
           32 + MediaQuery.paddingOf(context).bottom,
         ),
         children: [
-          Text('ظاهری رنگ ءُ تھیم', style: theme.textTheme.labelMedium),
+          Text('زاهری رنگ ءُ دروشم', style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
           Card(
             clipBehavior: Clip.antiAlias,
@@ -62,7 +62,7 @@ class SettingsScreen extends ConsumerWidget {
                   size: 20,
                 ),
               ),
-              title: const Text('ظاهری رنگ ءُ دروشم'),
+              title: const Text('زاهری رنگ ءُ دروشم'),
               subtitle: Text(
                 '$modeLabel • ${appearance.accentColor.label} • ${appearance.colorStyle.title.split(' ').first}',
               ),
@@ -99,7 +99,7 @@ class SettingsScreen extends ConsumerWidget {
 
           // --- Font Family Selector with Live Specimen Preview ---
           Text(
-            'خط ءُ نبشتانک ءِ دروشم (Font)',
+            'کِشک ءُ نبشتانک ءِ دروشم (Font)',
             style: theme.textTheme.labelMedium,
           ),
           const SizedBox(height: 10),
@@ -188,18 +188,18 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 22),
 
           // --- Data & Search History ---
-          Text('داتا ءُ تاریخچہ', style: theme.textTheme.labelMedium),
+          Text('دپتر', style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
           Card(
             child: ListTile(
               leading: Icon(LucideIcons.trash2, color: colorScheme.error),
-              title: const Text('شوهازانی تاریخچہ ءَ پاک کن'),
-              subtitle: const Text('تازگیں شوهاز چہ حافظہ ءَ دور بنت'),
+              title: const Text('شوهازانی دپتر ءَ ساپ کن'),
+              subtitle: const Text('تازگیں شوهاز چہ حافظہ ءَ دور  کنگ بنت'),
               onTap: () async {
                 final confirmed = await showDialog<bool>(
                   context: context,
                   builder: (ctx) => AlertDialog(
-                    title: const Text('تاریخچہ پاک کنگ بہ بیت؟'),
+                    title: const Text('دپتر ساپ کنگ بہ بیت؟'),
                     content: const Text(
                       'تئی تازگیں شوهازانی لڑ پہ مدامی پاک کنگ بیت۔',
                     ),
@@ -211,7 +211,7 @@ class SettingsScreen extends ConsumerWidget {
                       TextButton(
                         onPressed: () => Navigator.pop(ctx, true),
                         child: Text(
-                          'هو، پاک کن',
+                          'هو، ساپ کن',
                           style: TextStyle(color: colorScheme.error),
                         ),
                       ),
@@ -226,7 +226,7 @@ class SettingsScreen extends ConsumerWidget {
                   if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('شوهازانی تاریخچہ پاک بوت'),
+                      content: Text('شوهازانی دپتر ساپ بوت'),
                       behavior: SnackBarBehavior.floating,
                     ),
                   );
@@ -237,7 +237,7 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 22),
 
           // --- About App & TakbandQandeel Card ---
-          Text('بابت ءِ ایپ ءُ مئے ٹولی', style: theme.textTheme.labelMedium),
+          Text('مئے بابت ءَ', style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
           AboutAppCard(wordCountAsync: wordCountAsync),
         ],

@@ -109,7 +109,7 @@ class PaginatedWordListView extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Center(
                             child: Text(
-                              'کل ${words.length} لبز پیش دارگ بوت انت',
+                              'سرجمیں ${words.length} گال پیش دارگ بوت انت',
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 fontSize: 12,
                                 color: colorScheme.onSurfaceVariant,

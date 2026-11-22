@@ -64,9 +64,9 @@ class MainShellScreen extends ConsumerWidget {
         color: colorScheme.primary,
       ),
       tabs: const [
-        GButton(icon: LucideIcons.bookOpen, text: 'لبزبلد'),
+        GButton(icon: LucideIcons.bookOpen, text: 'بزانت‌بلد'),
         GButton(icon: LucideIcons.bookmark, text: 'نشان کتگیں'),
-        GButton(icon: LucideIcons.settings, text: 'تنظیمات'),
+        GButton(icon: LucideIcons.settings, text: 'کاربوج'),
       ],
     );
 

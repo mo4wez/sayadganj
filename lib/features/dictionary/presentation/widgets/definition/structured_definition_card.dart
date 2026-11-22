@@ -60,7 +60,7 @@ class _StructuredDefinitionCardState extends State<StructuredDefinitionCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'مانا ءُ تشریح',
+                  'بزانت ءُ گیشوار',
                   style: theme.textTheme.labelMedium?.copyWith(
                     color: colorScheme.primary,
                   ),

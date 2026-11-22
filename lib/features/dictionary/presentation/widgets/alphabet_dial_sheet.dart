@@ -92,7 +92,7 @@ class _AlphabetDialSheetState extends ConsumerState<AlphabetDialSheet>
     'م': 'میم',
     'ن': 'نون',
     'و': 'واؤ',
-    'ھ': 'دوچشمی ھ',
+    'ھ': 'دوچمی ھ',
     'ه': 'گول هے',
     'ی': 'بلوچی یے',
     'ے': 'بڑی ے',
@@ -193,7 +193,10 @@ class _AlphabetDialSheetState extends ConsumerState<AlphabetDialSheet>
                         color: colorScheme.primary,
                       ),
                       const SizedBox(width: 8),
-                      Text('چرخِ آب ءُ ب', style: theme.textTheme.titleLarge),
+                      Text(
+                        'آب ءُ ب ءِ چَهر',
+                        style: theme.textTheme.titleLarge,
+                      ),
                     ],
                   ),
                   IconButton(
@@ -269,7 +272,7 @@ class _AlphabetDialSheetState extends ConsumerState<AlphabetDialSheet>
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          '${currentBucket.count} لبز',
+                          '${currentBucket.count} گال',
                           style: theme.textTheme.labelMedium?.copyWith(
                             color: colorScheme.primary,
                           ),
@@ -439,7 +442,7 @@ class _AlphabetDialSheetState extends ConsumerState<AlphabetDialSheet>
                       ),
                       icon: const Icon(LucideIcons.bookOpenCheck, size: 18),
                       label: Text(
-                        'حرف «${_glyph(currentBucket.letter)}» ءِ لبزاں بچار',
+                        'آب «${_glyph(currentBucket.letter)}» ءِ گالاں بچار',
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,

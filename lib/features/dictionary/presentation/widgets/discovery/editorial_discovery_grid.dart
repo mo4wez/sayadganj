@@ -22,7 +22,7 @@ class EditorialDiscoveryGrid extends StatelessWidget {
             Icon(LucideIcons.compass, size: 16, color: colorScheme.primary),
             const SizedBox(width: 6),
             Text(
-              'گچین کتگیں لبز',
+              'گچین کتگیں گال',
               style: theme.textTheme.labelMedium?.copyWith(
                 color: colorScheme.primary,
               ),

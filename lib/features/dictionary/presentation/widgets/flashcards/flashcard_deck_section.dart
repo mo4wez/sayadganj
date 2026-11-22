@@ -67,7 +67,7 @@ class _FlashcardDeckSectionState extends ConsumerState<FlashcardDeckSection> {
                             ),
                             const SizedBox(width: 6),
                             Text(
-                              'لبزانی تاکدیم',
+                              'گالانی تاکدیم',
                               style: theme.textTheme.labelMedium?.copyWith(
                                 color: colorScheme.primary,
                               ),

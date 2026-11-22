@@ -86,7 +86,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('لبز آزمائی'),
+        title: const Text('گال چکّاس'),
         actions: [
           if (!isRoundComplete)
             Container(
@@ -170,7 +170,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                       data: (question) {
                         if (question == null) {
                           return const Center(
-                            child: Text('پہ آزمائی ءَ لبز دست نہ کپت'),
+                            child: Text('پہ چکّاس ءَ گال دست نہ کپت'),
                           );
                         }
 
@@ -223,7 +223,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'اے لبز ءِ راستیں مانا کجام اِنت؟',
+                                        'اے گال ءِ راستیں مانا کجام اِنت؟',
                                         style: theme.textTheme.bodyMedium,
                                       ),
                                       const SizedBox(height: 8),
@@ -319,7 +319,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                                             LucideIcons.bookOpen,
                                             size: 16,
                                           ),
-                                          label: const Text('سرجمیں مانا'),
+                                          label: const Text('سرجمیں بزانت'),
                                         ),
                                         const SizedBox(width: 10),
                                         Expanded(

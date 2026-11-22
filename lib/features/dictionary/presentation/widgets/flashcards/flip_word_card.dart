@@ -231,7 +231,7 @@ class _BackFace extends StatelessWidget {
                 foregroundColor: colorScheme.primary,
               ),
               icon: const Icon(LucideIcons.arrowUpLeft, size: 15),
-              label: const Text('سرجمیں مانا'),
+              label: const Text('سرجمیں بزانت'),
             ),
           ),
         ],

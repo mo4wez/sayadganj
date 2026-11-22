@@ -26,7 +26,7 @@ class DiscoveryCollectionScreen extends ConsumerWidget {
         actions: [
           if (category.supportsRefresh)
             IconButton(
-              tooltip: 'نوکیں لبز',
+              tooltip: 'نوکیں گال',
               icon: const Icon(LucideIcons.refreshCw, size: 19),
               onPressed: () {
                 HapticFeedback.selectionClick();
@@ -43,7 +43,7 @@ class DiscoveryCollectionScreen extends ConsumerWidget {
           if (words.isEmpty) {
             return Center(
               child: Text(
-                'هچ لبزے دست نہ کپت',
+                'هچ گالے دست نہ کپت',
                 style: theme.textTheme.titleMedium,
               ),
             );
@@ -70,7 +70,7 @@ class DiscoveryCollectionScreen extends ConsumerWidget {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          '${category.subtitle} (${words.length} لبز)',
+                          '${category.subtitle} (${words.length} گال)',
                           style: theme.textTheme.labelMedium?.copyWith(
                             color: colorScheme.primary,
                           ),

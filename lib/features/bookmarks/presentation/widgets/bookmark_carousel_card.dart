@@ -72,7 +72,7 @@ class BookmarkCarouselCard extends StatelessWidget {
                   ),
                   const Spacer(),
                   IconButton(
-                    tooltip: 'نقل کنگ',
+                    tooltip: 'کُپی کنگ',
                     visualDensity: VisualDensity.compact,
                     icon: const Icon(LucideIcons.copy, size: 17),
                     onPressed: () {
@@ -82,7 +82,7 @@ class BookmarkCarouselCard extends StatelessWidget {
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('لبز ءُ مانا نقل بوت انت'),
+                          content: Text('گال ءُ بزانت کُپی بوت انت'),
                           behavior: SnackBarBehavior.floating,
                           duration: Duration(seconds: 2),
                         ),
@@ -161,7 +161,7 @@ class BookmarkCarouselCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    'سرجمیں مانا ءَ بوان',
+                    'سرجمیں بزانت ءَ بوان',
                     style: theme.textTheme.labelMedium?.copyWith(
                       color: colorScheme.primary,
                     ),

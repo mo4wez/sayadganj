@@ -85,7 +85,7 @@ class DailyQuizCard extends ConsumerWidget {
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          'لبز آزمائی',
+                          'گال چکّاس',
                           style: theme.textTheme.labelMedium?.copyWith(
                             color: colorScheme.primary,
                           ),
@@ -113,7 +113,7 @@ class DailyQuizCard extends ConsumerWidget {
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          '$score امتیاز',
+                          '$score دَرَجَگ',
                           style: theme.textTheme.labelMedium?.copyWith(
                             color: colorScheme.primary,
                           ),
@@ -127,14 +127,14 @@ class DailyQuizCard extends ConsumerWidget {
 
               // Title & Subtitle
               Text(
-                'وتی بلوچی لبزانی زانت ءَ بَچکّاس',
+                'وتی بلوچی گالانی زانت ءَ بہ چکّاس',
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
-                '۵ جست ءِ تہ ءَ لبزانی راستیں مانا ءَ گچین کن ءُ وتی امتیاز ءَ گیش کن۔',
+                '۵ جُست ءِ تہ ءَ گالانی راستیں بزانت ءَ گچین کن ءُ وتی دَرَجَگ ءَ گیش کن۔',
                 style: theme.textTheme.bodyMedium,
               ),
               const SizedBox(height: 16),
@@ -152,7 +152,7 @@ class DailyQuizCard extends ConsumerWidget {
                 ),
                 icon: const Icon(LucideIcons.play, size: 17),
                 label: const Text(
-                  'آزمائی ءَ بندات کن',
+                  'چکّاس ءَ بندات کن',
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
               ),

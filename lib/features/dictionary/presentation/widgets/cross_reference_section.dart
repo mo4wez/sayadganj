@@ -35,7 +35,7 @@ class CrossReferenceSection extends StatelessWidget {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    'همگرنچیں لبز (زوتیں چارگ)',
+                    'همگرنچیں گال (زوتیں چارگ)',
                     style: theme.textTheme.labelMedium?.copyWith(
                       color: colorScheme.primary,
                     ),

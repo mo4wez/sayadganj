@@ -61,10 +61,7 @@ class IdleDictionaryView extends StatelessWidget {
                           color: colorScheme.onSurfaceVariant,
                         ),
                         const SizedBox(width: 6),
-                        Text(
-                          'تازگیں شوهاز',
-                          style: theme.textTheme.labelMedium,
-                        ),
+                        Text('نوکیں شوهاز', style: theme.textTheme.labelMedium),
                       ],
                     ),
                     TextButton(
@@ -73,7 +70,7 @@ class IdleDictionaryView extends StatelessWidget {
                         visualDensity: VisualDensity.compact,
                         foregroundColor: colorScheme.primary,
                       ),
-                      child: const Text('پاک کنگ'),
+                      child: const Text('ساپ کنگ'),
                     ),
                   ],
                 ),

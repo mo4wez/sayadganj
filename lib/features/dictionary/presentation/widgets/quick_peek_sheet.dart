@@ -128,7 +128,7 @@ class QuickPeekSheet extends ConsumerWidget {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            'لبز «$targetWord» دست نہ کپت',
+                            'گال «$targetWord» دست نہ کپت',
                             style: theme.textTheme.titleMedium,
                             textAlign: TextAlign.center,
                           ),

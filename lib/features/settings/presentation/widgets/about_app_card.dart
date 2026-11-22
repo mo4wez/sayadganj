@@ -25,25 +25,25 @@ class AboutAppCard extends StatelessWidget {
 
   static const List<_SocialChannel> _channels = [
     _SocialChannel(
-      title: 'تیلیگرام (Telegram)',
+      title: 'تلگرام (Telegram)',
       handle: '@takband_qandeel',
       url: 'https://t.me/takband_qandeel',
       icon: LucideIcons.send,
     ),
     _SocialChannel(
-      title: 'انسٹاگرام (Instagram)',
+      title: 'اینستاگرام (Instagram)',
       handle: '@takband.qandeel',
       url: 'https://www.instagram.com/takband.qandeel',
       icon: LucideIcons.camera,
     ),
     _SocialChannel(
-      title: 'یوٹیوب (YouTube)',
+      title: 'یوتیوب (YouTube)',
       handle: '@takband_qandeel',
       url: 'https://www.youtube.com/@takband_qandeel',
       icon: LucideIcons.video,
     ),
     _SocialChannel(
-      title: 'کسٹ‌باکس پڈکاسٹ (CastBox)',
+      title: 'کست باکس (CastBox)',
       handle: 'TakbandQandeel Podcast',
       url: 'https://castbox.fm/va/7074852',
       icon: LucideIcons.headphones,
@@ -83,7 +83,7 @@ class AboutAppCard extends StatelessWidget {
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('لینک کاپی بوت'),
+        content: Text('لینک کُپی بوت'),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -121,7 +121,7 @@ class AboutAppCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'سیدگنج — بلوچی لبزبلد',
+                        'سیدگنج — بلوچی بزانت‌بلد',
                         style: theme.textTheme.titleMedium,
                       ),
                       const SizedBox(height: 2),
@@ -138,7 +138,7 @@ class AboutAppCard extends StatelessWidget {
             ),
             const SizedBox(height: 14),
             Text(
-              'بلوچی ءَ پہ بلوچی سرجمیں لبزبلد کہ بید ء انٹرنیٹ ءَ کار کنت ءُ لبزانی مانا، اعراب ءُ تشریح ءَ پیش داریت۔',
+              'سیدگنج، سیدھاشمی ءِ مستریں جھد پہ بلوچی زبان ءَ اِنت کہ تاکبند کندیل ءَ آئی دیتابیس، اندروید ءِ تہ ءَ مُدرنے رنگے ءَ دیم ءَ آرتگ، ما واجہ شبیر کلمتی ءُ آئی ھمراھاں کہ اے دیتابیس دیجیتالایز کتگ ءُ کارمرز کنگ ءِ موکل داتگ، منتوار ایں۔',
               style: theme.textTheme.bodyMedium,
             ),
             const SizedBox(height: 12),
@@ -159,9 +159,9 @@ class AboutAppCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     wordCountAsync.when(
-                      data: (count) => 'کل لبز: $count',
-                      loading: () => 'کل لبز: ...',
-                      error: (_, __) => 'کل لبز: —',
+                      data: (count) => 'سرجمیں گال: $count',
+                      loading: () => 'سرجمیں گال: ...',
+                      error: (_, __) => 'سرجمیں گال: —',
                     ),
                     style: theme.textTheme.labelMedium?.copyWith(
                       color: colorScheme.primary,
@@ -196,14 +196,14 @@ class AboutAppCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'تکبند قندیل (TakbandQandeel)',
+                        'تاکبند کندیل (TakbandQandeel)',
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontSize: 15.5,
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'بلوچی زبان ءُ لبزانک ءِ دوزواہانی ٹولی',
+                        'بلوچی زبان ءُ لبزانک ءِ دوزواهانی گَل',
                         style: theme.textTheme.labelMedium?.copyWith(
                           color: colorScheme.primary,
                         ),
@@ -215,14 +215,14 @@ class AboutAppCard extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              'ما بلوچی زبان ءُ لبزانک ءِ کسانیں کارمند ءُ دوزواہانی ٹولی یے ایں کہ پہ بلوچی زبان ءِ دیمروئی، زانتکاری ءُ ڈیجیٹل مڈیانی جوڑ کنگ ءَ کار کنگ ءَ ایں۔',
+              'ما بلوچی زبان ءُ لبزانک ءِ کسانیں نودربر ءُ دوزواھانی گَلے ایں کہ پہ بلوچی زبان ءِ دیمروئی، زانتکاری ءَ کار کنگ ءَ ایں۔',
               style: theme.textTheme.bodyMedium,
             ),
             const SizedBox(height: 14),
 
             // Social & Podcast Links
             Text(
-              'مئے تاک ءُ پڈکاسٹ',
+              'مئے تاک ءُ پادکست',
               style: theme.textTheme.labelMedium?.copyWith(
                 color: colorScheme.primary,
               ),

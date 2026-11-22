@@ -60,7 +60,7 @@ class AllNotationsSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'گْونڈگال ءُ ٹِکانی سرجمیں لڑ',
+                  'گْونڈگال ءُ ٹِکّانی سرجمیں لڑ',
                   style: theme.textTheme.titleLarge,
                 ),
                 IconButton(

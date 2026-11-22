@@ -3,8 +3,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 enum DiscoveryCategory {
   richDefinitions(
-    title: 'دراجیں تشریح',
-    subtitle: 'سرجم ءُ پُرمانائیں لبز',
+    title: 'دراجیں گیشوار',
+    subtitle: 'سرجم ءُ پُرمانائیں گال',
     icon: LucideIcons.scrollText,
     supportsRefresh: false,
   ),
@@ -22,7 +22,7 @@ enum DiscoveryCategory {
   ),
   pastWeekWords(
     title: 'گوستگیں ھپتگ',
-    subtitle: '۷ روچ ءِ گچین کتگیں لبز',
+    subtitle: '۷ روچ ءِ گچین کتگیں گال',
     icon: LucideIcons.calendarDays,
     supportsRefresh: false,
   );
