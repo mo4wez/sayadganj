@@ -26,13 +26,14 @@ class IdleDictionaryView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
     final recents = recentAsync.maybeWhen(
       data: (list) => list,
       orElse: () => const <String>[],
     );
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+      padding: EdgeInsets.fromLTRB(16, 4, 16, 24 + bottomInset),
       children: [
         const WordOfTheDayCard(),
         const SizedBox(height: 16),

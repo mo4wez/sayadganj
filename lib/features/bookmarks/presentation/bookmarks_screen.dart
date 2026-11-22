@@ -116,7 +116,12 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
           }
 
           return ListView.separated(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+            padding: EdgeInsets.fromLTRB(
+              16,
+              8,
+              16,
+              24 + MediaQuery.paddingOf(context).bottom,
+            ),
             itemCount: words.length,
             separatorBuilder: (_, __) => const SizedBox(height: 10),
             itemBuilder: (context, index) {

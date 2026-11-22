@@ -93,7 +93,12 @@ class _BookmarksCarouselViewState extends State<BookmarksCarouselView> {
 
         // Bottom Controls
         Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+          padding: EdgeInsets.fromLTRB(
+            24,
+            0,
+            24,
+            24 + MediaQuery.paddingOf(context).bottom,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

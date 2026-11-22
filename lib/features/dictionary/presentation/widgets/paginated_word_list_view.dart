@@ -90,7 +90,12 @@ class _PaginatedWordListViewState extends State<PaginatedWordListView> {
           radius: const Radius.circular(100),
           child: ListView.separated(
             controller: _scrollController,
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+            padding: EdgeInsets.fromLTRB(
+              16,
+              4,
+              16,
+              24 + MediaQuery.paddingOf(context).bottom,
+            ),
             addAutomaticKeepAlives: false,
             itemCount: totalCount,
             separatorBuilder: (_, __) => const SizedBox(height: 10),

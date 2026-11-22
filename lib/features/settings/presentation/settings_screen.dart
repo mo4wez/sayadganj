@@ -32,7 +32,12 @@ class SettingsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('تنظیمات')),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+        padding: EdgeInsets.fromLTRB(
+          16,
+          8,
+          16,
+          32 + MediaQuery.paddingOf(context).bottom,
+        ),
         children: [
           Text('ظاهری رنگ ءُ تھیم', style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
