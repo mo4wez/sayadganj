@@ -18,9 +18,14 @@ final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
-  await WordNotificationService.instance.initialize(
-    navigatorKey: rootNavigatorKey,
-  );
+
+  try {
+    await WordNotificationService.instance.initialize(
+      navigatorKey: rootNavigatorKey,
+    );
+  } catch (e, st) {
+    debugPrint('WordNotificationService init failed: $e\n$st');
+  }
 
   runApp(
     ProviderScope(
