@@ -23,6 +23,7 @@ dependencies:
   url_launcher: ^6.3.3
   flutter_local_notifications: ^23.0.3
   timezone: ^0.11.2
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -45,3 +46,12 @@ flutter:
     - family: DroshumBalochi
       fonts:
         - asset: assets/fonts/DroshumBalochi.ttf
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.webp"
+  min_sdk_android: 21
+  adaptive_icon_background: "#0B132B"
+  adaptive_icon_foreground: "assets/icon/app_icon.webp"
+  remove_alpha_ios: true
