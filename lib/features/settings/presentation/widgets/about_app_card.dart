@@ -58,17 +58,23 @@ class AboutAppCard extends StatelessWidget {
     final uri = Uri.parse(channel.url);
 
     try {
-      final launched = await launchUrl(
+      final openedExternal = await launchUrl(
         uri,
         mode: LaunchMode.externalApplication,
       );
-      if (!launched && context.mounted) {
-        await _copyLink(context, channel.url);
-      }
-    } catch (_) {
-      if (context.mounted) {
-        await _copyLink(context, channel.url);
-      }
+      if (openedExternal) return;
+
+      final openedDefault = await launchUrl(
+        uri,
+        mode: LaunchMode.platformDefault,
+      );
+      if (openedDefault) return;
+    } catch (e) {
+      debugPrint('Failed to launch ${channel.url}: $e');
+    }
+
+    if (context.mounted) {
+      await _copyLink(context, channel.url);
     }
   }
 
