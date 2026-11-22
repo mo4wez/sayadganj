@@ -102,9 +102,9 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
     ref.read(selectedLetterProvider.notifier).select(letter);
   }
 
-  void _openAlphabetDial(String? activeLetter) {
-    final buckets = ref.read(letterBucketsProvider).value ?? const [];
-    if (buckets.isEmpty) return;
+  Future<void> _openAlphabetDial(String? activeLetter) async {
+    final buckets = await ref.read(letterBucketsProvider.future);
+    if (!mounted || buckets.isEmpty) return;
 
     AlphabetDialSheet.show(
       context,
