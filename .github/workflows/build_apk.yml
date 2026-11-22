@@ -3,7 +3,7 @@ name: Build Release APK
 on:
   push:
     branches:
-      - master
+      - main
     tags:
       - "v*"
   workflow_dispatch:
@@ -38,11 +38,19 @@ jobs:
       - name: Build split-per-abi release APKs
         run: flutter build apk --release --split-per-abi
 
+      - name: Rename release APKs
+        run: |
+          REF="${GITHUB_REF_NAME}"
+          DIR="build/app/outputs/flutter-apk"
+          mv "$DIR/app-arm64-v8a-release.apk" "$DIR/SayadGanj-${REF}-arm64-v8a.apk"
+          mv "$DIR/app-armeabi-v7a-release.apk" "$DIR/SayadGanj-${REF}-armeabi-v7a.apk"
+          mv "$DIR/app-x86_64-release.apk" "$DIR/SayadGanj-${REF}-x86_64.apk"
+
       - name: Upload APKs as Workflow Artifacts
         uses: actions/upload-artifact@v7
         with:
           name: sayadganj-release-apks
-          path: build/app/outputs/flutter-apk/*-release.apk
+          path: build/app/outputs/flutter-apk/SayadGanj-*.apk
           retention-days: 30
 
       - name: Publish GitHub Release (on version tags)
@@ -51,6 +59,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "${GITHUB_REF_NAME}" \
-            build/app/outputs/flutter-apk/*-release.apk \
+            build/app/outputs/flutter-apk/SayadGanj-*.apk \
             --title "SayadGanj ${GITHUB_REF_NAME}" \
             --generate-notes
