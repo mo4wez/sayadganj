@@ -15,8 +15,11 @@ class ReadingActivityController extends AsyncNotifier<void> {
   Future<void> build() async {}
 
   Future<void> recordView(WordEntry word) async {
-    await UserDbService.instance.recordWordView(word);
-    ref.invalidate(readingActivityProvider);
+    try {
+      await UserDbService.instance.recordWordView(word);
+    } finally {
+      ref.invalidate(readingActivityProvider);
+    }
   }
 
   Future<void> clearRecentWords() async {

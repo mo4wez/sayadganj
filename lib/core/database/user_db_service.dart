@@ -179,14 +179,16 @@ class UserDbService {
       'viewed_at': now.millisecondsSinceEpoch,
     }, conflictAlgorithm: ConflictAlgorithm.replace);
 
-    await db.rawInsert(
-      '''
-      INSERT INTO reading_days (day_key, views_count)
-      VALUES (?, 1)
-      ON CONFLICT(day_key) DO UPDATE SET views_count = views_count + 1
-      ''',
+    final updated = await db.rawUpdate(
+      'UPDATE reading_days SET views_count = views_count + 1 WHERE day_key = ?',
       [today],
     );
+    if (updated == 0) {
+      await db.insert('reading_days', {
+        'day_key': today,
+        'views_count': 1,
+      }, conflictAlgorithm: ConflictAlgorithm.ignore);
+    }
   }
 
   Future<ReadingActivitySummary> getReadingActivity({
