@@ -275,7 +275,7 @@ class WordNotificationService {
         'sayadganj',
         where:
             "TRIM(full_word) != '' "
-            'AND LENGTH(TRIM(definition)) >= 14 '
+            'AND LENGTH(TRIM(definition)) <= 220 '
             "AND full_word_with_symbols NOT LIKE '%✪%'",
         orderBy: 'RANDOM()',
         limit: count < 4 ? 25 : count * 6,
