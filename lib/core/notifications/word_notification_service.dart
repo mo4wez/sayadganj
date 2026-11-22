@@ -21,6 +21,7 @@ class WordNotificationService {
       'هر روچ یک نوکیں بلوچی لبزے گوں آئی ءِ مانا ءَ';
   static const int _baseNotificationId = 4100;
   static const int _queueDays = 7;
+  String _rtlText(String text) => '\u200F\u202B$text\u202C';
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
@@ -133,6 +134,16 @@ class WordNotificationService {
     final words = await _pickDailyWords(_queueDays);
     if (words.isEmpty) return;
 
+    final androidImpl = _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+    final canExact =
+        await androidImpl?.canScheduleExactNotifications() ?? false;
+    final scheduleMode = canExact
+        ? AndroidScheduleMode.exactAllowWhileIdle
+        : AndroidScheduleMode.inexactAllowWhileIdle;
+
     final now = DateTime.now();
     var firstSlot = DateTime(now.year, now.month, now.day, hour, minute);
     if (!firstSlot.isAfter(now.add(const Duration(minutes: 1)))) {
@@ -149,6 +160,10 @@ class WordNotificationService {
           : entry.fullWord;
       final cleanMeaning = QuizQuestion.formatOptionDefinition(entry);
 
+      final titleText = _rtlText('روچ ءِ لبز: $headword');
+      final bodyText = _rtlText(cleanMeaning);
+      final summaryText = _rtlText('سیدگنج');
+
       final androidDetails = AndroidNotificationDetails(
         _channelId,
         _channelName,
@@ -156,9 +171,9 @@ class WordNotificationService {
         importance: Importance.defaultImportance,
         priority: Priority.defaultPriority,
         styleInformation: BigTextStyleInformation(
-          cleanMeaning,
-          contentTitle: 'روچ ءِ لبز: $headword',
-          summaryText: 'سیدگنج',
+          bodyText,
+          contentTitle: titleText,
+          summaryText: summaryText,
         ),
       );
 
@@ -166,6 +181,85 @@ class WordNotificationService {
 
       await _plugin.zonedSchedule(
         id: _baseNotificationId + i,
+        title: titleText,
+        body: bodyText,
+        scheduledDate: scheduledTz,
+        notificationDetails: NotificationDetails(
+          android: androidDetails,
+          iOS: darwinDetails,
+        ),
+        payload: 'word:${entry.id}',
+        androidScheduleMode: scheduleMode,
+      );
+    }
+  }
+
+  Future<void> cancelAll() async {
+    for (int i = 0; i < _queueDays; i++) {
+      await _plugin.cancel(id: _baseNotificationId + i);
+    }
+  }
+
+  /// Debug helper: returns `null` when scheduled successfully, or a diagnostic
+  /// reason if permission/scheduling was blocked.
+  Future<String?> triggerDebugWordNotification({
+    Duration delay = const Duration(seconds: 5),
+  }) async {
+    try {
+      final granted = await requestPermission();
+      if (!granted) {
+        return 'یات‌دھانی ءِ اجازت بند اِنت (Notifications denied)';
+      }
+
+      final androidImpl = _plugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
+      if (androidImpl != null) {
+        final canExact =
+            await androidImpl.canScheduleExactNotifications() ?? false;
+        if (!canExact) {
+          await androidImpl.requestExactAlarmsPermission();
+          return '«Alarms & reminders» ءِ اجازت ءَ پچ کن ءُ پدا تست کن';
+        }
+      }
+
+      final words = await _pickDailyWords(1);
+      if (words.isEmpty) {
+        return 'لبز دست نہ کپت';
+      }
+
+      final entry = words.first;
+      final headword = entry.fullWordWithSymbols.isNotEmpty
+          ? entry.fullWordWithSymbols
+          : entry.fullWord;
+      final cleanMeaning = QuizQuestion.formatOptionDefinition(entry);
+      final scheduledTz = tz.TZDateTime.from(
+        DateTime.now().add(delay).toUtc(),
+        tz.UTC,
+      );
+
+      final androidDetails = AndroidNotificationDetails(
+        '${_channelId}_test_v2',
+        '$_channelName (تست)',
+        channelDescription: _channelDesc,
+        importance: Importance.max,
+        priority: Priority.max,
+        styleInformation: BigTextStyleInformation(
+          cleanMeaning,
+          contentTitle: 'روچ ءِ لبز: $headword',
+          summaryText: 'سیدگنج (تست)',
+        ),
+      );
+
+      const darwinDetails = DarwinNotificationDetails(
+        presentAlert: true,
+        presentBanner: true,
+        presentSound: true,
+      );
+
+      await _plugin.zonedSchedule(
+        id: 9999,
         title: 'روچ ءِ لبز: $headword',
         body: cleanMeaning,
         scheduledDate: scheduledTz,
@@ -174,14 +268,12 @@ class WordNotificationService {
           iOS: darwinDetails,
         ),
         payload: 'word:${entry.id}',
-        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        androidScheduleMode: AndroidScheduleMode.alarmClock,
       );
-    }
-  }
 
-  Future<void> cancelAll() async {
-    for (int i = 0; i < _queueDays; i++) {
-      await _plugin.cancel(id: _baseNotificationId + i);
+      return null;
+    } catch (e) {
+      return 'ردی: $e';
     }
   }
 
@@ -195,7 +287,7 @@ class WordNotificationService {
             'AND LENGTH(TRIM(definition)) >= 14 '
             "AND full_word_with_symbols NOT LIKE '%✪%'",
         orderBy: 'RANDOM()',
-        limit: count * 6,
+        limit: count < 4 ? 25 : count * 6,
       );
 
       final eligible =

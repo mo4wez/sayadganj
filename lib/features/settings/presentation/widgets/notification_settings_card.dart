@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../../../core/notifications/word_notification_service.dart';
 import '../../providers/notification_settings_provider.dart';
 
 class NotificationSettingsCard extends ConsumerWidget {
@@ -109,6 +111,34 @@ class NotificationSettingsCard extends ConsumerWidget {
                       .read(notificationSettingsProvider.notifier)
                       .setReminderTime(picked);
                 }
+              },
+            ),
+          ],
+          if (kDebugMode) ...[
+            const Divider(height: 1),
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 2,
+              ),
+              leading: Icon(
+                LucideIcons.flaskConical,
+                size: 19,
+                color: colorScheme.primary,
+              ),
+              title: const Text('تستِ یات‌دھانی (۵ سیکنڈ)'),
+              subtitle: const Text('فقط در حالت Debug نمایش داده می‌شود'),
+              onTap: () async {
+                HapticFeedback.selectionClick();
+                final error = await WordNotificationService.instance
+                    .triggerDebugWordNotification();
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(error ?? '۵ سیکنڈ ءَ رند یات‌دھانی کیت...'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
               },
             ),
           ],
