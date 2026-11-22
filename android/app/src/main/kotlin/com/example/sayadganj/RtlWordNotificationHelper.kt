@@ -8,7 +8,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import org.json.JSONObject
@@ -17,6 +16,7 @@ object RtlWordNotificationHelper {
     private const val PREFS_NAME = "sayadganj_rtl_alarms"
     private const val CHANNEL_DAILY = "sayadganj_word_of_day"
     private const val CHANNEL_TEST = "sayadganj_word_of_day_test_v2"
+    private const val RLM = "\u200F"
 
     fun ensureChannels(context: Context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
@@ -180,15 +180,8 @@ object RtlWordNotificationHelper {
             .remove(id.toString())
             .apply()
 
-        val collapsedView = RemoteViews(context.packageName, R.layout.notification_word_collapsed).apply {
-            setTextViewText(R.id.notif_title, title)
-            setTextViewText(R.id.notif_body, body)
-        }
-
-        val expandedView = RemoteViews(context.packageName, R.layout.notification_word_expanded).apply {
-            setTextViewText(R.id.notif_title, title)
-            setTextViewText(R.id.notif_body, body)
-        }
+        val rtlTitle = "$RLM$title"
+        val rtlBody = "$RLM$body"
 
         val launchIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -210,10 +203,13 @@ object RtlWordNotificationHelper {
 
         val notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(smallIconRes)
-            .setSubText("سیدگنج")
-            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            .setCustomContentView(collapsedView)
-            .setCustomBigContentView(expandedView)
+            .setContentTitle(rtlTitle)
+            .setContentText(rtlBody)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .setBigContentTitle(rtlTitle)
+                    .bigText(rtlBody)
+            )
             .setContentIntent(contentIntent)
             .setAutoCancel(true)
             .setPriority(
