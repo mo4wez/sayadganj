@@ -301,7 +301,9 @@ class SettingsScreen extends ConsumerWidget {
                                 .errorMessage;
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(err ?? 'تئی ایپ گڈّی ورژن اِنت'),
+                                content: Text(
+                                  err ?? 'تئی پریام گڈّی ورژن اِنت',
+                                ),
                                 behavior: SnackBarBehavior.floating,
                               ),
                             );

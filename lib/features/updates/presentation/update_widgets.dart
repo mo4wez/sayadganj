@@ -54,7 +54,7 @@ Future<void> showAppUpdateDialog(BuildContext context, AppUpdateInfo info) {
             launchUpdateDownload(info);
           },
           icon: const Icon(LucideIcons.download, size: 18),
-          label: const Text('ڈاؤنلوڈ کن'),
+          label: const Text('اِیرگیج کن'),
         ),
       ],
     ),
@@ -103,7 +103,7 @@ class UpdateAvailableBanner extends ConsumerWidget {
                       ),
                     ),
                     Text(
-                      'ڈاؤنلوڈ کنگ ءِ ھاترا ٹپّ بہ جن',
+                      'اِیرگیج کنگ ءِ ھاترا ٹپّ بہ جن',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: colorScheme.onPrimaryContainer.withValues(
                           alpha: 0.85,
