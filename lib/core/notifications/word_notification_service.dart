@@ -175,7 +175,7 @@ class WordNotificationService {
           ? entry.fullWordWithSymbols
           : entry.fullWord;
       final cleanMeaning = QuizQuestion.formatOptionDefinition(entry);
-      final titleText = 'روچ ءِ لبز: $headword';
+      final titleText = 'روچ ءِ گال: $headword';
 
       if (Platform.isAndroid) {
         await _rtlChannel.invokeMethod<void>('scheduleNotification', {
@@ -237,7 +237,7 @@ class WordNotificationService {
 
       final words = await _pickDailyWords(1);
       if (words.isEmpty) {
-        return 'لبز دست نہ کپت';
+        return 'گال دست نہ کپت';
       }
 
       final entry = words.first;
@@ -245,7 +245,7 @@ class WordNotificationService {
           ? entry.fullWordWithSymbols
           : entry.fullWord;
       final cleanMeaning = QuizQuestion.formatOptionDefinition(entry);
-      final titleText = 'روچ ءِ لبز: $headword';
+      final titleText = 'روچ ءِ گال: $headword';
       final triggerTime = DateTime.now().add(delay);
 
       if (Platform.isAndroid) {

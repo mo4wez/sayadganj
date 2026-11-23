@@ -24,18 +24,18 @@ object RtlWordNotificationHelper {
 
         val dailyChannel = NotificationChannel(
             CHANNEL_DAILY,
-            "روچ ءِ لبز (Word of the Day)",
+            "روچ ءِ گال (Word of the Day)",
             NotificationManager.IMPORTANCE_DEFAULT
         ).apply {
-            description = "هر روچ یک نوکیں بلوچی لبزے گوں آئی ءِ مانا ءَ"
+            description = "هر روچ یک نوکیں بلوچی گالے گوں آئی ءِ مانا ءَ"
         }
 
         val testChannel = NotificationChannel(
             CHANNEL_TEST,
-            "روچ ءِ لبز (تست)",
+            "روچ ءِ گال (تست)",
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
-            description = "تستِ یات‌دھانی"
+            description = "جار جَنَگ ءِ تست"
         }
 
         manager.createNotificationChannel(dailyChannel)

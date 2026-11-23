@@ -44,9 +44,9 @@ class NotificationSettingsCard extends ConsumerWidget {
                 size: 20,
               ),
             ),
-            title: const Text('روچ ءِ لبز ءِ جار'),
+            title: const Text('روچ ءِ گال ءِ جار'),
             subtitle: const Text(
-              'هر روچ یک نوکیں بلوچی لبزے گوں آئی ءِ مانا ءَ دیم دیگ بیت',
+              'هر روچ یک نوکیں بلوچی گالے گوں آئی ءِ مانا ءَ دیم دیگ بیت',
             ),
             value: notifState.enabled,
             onChanged: (value) async {
