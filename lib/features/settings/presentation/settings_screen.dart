@@ -35,9 +35,10 @@ class SettingsScreen extends ConsumerWidget {
     final colorScheme = theme.colorScheme;
 
     final modeLabel = switch (themeMode) {
-      ThemeMode.system => 'سیستم',
-      ThemeMode.light => 'روچ',
-      ThemeMode.dark => appearance.isPureBlack ? 'پُرتہاریں شپ' : 'شپ',
+      ThemeMode.system => l10n.themeModeSystem,
+      ThemeMode.light => l10n.themeModeLight,
+      ThemeMode.dark =>
+        appearance.isPureBlack ? l10n.themeModePureBlack : l10n.themeModeDark,
     };
 
     return Scaffold(
@@ -50,7 +51,7 @@ class SettingsScreen extends ConsumerWidget {
           32 + MediaQuery.paddingOf(context).bottom,
         ),
         children: [
-          Text('زاهری رنگ ءُ دروشم', style: theme.textTheme.labelMedium),
+          Text(l10n.appearanceSectionTitle, style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
           Card(
             clipBehavior: Clip.antiAlias,
@@ -72,7 +73,7 @@ class SettingsScreen extends ConsumerWidget {
                   size: 20,
                 ),
               ),
-              title: const Text('زاهری رنگ ءُ دروشم'),
+              title: Text(l10n.appearanceSectionTitle),
               subtitle: Text(
                 '$modeLabel • ${appearance.accentColor.label} • ${appearance.colorStyle.title.split(' ').first}',
               ),
@@ -106,6 +107,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 22),
+
           // --- Language Switcher ---
           Text(l10n.languageSettingTitle, style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
@@ -191,10 +193,7 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 22),
 
           // --- Font Family Selector with Live Specimen Preview ---
-          Text(
-            'کِشک ءُ نبشتانک ءِ دروشم (Font)',
-            style: theme.textTheme.labelMedium,
-          ),
+          Text(l10n.fontSectionTitle, style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
           ...AppFont.values.map((font) {
             final isSelected = selectedFont == font;
@@ -218,7 +217,7 @@ class SettingsScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'نبشتانک ءِ کساس (Font Size)',
+                l10n.fontSizeSectionTitle,
                 style: theme.textTheme.labelMedium,
               ),
               Row(
@@ -232,7 +231,7 @@ class SettingsScreen extends ConsumerWidget {
                         visualDensity: VisualDensity.compact,
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                       ),
-                      child: const Text('پدا ۱۰۰٪'),
+                      child: Text(l10n.resetFontSize),
                     ),
                   Text(
                     '${(fontScale * 100).round()}%',
@@ -252,7 +251,7 @@ class SettingsScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'بلوچی زبان مئے پجّار اِنت',
+                    l10n.fontSizePreviewText,
                     style: theme.textTheme.bodyLarge?.copyWith(
                       fontSize: 16 * fontScale,
                     ),
@@ -281,36 +280,37 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 22),
 
           // --- Notifications ---
-          Text('یات‌دھانی (Notifications)', style: theme.textTheme.labelMedium),
+          Text(
+            l10n.notificationsSectionTitle,
+            style: theme.textTheme.labelMedium,
+          ),
           const SizedBox(height: 10),
           const NotificationSettingsCard(),
           const SizedBox(height: 22),
 
           // --- Data & Search History ---
-          Text('دپتر', style: theme.textTheme.labelMedium),
+          Text(l10n.historySectionTitle, style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
           Card(
             child: ListTile(
               leading: Icon(LucideIcons.trash2, color: colorScheme.error),
-              title: const Text('شوهازانی دپتر ءَ ساپ کن'),
-              subtitle: const Text('تازگیں شوهاز چہ حافظہ ءَ دور  کنگ بنت'),
+              title: Text(l10n.clearSearchHistoryTitle),
+              subtitle: Text(l10n.clearSearchHistorySubtitle),
               onTap: () async {
                 final confirmed = await showDialog<bool>(
                   context: context,
                   builder: (ctx) => AlertDialog(
-                    title: const Text('دپتر ساپ کنگ بہ بیت؟'),
-                    content: const Text(
-                      'تئی تازگیں شوهازانی لڑ پہ مدامی پاک کنگ بیت۔',
-                    ),
+                    title: Text(l10n.clearSearchHistoryDialogTitle),
+                    content: Text(l10n.clearSearchHistoryDialogBody),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(ctx, false),
-                        child: const Text('نہ'),
+                        child: Text(l10n.cancelAction),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(ctx, true),
                         child: Text(
-                          'هو، ساپ کن',
+                          l10n.confirmClearAction,
                           style: TextStyle(color: colorScheme.error),
                         ),
                       ),
@@ -324,8 +324,8 @@ class SettingsScreen extends ConsumerWidget {
                       .clearAll();
                   if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('شوهازانی دپتر ساپ بوت'),
+                    SnackBar(
+                      content: Text(l10n.searchHistoryClearedSnack),
                       behavior: SnackBarBehavior.floating,
                     ),
                   );
@@ -336,7 +336,7 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 22),
 
           // --- About App & TakbandQandeel Card ---
-          Text('مئے بابت ءَ', style: theme.textTheme.labelMedium),
+          Text(l10n.aboutSectionTitle, style: theme.textTheme.labelMedium),
           const SizedBox(height: 10),
           AboutAppCard(wordCountAsync: wordCountAsync),
           const SizedBox(height: 10),
@@ -352,11 +352,11 @@ class SettingsScreen extends ConsumerWidget {
                     LucideIcons.refreshCw,
                     color: colorScheme.primary,
                   ),
-                  title: const Text('نوکیں ورژن ءِ پٹّ ءُ پول'),
+                  title: Text(l10n.checkForUpdatesTitle),
                   subtitle: Text(
                     update != null
-                        ? 'نوکیں ورژن v${update.latestVersion} دست کپت!'
-                        : 'گڈّی ورژن ءَ چکّاس کن',
+                        ? l10n.updateAvailableSubtitle(update.latestVersion)
+                        : l10n.checkLatestVersionSubtitle,
                   ),
                   trailing: updateState.isChecking
                       ? const SizedBox(
@@ -388,9 +388,7 @@ class SettingsScreen extends ConsumerWidget {
                                 .errorMessage;
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(
-                                  err ?? 'تئی پریام گڈّی ورژن اِنت',
-                                ),
+                                content: Text(err ?? l10n.appIsUpToDateSnack),
                                 behavior: SnackBarBehavior.floating,
                               ),
                             );

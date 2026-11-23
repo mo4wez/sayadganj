@@ -74,7 +74,80 @@ class AppLocalizationsBal extends AppLocalizations {
   String get offlineBadge => '۱۰۰٪ آفلاین';
 
   @override
-  String versionLabel(String version) {
+  String versionLabel(Object version) {
     return 'ورژن $version • ۱۰۰٪ آفلاین';
   }
+
+  @override
+  String get appearanceSectionTitle => 'زاهری رنگ ءُ دروشم';
+
+  @override
+  String get themeModeSystem => 'سیستم';
+
+  @override
+  String get themeModeLight => 'روچ';
+
+  @override
+  String get themeModeDark => 'شپ';
+
+  @override
+  String get themeModePureBlack => 'پُرتہاریں شپ';
+
+  @override
+  String get fontSectionTitle => 'کِشک ءُ نبشتانک ءِ دروشم (Font)';
+
+  @override
+  String get fontSizeSectionTitle => 'نبشتانک ءِ کساس (Font Size)';
+
+  @override
+  String get resetFontSize => 'پدا ۱۰۰٪';
+
+  @override
+  String get fontSizePreviewText => 'بلوچی زبان مئے پجّار اِنت';
+
+  @override
+  String get notificationsSectionTitle => 'یات‌دھانی (Notifications)';
+
+  @override
+  String get historySectionTitle => 'دپتر';
+
+  @override
+  String get clearSearchHistoryTitle => 'شوهازانی دپتر ءَ ساپ کن';
+
+  @override
+  String get clearSearchHistorySubtitle =>
+      'تازگیں شوهاز چہ حافظہ ءَ دور کنگ بنت';
+
+  @override
+  String get clearSearchHistoryDialogTitle => 'دپتر ساپ کنگ بہ بیت؟';
+
+  @override
+  String get clearSearchHistoryDialogBody =>
+      'تئی تازگیں شوهازانی لڑ پہ مدامی پاک کنگ بیت۔';
+
+  @override
+  String get cancelAction => 'نہ';
+
+  @override
+  String get confirmClearAction => 'هو، ساپ کن';
+
+  @override
+  String get searchHistoryClearedSnack => 'شوهازانی دپتر ساپ بوت';
+
+  @override
+  String get aboutSectionTitle => 'مئے بابت ءَ';
+
+  @override
+  String get checkForUpdatesTitle => 'نوکیں ورژن ءِ پٹّ ءُ پول';
+
+  @override
+  String updateAvailableSubtitle(String version) {
+    return 'نوکیں ورژن v$version دست کپت!';
+  }
+
+  @override
+  String get checkLatestVersionSubtitle => 'گڈّی ورژن ءَ چکّاس کن';
+
+  @override
+  String get appIsUpToDateSnack => 'تئی پریام گڈّی ورژن اِنت';
 }

@@ -216,7 +216,145 @@ abstract class AppLocalizations {
   ///
   /// In bal, this message translates to:
   /// **'ورژن {version} • ۱۰۰٪ آفلاین'**
-  String versionLabel(String version);
+  String versionLabel(Object version);
+
+  /// No description provided for @appearanceSectionTitle.
+  ///
+  /// In bal, this message translates to:
+  /// **'زاهری رنگ ءُ دروشم'**
+  String get appearanceSectionTitle;
+
+  /// No description provided for @themeModeSystem.
+  ///
+  /// In bal, this message translates to:
+  /// **'سیستم'**
+  String get themeModeSystem;
+
+  /// No description provided for @themeModeLight.
+  ///
+  /// In bal, this message translates to:
+  /// **'روچ'**
+  String get themeModeLight;
+
+  /// No description provided for @themeModeDark.
+  ///
+  /// In bal, this message translates to:
+  /// **'شپ'**
+  String get themeModeDark;
+
+  /// No description provided for @themeModePureBlack.
+  ///
+  /// In bal, this message translates to:
+  /// **'پُرتہاریں شپ'**
+  String get themeModePureBlack;
+
+  /// No description provided for @fontSectionTitle.
+  ///
+  /// In bal, this message translates to:
+  /// **'کِشک ءُ نبشتانک ءِ دروشم (Font)'**
+  String get fontSectionTitle;
+
+  /// No description provided for @fontSizeSectionTitle.
+  ///
+  /// In bal, this message translates to:
+  /// **'نبشتانک ءِ کساس (Font Size)'**
+  String get fontSizeSectionTitle;
+
+  /// No description provided for @resetFontSize.
+  ///
+  /// In bal, this message translates to:
+  /// **'پدا ۱۰۰٪'**
+  String get resetFontSize;
+
+  /// No description provided for @fontSizePreviewText.
+  ///
+  /// In bal, this message translates to:
+  /// **'بلوچی زبان مئے پجّار اِنت'**
+  String get fontSizePreviewText;
+
+  /// No description provided for @notificationsSectionTitle.
+  ///
+  /// In bal, this message translates to:
+  /// **'یات‌دھانی (Notifications)'**
+  String get notificationsSectionTitle;
+
+  /// No description provided for @historySectionTitle.
+  ///
+  /// In bal, this message translates to:
+  /// **'دپتر'**
+  String get historySectionTitle;
+
+  /// No description provided for @clearSearchHistoryTitle.
+  ///
+  /// In bal, this message translates to:
+  /// **'شوهازانی دپتر ءَ ساپ کن'**
+  String get clearSearchHistoryTitle;
+
+  /// No description provided for @clearSearchHistorySubtitle.
+  ///
+  /// In bal, this message translates to:
+  /// **'تازگیں شوهاز چہ حافظہ ءَ دور کنگ بنت'**
+  String get clearSearchHistorySubtitle;
+
+  /// No description provided for @clearSearchHistoryDialogTitle.
+  ///
+  /// In bal, this message translates to:
+  /// **'دپتر ساپ کنگ بہ بیت؟'**
+  String get clearSearchHistoryDialogTitle;
+
+  /// No description provided for @clearSearchHistoryDialogBody.
+  ///
+  /// In bal, this message translates to:
+  /// **'تئی تازگیں شوهازانی لڑ پہ مدامی پاک کنگ بیت۔'**
+  String get clearSearchHistoryDialogBody;
+
+  /// No description provided for @cancelAction.
+  ///
+  /// In bal, this message translates to:
+  /// **'نہ'**
+  String get cancelAction;
+
+  /// No description provided for @confirmClearAction.
+  ///
+  /// In bal, this message translates to:
+  /// **'هو، ساپ کن'**
+  String get confirmClearAction;
+
+  /// No description provided for @searchHistoryClearedSnack.
+  ///
+  /// In bal, this message translates to:
+  /// **'شوهازانی دپتر ساپ بوت'**
+  String get searchHistoryClearedSnack;
+
+  /// No description provided for @aboutSectionTitle.
+  ///
+  /// In bal, this message translates to:
+  /// **'مئے بابت ءَ'**
+  String get aboutSectionTitle;
+
+  /// No description provided for @checkForUpdatesTitle.
+  ///
+  /// In bal, this message translates to:
+  /// **'نوکیں ورژن ءِ پٹّ ءُ پول'**
+  String get checkForUpdatesTitle;
+
+  /// No description provided for @updateAvailableSubtitle.
+  ///
+  /// In bal, this message translates to:
+  /// **'نوکیں ورژن v{version} دست کپت!'**
+  String updateAvailableSubtitle(String version);
+
+  /// No description provided for @checkLatestVersionSubtitle.
+  ///
+  /// In bal, this message translates to:
+  /// **'گڈّی ورژن ءَ چکّاس کن'**
+  String get checkLatestVersionSubtitle;
+
+  /// No description provided for @appIsUpToDateSnack.
+  ///
+  /// In bal, this message translates to:
+  /// **'تئی پریام گڈّی ورژن اِنت'**
+  String get appIsUpToDateSnack;
 }
 
 class _AppLocalizationsDelegate

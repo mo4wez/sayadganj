@@ -35,9 +35,32 @@
   "languagePersian": "فارسی",
   "offlineBadge": "۱۰۰٪ آفلاین",
   "versionLabel": "ورژن {version} • ۱۰۰٪ آفلاین",
-  "@versionLabel": {
+  "appearanceSectionTitle": "زاهری رنگ ءُ دروشم",
+  "themeModeSystem": "سیستم",
+  "themeModeLight": "روچ",
+  "themeModeDark": "شپ",
+  "themeModePureBlack": "پُرتہاریں شپ",
+  "fontSectionTitle": "کِشک ءُ نبشتانک ءِ دروشم (Font)",
+  "fontSizeSectionTitle": "نبشتانک ءِ کساس (Font Size)",
+  "resetFontSize": "پدا ۱۰۰٪",
+  "fontSizePreviewText": "بلوچی زبان مئے پجّار اِنت",
+  "notificationsSectionTitle": "یات‌دھانی (Notifications)",
+  "historySectionTitle": "دپتر",
+  "clearSearchHistoryTitle": "شوهازانی دپتر ءَ ساپ کن",
+  "clearSearchHistorySubtitle": "تازگیں شوهاز چہ حافظہ ءَ دور کنگ بنت",
+  "clearSearchHistoryDialogTitle": "دپتر ساپ کنگ بہ بیت؟",
+  "clearSearchHistoryDialogBody": "تئی تازگیں شوهازانی لڑ پہ مدامی پاک کنگ بیت۔",
+  "cancelAction": "نہ",
+  "confirmClearAction": "هو، ساپ کن",
+  "searchHistoryClearedSnack": "شوهازانی دپتر ساپ بوت",
+  "aboutSectionTitle": "مئے بابت ءَ",
+  "checkForUpdatesTitle": "نوکیں ورژن ءِ پٹّ ءُ پول",
+  "updateAvailableSubtitle": "نوکیں ورژن v{version} دست کپت!",
+  "@updateAvailableSubtitle": {
     "placeholders": {
       "version": { "type": "String" }
     }
-  }
+  },
+  "checkLatestVersionSubtitle": "گڈّی ورژن ءَ چکّاس کن",
+  "appIsUpToDateSnack": "تئی پریام گڈّی ورژن اِنت"
 }
