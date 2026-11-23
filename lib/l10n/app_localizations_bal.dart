@@ -22,7 +22,7 @@ class AppLocalizationsBal extends AppLocalizations {
   String get wordOfTheDay => 'روچ ءِ گال';
 
   @override
-  String get luckyWord => 'پدیمیں گال';
+  String get luckyWord => 'پَدیمیں گال';
 
   @override
   String get readFullDefinition => 'سرجمیں بزانت ءَ بوان';
@@ -39,7 +39,7 @@ class AppLocalizationsBal extends AppLocalizations {
 
   @override
   String totalViewedCount(int count) {
-    return 'کل دیستگیں: $count';
+    return 'کُل دیستگیں: $count';
   }
 
   @override
@@ -62,7 +62,7 @@ class AppLocalizationsBal extends AppLocalizations {
   String get settingsTitle => 'کاربوج';
 
   @override
-  String get languageSettingTitle => 'زبان / زُبان';
+  String get languageSettingTitle => 'زبان (Language)';
 
   @override
   String get languageBalochi => 'بلوچی';
@@ -106,7 +106,7 @@ class AppLocalizationsBal extends AppLocalizations {
   String get fontSizePreviewText => 'بلوچی زبان مئے پجّار اِنت';
 
   @override
-  String get notificationsSectionTitle => 'یات‌دھانی (Notifications)';
+  String get notificationsSectionTitle => 'جار (Notifications)';
 
   @override
   String get historySectionTitle => 'دپتر';
@@ -146,7 +146,7 @@ class AppLocalizationsBal extends AppLocalizations {
   }
 
   @override
-  String get checkLatestVersionSubtitle => 'گڈّی ورژن ءَ چکّاس کن';
+  String get checkLatestVersionSubtitle => 'گڈّی ورژن ءَ چکّاس';
 
   @override
   String get appIsUpToDateSnack => 'تئی پریام گڈّی ورژن اِنت';
@@ -227,7 +227,7 @@ class AppLocalizationsBal extends AppLocalizations {
   String get standardDarkOption => 'سادگیں شپ (Standard)';
 
   @override
-  String get standardDarkSubtitle => 'نرمیں سیاہ ءُ نیلیں پشت‌در';
+  String get standardDarkSubtitle => 'نرمیں سیاہ ءُ نیلیں پُشت‌در';
 
   @override
   String get pureBlackOption => 'پُرتہاریں شپ (Pure black)';

@@ -4,7 +4,7 @@
   "appSubtitle": "سیدگنج — بلوچی بزانت‌بلد",
   "searchHint": "گالے بہ شوهاز...",
   "wordOfTheDay": "روچ ءِ گال",
-  "luckyWord": "پدیمیں گال",
+  "luckyWord": "پَدیمیں گال",
   "readFullDefinition": "سرجمیں بزانت ءَ بوان",
   "streakDays": "{count} روچ رِد",
   "@streakDays": {
@@ -18,7 +18,7 @@
       "count": { "type": "int" }
     }
   },
-  "totalViewedCount": "کل دیستگیں: {count}",
+  "totalViewedCount": "کُل دیستگیں: {count}",
   "@totalViewedCount": {
     "placeholders": {
       "count": { "type": "int" }
@@ -30,7 +30,7 @@
   "curatedWords": "گچین کتگیں گال",
   "dictionaryTab": "بزانت‌بلد",
   "settingsTitle": "کاربوج",
-  "languageSettingTitle": "زبان / زُبان",
+  "languageSettingTitle": "زبان (Language)",
   "languageBalochi": "بلوچی",
   "languagePersian": "فارسی",
   "offlineBadge": "۱۰۰٪ آفلاین",
@@ -44,7 +44,7 @@
   "fontSizeSectionTitle": "نبشتانک ءِ کساس (Font Size)",
   "resetFontSize": "پدا ۱۰۰٪",
   "fontSizePreviewText": "بلوچی زبان مئے پجّار اِنت",
-  "notificationsSectionTitle": "یات‌دھانی (Notifications)",
+  "notificationsSectionTitle": "جار (Notifications)",
   "historySectionTitle": "دپتر",
   "clearSearchHistoryTitle": "شوهازانی دپتر ءَ ساپ کن",
   "clearSearchHistorySubtitle": "تازگیں شوهاز چہ حافظہ ءَ دور کنگ بنت",
@@ -61,7 +61,7 @@
       "version": { "type": "String" }
     }
   },
-  "checkLatestVersionSubtitle": "گڈّی ورژن ءَ چکّاس کن",
+  "checkLatestVersionSubtitle": "گڈّی ورژن ءَ چکّاس",
   "appIsUpToDateSnack": "تئی پریام گڈّی ورژن اِنت",
   "channelTelegram": "تلگرام (Telegram)",
   "channelInstagram": "اینستاگرام (Instagram)",
@@ -91,7 +91,7 @@
   "themeModeDarkOption": "شپ ءِ دروشم (Dark)",
   "pureBlackSectionTitle": "تہاریں شپ ءِ دروشم (Pure black mode)",
   "standardDarkOption": "سادگیں شپ (Standard)",
-  "standardDarkSubtitle": "نرمیں سیاہ ءُ نیلیں پشت‌در",
+  "standardDarkSubtitle": "نرمیں سیاہ ءُ نیلیں پُشت‌در",
   "pureBlackOption": "پُرتہاریں شپ (Pure black)",
   "pureBlackSubtitle": "سرجمیں سیاہ (AMOLED) پہ شپ ءِ وانگ ءَ",
   "themeColorSectionTitle": "رنگ ءِ گچین (Theme color)",

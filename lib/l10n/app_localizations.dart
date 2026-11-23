@@ -125,7 +125,7 @@ abstract class AppLocalizations {
   /// No description provided for @luckyWord.
   ///
   /// In bal, this message translates to:
-  /// **'پدیمیں گال'**
+  /// **'پَدیمیں گال'**
   String get luckyWord;
 
   /// No description provided for @readFullDefinition.
@@ -149,7 +149,7 @@ abstract class AppLocalizations {
   /// No description provided for @totalViewedCount.
   ///
   /// In bal, this message translates to:
-  /// **'کل دیستگیں: {count}'**
+  /// **'کُل دیستگیں: {count}'**
   String totalViewedCount(int count);
 
   /// No description provided for @recentlyViewedWords.
@@ -191,7 +191,7 @@ abstract class AppLocalizations {
   /// No description provided for @languageSettingTitle.
   ///
   /// In bal, this message translates to:
-  /// **'زبان / زُبان'**
+  /// **'زبان (Language)'**
   String get languageSettingTitle;
 
   /// No description provided for @languageBalochi.
@@ -275,7 +275,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationsSectionTitle.
   ///
   /// In bal, this message translates to:
-  /// **'یات‌دھانی (Notifications)'**
+  /// **'جار (Notifications)'**
   String get notificationsSectionTitle;
 
   /// No description provided for @historySectionTitle.
@@ -347,7 +347,7 @@ abstract class AppLocalizations {
   /// No description provided for @checkLatestVersionSubtitle.
   ///
   /// In bal, this message translates to:
-  /// **'گڈّی ورژن ءَ چکّاس کن'**
+  /// **'گڈّی ورژن ءَ چکّاس'**
   String get checkLatestVersionSubtitle;
 
   /// No description provided for @appIsUpToDateSnack.
@@ -497,7 +497,7 @@ abstract class AppLocalizations {
   /// No description provided for @standardDarkSubtitle.
   ///
   /// In bal, this message translates to:
-  /// **'نرمیں سیاہ ءُ نیلیں پشت‌در'**
+  /// **'نرمیں سیاہ ءُ نیلیں پُشت‌در'**
   String get standardDarkSubtitle;
 
   /// No description provided for @pureBlackOption.
