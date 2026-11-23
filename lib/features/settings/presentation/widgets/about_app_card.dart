@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class _SocialChannel {
   final String title;
@@ -49,6 +50,16 @@ class AboutAppCard extends StatelessWidget {
       icon: LucideIcons.headphones,
     ),
   ];
+
+  String _toBalochiDigits(String input) {
+    const western = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const eastern = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    var output = input;
+    for (var i = 0; i < western.length; i++) {
+      output = output.replaceAll(western[i], eastern[i]);
+    }
+    return output;
+  }
 
   Future<void> _openChannel(
     BuildContext context,
@@ -125,11 +136,22 @@ class AboutAppCard extends StatelessWidget {
                         style: theme.textTheme.titleMedium,
                       ),
                       const SizedBox(height: 2),
-                      Text(
-                        'ورژن ۱.۱.۱ • ۱۰۰٪ آفلاین',
-                        style: theme.textTheme.labelMedium?.copyWith(
-                          color: colorScheme.primary,
-                        ),
+                      FutureBuilder<PackageInfo>(
+                        future: PackageInfo.fromPlatform(),
+                        builder: (context, snapshot) {
+                          final version = _toBalochiDigits(
+                            snapshot.data?.version ?? '',
+                          );
+                          final label = version.isEmpty
+                              ? '۱۰۰٪ آفلاین'
+                              : 'ورژن $version • ۱۰۰٪ آفلاین';
+                          return Text(
+                            label,
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: colorScheme.primary,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

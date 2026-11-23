@@ -1,7 +1,7 @@
 name: sayadganj
 description: "An offline-first Balochi-to-Balochi dictionary mobile application built with Flutter, bringing Sayad Hashumi's landmark lexicographical work into a fast, modern, and accessible reading experience."
 publish_to: "none"
-version: 1.1.1+5
+version: 1.1.2+6
 
 environment:
   sdk: ^3.14.0
