@@ -7,6 +7,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../domain/quiz_question.dart';
 import '../../../domain/word_entry.dart';
 import '../../word_detail_screen.dart';
+import '../../../../../l10n/app_localizations.dart';
 
 class FlipWordCard extends StatefulWidget {
   final WordEntry word;
@@ -148,7 +149,7 @@ class _FrontFace extends StatelessWidget {
               Icon(LucideIcons.rotateCw, size: 14, color: colorScheme.primary),
               const SizedBox(width: 6),
               Text(
-                'بزانت ءِ چارگ ءَ بہ ٹپّ',
+                AppLocalizations.of(context).tapToViewMeaning,
                 style: theme.textTheme.labelMedium?.copyWith(
                   color: colorScheme.primary,
                 ),
@@ -231,7 +232,7 @@ class _BackFace extends StatelessWidget {
                 foregroundColor: colorScheme.primary,
               ),
               icon: const Icon(LucideIcons.arrowUpLeft, size: 15),
-              label: const Text('سرجمیں بزانت'),
+              label: Text(AppLocalizations.of(context).fullMeaningShort),
             ),
           ),
         ],

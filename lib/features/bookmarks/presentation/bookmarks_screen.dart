@@ -8,6 +8,7 @@ import '../../dictionary/domain/word_entry.dart';
 import '../../dictionary/presentation/widgets/word_card.dart';
 import '../../dictionary/presentation/word_detail_screen.dart';
 import '../providers/bookmarks_provider.dart';
+import '../../../l10n/app_localizations.dart';
 import 'widgets/bookmarks_carousel_view.dart';
 
 class BookmarksScreen extends ConsumerStatefulWidget {
@@ -21,13 +22,14 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
   bool _isCarouselMode = false;
 
   void _removeWithUndo(WordEntry word) {
+    final l10n = AppLocalizations.of(context);
     ref.read(bookmarkControllerProvider.notifier).remove(word.id);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('«${word.fullWord}» چہ نشاناں دور کنگ بوت'),
+        content: Text(l10n.wordRemovedFromBookmarksSnack(word.fullWord)),
         behavior: SnackBarBehavior.floating,
         action: SnackBarAction(
-          label: 'پدا بیار',
+          label: l10n.undoAction,
           onPressed: () {
             ref.read(bookmarkControllerProvider.notifier).toggle(word);
           },
@@ -39,6 +41,7 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
   @override
   Widget build(BuildContext context) {
     final bookmarksAsync = ref.watch(bookmarksProvider);
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final hasBookmarks = bookmarksAsync.maybeWhen(
@@ -48,11 +51,13 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('نشان کتگیں گال'),
+        title: Text(l10n.bookmarksScreenTitle),
         actions: [
           if (hasBookmarks)
             IconButton(
-              tooltip: _isCarouselMode ? 'لڑ ءِ دروشم' : 'تاکدیم ءِ دروشم',
+              tooltip: _isCarouselMode
+                  ? l10n.listViewTooltip
+                  : l10n.carouselViewTooltip,
               icon: Icon(
                 _isCarouselMode
                     ? LucideIcons.list
@@ -69,7 +74,8 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
       ),
       body: bookmarksAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => Center(child: Text('ردی یے بوت: $err')),
+        error: (err, _) =>
+            Center(child: Text(l10n.errorOccurredWithDetail('$err'))),
         data: (words) {
           if (words.isEmpty) {
             return Center(
@@ -92,13 +98,13 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'انگت هچ گالے نشان نہ بوتگ',
+                      l10n.noBookmarksTitle,
                       style: theme.textTheme.titleMedium,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'وتی دوست داشتگیں گالاں پہ زوت دست گرگ ءَ نشان بہ کن',
+                      l10n.noBookmarksSubtitle,
                       style: theme.textTheme.bodyMedium,
                       textAlign: TextAlign.center,
                     ),

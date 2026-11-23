@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../domain/discovery_category.dart';
 import '../providers/discovery_provider.dart';
+import '../../../l10n/app_localizations.dart';
 import 'widgets/word_card.dart';
 import 'word_detail_screen.dart';
 
@@ -17,6 +18,7 @@ class DiscoveryCollectionScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final wordsAsync = ref.watch(discoveryWordsProvider(category));
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -26,7 +28,7 @@ class DiscoveryCollectionScreen extends ConsumerWidget {
         actions: [
           if (category.supportsRefresh)
             IconButton(
-              tooltip: 'نوکیں گال',
+              tooltip: l10n.newWordAction,
               icon: const Icon(LucideIcons.refreshCw, size: 19),
               onPressed: () {
                 HapticFeedback.selectionClick();
@@ -38,12 +40,13 @@ class DiscoveryCollectionScreen extends ConsumerWidget {
       ),
       body: wordsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => Center(child: Text('ردی یے بوت: $err')),
+        error: (err, _) =>
+            Center(child: Text(l10n.errorOccurredWithDetail('$err'))),
         data: (words) {
           if (words.isEmpty) {
             return Center(
               child: Text(
-                'هچ گالے دست نہ کپت',
+                l10n.noWordsFoundTitle,
                 style: theme.textTheme.titleMedium,
               ),
             );
@@ -70,7 +73,10 @@ class DiscoveryCollectionScreen extends ConsumerWidget {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          '${category.subtitle} (${words.length} گال)',
+                          l10n.categorySubtitleWithCount(
+                            category.subtitle,
+                            words.length,
+                          ),
                           style: theme.textTheme.labelMedium?.copyWith(
                             color: colorScheme.primary,
                           ),

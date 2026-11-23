@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../core/database/dictionary_db_service.dart';
+import '../../../l10n/app_localizations.dart';
 import 'widgets/astrolabe_emblem.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -66,6 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
@@ -105,7 +107,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
                   // Main Balochi App Title
                   Text(
-                        'سیدگنج',
+                        l10n.appTitle,
                         textAlign: TextAlign.center,
                         style: theme.textTheme.headlineLarge?.copyWith(
                           fontSize: 38,
@@ -140,7 +142,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           ),
                         ),
                         child: Text(
-                          'بلوچی ءَ پہ بلوچی بزانت‌بلد',
+                          l10n.splashSubtitle,
                           textAlign: TextAlign.center,
                           style: theme.textTheme.labelMedium?.copyWith(
                             color: colorScheme.primary,
@@ -189,7 +191,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        'تاکبند کندیل',
+                        l10n.takbandName,
                         style: theme.textTheme.labelMedium?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),

@@ -3,6 +3,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class _SocialItem {
   final String label;
   final String subtitle;
@@ -27,27 +29,27 @@ class TakbandFollowSheet extends StatelessWidget {
     required this.onDontShowAgain,
   });
 
-  static const List<_SocialItem> _items = [
+  List<_SocialItem> _buildItems(AppLocalizations l10n) => [
     _SocialItem(
-      label: 'تلگرام',
+      label: l10n.telegramShort,
       subtitle: 'Telegram',
       url: 'https://t.me/takband_qandeel',
       icon: LucideIcons.send,
     ),
     _SocialItem(
-      label: 'اینستاگرام',
+      label: l10n.instagramShort,
       subtitle: 'Instagram',
       url: 'https://www.instagram.com/takband.qandeel',
       icon: LucideIcons.camera,
     ),
     _SocialItem(
-      label: 'یوتیوب',
+      label: l10n.youtubeShort,
       subtitle: 'YouTube',
       url: 'https://www.youtube.com/@takband_qandeel',
       icon: LucideIcons.video,
     ),
     _SocialItem(
-      label: 'کست باکس',
+      label: l10n.castboxShort,
       subtitle: 'CastBox',
       url: 'https://castbox.fm/va/7074852',
       icon: LucideIcons.headphones,
@@ -90,9 +92,10 @@ class TakbandFollowSheet extends StatelessWidget {
     } catch (_) {
       await Clipboard.setData(ClipboardData(text: url));
       if (context.mounted) {
+        final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('لینک کُپی بوت'),
+          SnackBar(
+            content: Text(l10n.linkCopiedSnack),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -105,6 +108,8 @@ class TakbandFollowSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context);
+    final items = _buildItems(l10n);
 
     return Container(
       margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
@@ -145,13 +150,13 @@ class TakbandFollowSheet extends StatelessWidget {
           const SizedBox(height: 14),
 
           Text(
-            'تاکبندکندیل ءِ همراه بہ بئے',
+            l10n.followTakbandTitle,
             style: theme.textTheme.titleMedium?.copyWith(fontSize: 17),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 6),
           Text(
-            'اگاں سیدگنج پہ تو کارآمد بوتگ، مئے کسانیں لبزانکی گَبل ءِ تاک ءُ پادکستاں هم بچار دانکہ بلوچی زبان ءِ نوکیں کاراں سرپد بہ بئے.',
+            l10n.followTakbandSubtitle,
             style: theme.textTheme.bodyMedium?.copyWith(height: 1.65),
             textAlign: TextAlign.center,
           ),
@@ -161,7 +166,7 @@ class TakbandFollowSheet extends StatelessWidget {
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: _items.length,
+            itemCount: items.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               mainAxisSpacing: 10,
@@ -169,7 +174,7 @@ class TakbandFollowSheet extends StatelessWidget {
               childAspectRatio: 2.55,
             ),
             itemBuilder: (context, index) {
-              final item = _items[index];
+              final item = items[index];
               return Material(
                 color: theme.scaffoldBackgroundColor,
                 shape: RoundedRectangleBorder(
@@ -240,7 +245,7 @@ class TakbandFollowSheet extends StatelessWidget {
                     foregroundColor: colorScheme.onSurfaceVariant,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                  child: const Text('دگہ پیش مدار'),
+                  child: Text(l10n.dontShowAgainAction),
                 ),
               ),
               const SizedBox(width: 8),
@@ -253,7 +258,7 @@ class TakbandFollowSheet extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text('پدا بچاراں'),
+                  child: Text(l10n.maybeLaterAction),
                 ),
               ),
             ],

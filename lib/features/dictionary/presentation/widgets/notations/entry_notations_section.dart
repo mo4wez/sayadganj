@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../domain/dictionary_notation.dart';
+import '../../../../../l10n/app_localizations.dart';
 import 'all_notations_sheet.dart';
 
 class EntryNotationsSection extends StatelessWidget {
@@ -24,6 +25,7 @@ class EntryNotationsSection extends StatelessWidget {
 
     if (notations.isEmpty) return const SizedBox.shrink();
 
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -47,7 +49,7 @@ class EntryNotationsSection extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        'گْونڈگال ءُ ٹِکانی بزانت',
+                        l10n.entryNotationsTitle,
                         style: theme.textTheme.labelMedium?.copyWith(
                           color: colorScheme.primary,
                         ),
@@ -60,7 +62,7 @@ class EntryNotationsSection extends StatelessWidget {
                       visualDensity: VisualDensity.compact,
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                     ),
-                    child: const Text('سرجمیں لڑ'),
+                    child: Text(l10n.fullListAction),
                   ),
                 ],
               ),

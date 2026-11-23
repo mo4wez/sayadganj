@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../domain/app_update_info.dart';
 import '../providers/app_update_provider.dart';
+import '../../../l10n/app_localizations.dart';
 
 Future<void> launchUpdateDownload(AppUpdateInfo info) async {
   final uri = Uri.parse(info.downloadUrl);
@@ -17,6 +18,7 @@ Future<void> launchUpdateDownload(AppUpdateInfo info) async {
 }
 
 Future<void> showAppUpdateDialog(BuildContext context, AppUpdateInfo info) {
+  final l10n = AppLocalizations.of(context);
   final theme = Theme.of(context);
   final colorScheme = theme.colorScheme;
 
@@ -24,19 +26,19 @@ Future<void> showAppUpdateDialog(BuildContext context, AppUpdateInfo info) {
     context: context,
     builder: (ctx) => AlertDialog(
       icon: Icon(LucideIcons.sparkles, color: colorScheme.primary, size: 28),
-      title: Text('نوکیں ورژن دست کپت (v${info.latestVersion})'),
+      title: Text(l10n.newVersionAvailableTitle(info.latestVersion)),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'تئی انّوگیں ورژن: v${info.currentVersion}',
+              l10n.currentVersionLabel(info.currentVersion),
               style: theme.textTheme.bodySmall,
             ),
             if (info.releaseNotes.isNotEmpty) ...[
               const SizedBox(height: 12),
-              Text('نوکیں بدلی:', style: theme.textTheme.titleSmall),
+              Text(l10n.whatsNewLabel, style: theme.textTheme.titleSmall),
               const SizedBox(height: 4),
               Text(info.releaseNotes, style: theme.textTheme.bodyMedium),
             ],
@@ -46,7 +48,7 @@ Future<void> showAppUpdateDialog(BuildContext context, AppUpdateInfo info) {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(ctx).pop(),
-          child: const Text('پدا'),
+          child: Text(l10n.laterAction),
         ),
         FilledButton.icon(
           onPressed: () {
@@ -54,7 +56,7 @@ Future<void> showAppUpdateDialog(BuildContext context, AppUpdateInfo info) {
             launchUpdateDownload(info);
           },
           icon: const Icon(LucideIcons.download, size: 18),
-          label: const Text('اِیرگیج کن'),
+          label: Text(l10n.downloadAction),
         ),
       ],
     ),
@@ -73,6 +75,7 @@ class UpdateAvailableBanner extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -97,13 +100,13 @@ class UpdateAvailableBanner extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'سیدگنج ءِ نوکیں ورژن (v${info.latestVersion})',
+                      l10n.appNewVersionBannerTitle(info.latestVersion),
                       style: theme.textTheme.labelLarge?.copyWith(
                         color: colorScheme.onPrimaryContainer,
                       ),
                     ),
                     Text(
-                      'اِیرگیج کنگ ءِ ھاترا ٹپّ بہ جن',
+                      l10n.tapToDownloadSubtitle,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: colorScheme.onPrimaryContainer.withValues(
                           alpha: 0.85,
@@ -114,7 +117,7 @@ class UpdateAvailableBanner extends ConsumerWidget {
                 ),
               ),
               IconButton(
-                tooltip: 'بند کن',
+                tooltip: l10n.closeTooltip,
                 icon: Icon(
                   LucideIcons.x,
                   size: 18,

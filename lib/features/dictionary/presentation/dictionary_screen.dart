@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../providers/dictionary_providers.dart';
 import '../providers/paginated_words_provider.dart';
+import '../../../l10n/app_localizations.dart';
 import 'widgets/alphabet_dial_sheet.dart';
 import 'widgets/animated_search_tools.dart';
 import 'widgets/idle_dictionary_view.dart';
@@ -122,6 +123,7 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
     final searchPageAsync = ref.watch(paginatedSearchWordsProvider);
     final letterPageAsync = ref.watch(paginatedLetterWordsProvider);
     final recentAsync = ref.watch(recentSearchesProvider);
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -159,7 +161,7 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                         ),
                       ),
                       const SizedBox(width: 10),
-                      const Text('سیدگنج'),
+                      Text(l10n.appTitle),
                     ],
                   ),
                 ),
@@ -199,7 +201,7 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                                       focusNode: _searchFocusNode,
                                       textInputAction: TextInputAction.search,
                                       decoration: InputDecoration(
-                                        hintText: 'گالے بہ شوهاز...',
+                                        hintText: l10n.searchHint,
                                         prefixIcon: const Icon(
                                           LucideIcons.search,
                                           size: 20,
@@ -290,7 +292,11 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                                       const SizedBox(width: 8),
                                       Expanded(
                                         child: Text(
-                                          'آب «${selectedLetter == 'ا' ? 'ا / آ' : selectedLetter}» ءِ گال',
+                                          l10n.wordsStartingWithLetter(
+                                            selectedLetter == 'ا'
+                                                ? 'ا / آ'
+                                                : selectedLetter,
+                                          ),
                                           style: theme.textTheme.labelMedium
                                               ?.copyWith(
                                                 color: colorScheme.primary,
@@ -304,7 +310,7 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                                           visualDensity: VisualDensity.compact,
                                           foregroundColor: colorScheme.primary,
                                         ),
-                                        child: const Text('بدل کن'),
+                                        child: Text(l10n.changeAction),
                                       ),
                                       IconButton(
                                         visualDensity: VisualDensity.compact,
@@ -338,8 +344,8 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                     highlightQuery: query,
                     scope: scope,
                     emptyIcon: LucideIcons.searchX,
-                    emptyTitle: 'هچ گالے دست نہ کپت',
-                    emptySubtitle: 'دگہ گالے یا کسانیں بھرے بہ شوهاز',
+                    emptyTitle: l10n.noWordsFoundTitle,
+                    emptySubtitle: l10n.noWordsFoundSearchSubtitle,
                     onTapWord: (word) {
                       if (query.trim().isNotEmpty) {
                         ref
@@ -361,8 +367,8 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                         .read(paginatedLetterWordsProvider.notifier)
                         .loadMore(),
                     emptyIcon: LucideIcons.bookX,
-                    emptyTitle: 'هچ گالے دست نہ کپت',
-                    emptySubtitle: 'اے آب ءَ هچ گال نیست',
+                    emptyTitle: l10n.noWordsFoundTitle,
+                    emptySubtitle: l10n.noWordsFoundLetterSubtitle,
                     onTapWord: (word) {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -401,7 +407,7 @@ class _AlphabetDialButton extends StatelessWidget {
     final isActive = activeLetter != null && activeLetter!.isNotEmpty;
 
     return Tooltip(
-      message: 'چرخِ آب ءُ ب',
+      message: AppLocalizations.of(context).alphabetDialTooltip,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         width: 52,

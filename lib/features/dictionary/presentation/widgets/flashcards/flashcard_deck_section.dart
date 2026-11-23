@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../providers/flashcard_deck_provider.dart';
+import '../../../../../l10n/app_localizations.dart';
 import 'flip_word_card.dart';
 
 class FlashcardDeckSection extends ConsumerStatefulWidget {
@@ -24,6 +25,7 @@ class _FlashcardDeckSectionState extends ConsumerState<FlashcardDeckSection> {
   @override
   Widget build(BuildContext context) {
     final deckAsync = ref.watch(flashcardDeckProvider);
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -67,7 +69,7 @@ class _FlashcardDeckSectionState extends ConsumerState<FlashcardDeckSection> {
                             ),
                             const SizedBox(width: 6),
                             Text(
-                              'گالانی تاکدیم',
+                              l10n.flashcardsTitle,
                               style: theme.textTheme.labelMedium?.copyWith(
                                 color: colorScheme.primary,
                               ),
@@ -77,7 +79,9 @@ class _FlashcardDeckSectionState extends ConsumerState<FlashcardDeckSection> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        deck.isFromBookmarks ? 'نشان کتگیں' : 'گچین کتگیں',
+                        deck.isFromBookmarks
+                            ? l10n.bookmarksTab
+                            : l10n.curatedShort,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontSize: 12,
                         ),
@@ -134,7 +138,7 @@ class _FlashcardDeckSectionState extends ConsumerState<FlashcardDeckSection> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton.outlined(
-                        tooltip: 'پێشتر',
+                        tooltip: l10n.previousTooltip,
                         onPressed: hasMultiple
                             ? () {
                                 HapticFeedback.selectionClick();
@@ -162,17 +166,17 @@ class _FlashcardDeckSectionState extends ConsumerState<FlashcardDeckSection> {
                             foregroundColor: colorScheme.primary,
                           ),
                           icon: const Icon(LucideIcons.shuffle, size: 15),
-                          label: const Text('نوکیں تاکدیم'),
+                          label: Text(l10n.newDeckAction),
                         )
                       else
                         Text(
-                          'پہ دیمتر ءَ کشّ یا بہ ٹپّ',
+                          l10n.swipeOrTapHint,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontSize: 12,
                           ),
                         ),
                       IconButton.outlined(
-                        tooltip: 'دیمتر',
+                        tooltip: l10n.nextTooltip,
                         onPressed: hasMultiple
                             ? () {
                                 HapticFeedback.selectionClick();

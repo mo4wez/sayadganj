@@ -476,6 +476,7 @@ class _FontPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -519,7 +520,7 @@ class _FontPreviewCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          font.title,
+                          font.localizedTitle(l10n),
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontSize: 15,
                             color: selected
@@ -529,7 +530,7 @@ class _FontPreviewCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          font.subtitle,
+                          font.localizedSubtitle(l10n),
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontSize: 12.5,
                           ),

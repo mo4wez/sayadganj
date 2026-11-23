@@ -8,6 +8,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../../core/database/dictionary_db_service.dart';
 import '../../providers/dictionary_providers.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../word_detail_screen.dart';
 
 class AlphabetDialSheet extends ConsumerStatefulWidget {
@@ -149,6 +150,7 @@ class _AlphabetDialSheetState extends ConsumerState<AlphabetDialSheet>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final currentBucket = widget.buckets[_activeIndex];
@@ -194,7 +196,7 @@ class _AlphabetDialSheetState extends ConsumerState<AlphabetDialSheet>
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'آب ءُ ب ءِ چَهر',
+                        l10n.alphabetDialTitle,
                         style: theme.textTheme.titleLarge,
                       ),
                     ],
@@ -272,7 +274,7 @@ class _AlphabetDialSheetState extends ConsumerState<AlphabetDialSheet>
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          '${currentBucket.count} گال',
+                          l10n.wordCountShort(currentBucket.count),
                           style: theme.textTheme.labelMedium?.copyWith(
                             color: colorScheme.primary,
                           ),
@@ -418,7 +420,7 @@ class _AlphabetDialSheetState extends ConsumerState<AlphabetDialSheet>
               child: Row(
                 children: [
                   IconButton.outlined(
-                    tooltip: 'پێشتر',
+                    tooltip: l10n.previousTooltip,
                     onPressed: _activeIndex > 0
                         ? () => _animateToIndex(_activeIndex - 1)
                         : null,
@@ -442,7 +444,9 @@ class _AlphabetDialSheetState extends ConsumerState<AlphabetDialSheet>
                       ),
                       icon: const Icon(LucideIcons.bookOpenCheck, size: 18),
                       label: Text(
-                        'آب «${_glyph(currentBucket.letter)}» ءِ گالاں بچار',
+                        l10n.viewWordsForLetterAction(
+                          _glyph(currentBucket.letter),
+                        ),
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -452,7 +456,7 @@ class _AlphabetDialSheetState extends ConsumerState<AlphabetDialSheet>
                   ),
                   const SizedBox(width: 12),
                   IconButton.outlined(
-                    tooltip: 'دیمتر',
+                    tooltip: l10n.nextTooltip,
                     onPressed: _activeIndex < widget.buckets.length - 1
                         ? () => _animateToIndex(_activeIndex + 1)
                         : null,

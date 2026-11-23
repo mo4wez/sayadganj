@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../../../core/theme/theme_settings.dart';
+import '../../../../../l10n/app_localizations.dart';
 
 class AccentColorPickerCard extends StatelessWidget {
   final AppAccentColor selectedColor;
@@ -24,6 +25,7 @@ class AccentColorPickerCard extends StatelessWidget {
       context: context,
       backgroundColor: Colors.transparent,
       builder: (ctx) {
+        final l10n = AppLocalizations.of(ctx);
         final theme = Theme.of(ctx);
         final colorScheme = theme.colorScheme;
 
@@ -54,7 +56,7 @@ class AccentColorPickerCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 14),
                 Text(
-                  'رنگ ءِ انداز (Color Style)',
+                  l10n.colorStyleSettingTitle,
                   style: theme.textTheme.titleLarge,
                 ),
                 const SizedBox(height: 12),
@@ -93,7 +95,7 @@ class AccentColorPickerCard extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    style.title,
+                                    style.localizedTitle(l10n),
                                     style: theme.textTheme.titleMedium
                                         ?.copyWith(
                                           fontSize: 15,
@@ -104,7 +106,7 @@ class AccentColorPickerCard extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    style.subtitle,
+                                    style.localizedSubtitle(l10n),
                                     style: theme.textTheme.bodyMedium?.copyWith(
                                       fontSize: 12.5,
                                     ),
@@ -134,6 +136,7 @@ class AccentColorPickerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
@@ -160,7 +163,7 @@ class AccentColorPickerCard extends StatelessWidget {
                     onSelectColor(swatch);
                   },
                   child: Tooltip(
-                    message: swatch.label,
+                    message: swatch.localizedLabel(l10n),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       width: 44,
@@ -207,12 +210,12 @@ class AccentColorPickerCard extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    'رنگ ءِ انداز (Color style)',
+                    l10n.colorStyleSettingTitle,
                     style: theme.textTheme.titleMedium?.copyWith(fontSize: 15),
                   ),
                   const Spacer(),
                   Text(
-                    selectedStyle.title.split(' ').first,
+                    selectedStyle.localizedSubtitle(l10n).split(' ').first,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: colorScheme.primary,
                       fontWeight: FontWeight.w600,

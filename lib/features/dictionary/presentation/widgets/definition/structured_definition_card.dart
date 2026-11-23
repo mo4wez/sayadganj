@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../domain/definition_parser.dart';
+import '../../../../../l10n/app_localizations.dart';
 import '../notations/notation_rich_text.dart';
 import 'sub_definition_tile.dart';
 
@@ -42,6 +43,7 @@ class _StructuredDefinitionCardState extends State<StructuredDefinitionCard> {
       headword: widget.headword,
       definition: widget.definition,
     );
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final bodyStyle = theme.textTheme.bodyLarge?.copyWith(
@@ -60,7 +62,7 @@ class _StructuredDefinitionCardState extends State<StructuredDefinitionCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'بزانت ءُ گیشوار',
+                  l10n.definitionHeaderTitle,
                   style: theme.textTheme.labelMedium?.copyWith(
                     color: colorScheme.primary,
                   ),
@@ -93,7 +95,9 @@ class _StructuredDefinitionCardState extends State<StructuredDefinitionCard> {
                           ),
                           const SizedBox(width: 5),
                           Text(
-                            _showRawText ? 'بھر کتگیں دروشم' : 'سرجمیں نبشتانک',
+                            _showRawText
+                                ? l10n.structuredViewLabel
+                                : l10n.rawTextViewLabel,
                             style: theme.textTheme.labelMedium?.copyWith(
                               fontSize: 11.5,
                               color: colorScheme.primary,
@@ -127,7 +131,7 @@ class _StructuredDefinitionCardState extends State<StructuredDefinitionCard> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      'آبانی رِد: ${parsed.phoneticSpelling}',
+                      l10n.letterSequenceLabel(parsed.phoneticSpelling!),
                       style: theme.textTheme.labelMedium?.copyWith(
                         color: colorScheme.primary,
                       ),
@@ -141,7 +145,7 @@ class _StructuredDefinitionCardState extends State<StructuredDefinitionCard> {
               if (parsed.primaryMeaning.isNotEmpty) ...[
                 if (parsed.subEntries.isNotEmpty) ...[
                   Text(
-                    'بُنی بزانت',
+                    l10n.coreMeaningLabel,
                     style: theme.textTheme.labelMedium?.copyWith(
                       fontSize: 11.5,
                       color: colorScheme.onSurfaceVariant,
@@ -195,7 +199,9 @@ class _StructuredDefinitionCardState extends State<StructuredDefinitionCard> {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      'گالرد ءُ بن‌تہر (${parsed.subEntries.length})',
+                      l10n.compoundsAndSubEntriesCount(
+                        parsed.subEntries.length,
+                      ),
                       style: theme.textTheme.labelMedium?.copyWith(
                         color: colorScheme.primary,
                       ),
@@ -222,7 +228,7 @@ class _StructuredDefinitionCardState extends State<StructuredDefinitionCard> {
                         return ChoiceChip(
                           label: Text(
                             isAll
-                                ? 'کل (${parsed.subEntries.length})'
+                                ? l10n.allItemsCount(parsed.subEntries.length)
                                 : parsed.subEntries[subIdx].title,
                             style: TextStyle(
                               fontSize: 12,

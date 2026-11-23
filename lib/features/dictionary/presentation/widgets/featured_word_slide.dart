@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../providers/featured_carousel_provider.dart';
 import '../word_detail_screen.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class FeaturedWordSlide extends StatelessWidget {
   final FeaturedWordSlideItem item;
@@ -34,6 +35,7 @@ class FeaturedWordSlide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
@@ -101,7 +103,9 @@ class FeaturedWordSlide extends StatelessWidget {
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          item.isWordOfTheDay ? 'روچ ءِ گال' : 'پَدیمیں گال',
+                          item.isWordOfTheDay
+                              ? l10n.wordOfTheDay
+                              : l10n.luckyWord,
                           style: theme.textTheme.labelMedium?.copyWith(
                             color: colorScheme.primary,
                           ),
@@ -117,7 +121,7 @@ class FeaturedWordSlide extends StatelessWidget {
                     ),
                     icon: const Icon(LucideIcons.shuffle, size: 15),
                     label: Text(
-                      item.isWordOfTheDay ? 'پَدیمیں گال' : 'نوکیں گال',
+                      item.isWordOfTheDay ? l10n.luckyWord : l10n.newWordAction,
                     ),
                   ),
                 ],
@@ -174,7 +178,7 @@ class FeaturedWordSlide extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    'سرجمیں بزانت ءَ بوان',
+                    l10n.readFullDefinition,
                     style: theme.textTheme.labelMedium?.copyWith(
                       color: colorScheme.primary,
                     ),

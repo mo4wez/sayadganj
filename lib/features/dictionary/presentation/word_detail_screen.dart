@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../bookmarks/providers/bookmarks_provider.dart';
 import '../../settings/providers/settings_provider.dart';
 import '../providers/dictionary_providers.dart';
+import '../../../l10n/app_localizations.dart';
 import './widgets/cross_reference_section.dart';
 import 'widgets/notations/entry_notations_section.dart';
 import 'widgets/activity/record_word_view_tracker.dart';
@@ -22,12 +23,13 @@ class WordDetailScreen extends ConsumerWidget {
     final wordAsync = ref.watch(wordDetailProvider(wordId));
     final isSaved = ref.watch(isBookmarkedProvider(wordId));
     final fontScale = ref.watch(fontScaleProvider);
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('گال ءِ بزانت'),
+        title: Text(l10n.wordDetailTitle),
         actions: [
           wordAsync.maybeWhen(
             data: (word) => word == null
@@ -36,7 +38,9 @@ class WordDetailScreen extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                        tooltip: isSaved ? 'نشان دور کنگ' : 'نشان کنگ',
+                        tooltip: isSaved
+                            ? l10n.removeBookmarkTooltip
+                            : l10n.addBookmarkTooltip,
                         icon: Icon(
                           isSaved
                               ? LucideIcons.bookmarkCheck
@@ -53,8 +57,8 @@ class WordDetailScreen extends ConsumerWidget {
                             SnackBar(
                               content: Text(
                                 added
-                                    ? 'گال نشان کنگ بوت'
-                                    : 'گال چہ نشاناں دور کنگ بوت',
+                                    ? l10n.wordBookmarkedSnack
+                                    : l10n.wordUnbookmarkedSnack,
                               ),
                               behavior: SnackBarBehavior.floating,
                               duration: const Duration(seconds: 2),
@@ -63,7 +67,7 @@ class WordDetailScreen extends ConsumerWidget {
                         },
                       ),
                       IconButton(
-                        tooltip: 'کپی کنگ',
+                        tooltip: l10n.copyTooltip,
                         icon: const Icon(LucideIcons.copy, size: 20),
                         onPressed: () {
                           Clipboard.setData(
@@ -73,8 +77,8 @@ class WordDetailScreen extends ConsumerWidget {
                             ),
                           );
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('گال ءُ مانا کپی بوت انت'),
+                            SnackBar(
+                              content: Text(l10n.wordAndMeaningCopiedSnack),
                               behavior: SnackBarBehavior.floating,
                               duration: Duration(seconds: 2),
                             ),
@@ -82,7 +86,7 @@ class WordDetailScreen extends ConsumerWidget {
                         },
                       ),
                       IconButton(
-                        tooltip: 'بهر کنگ',
+                        tooltip: l10n.shareTooltip,
                         icon: const Icon(LucideIcons.share2, size: 20),
                         onPressed: () {
                           final headword = word.fullWordWithSymbols.isNotEmpty
@@ -91,7 +95,7 @@ class WordDetailScreen extends ConsumerWidget {
                           SharePlus.instance.share(
                             ShareParams(
                               text:
-                                  '$headword\n\n${word.definition}\n\n— سیدگنج بلوچی بزانت‌بلد',
+                                  '$headword\n\n${word.definition}\n\n${l10n.shareFooterSignature}',
                             ),
                           );
                         },
@@ -105,10 +109,11 @@ class WordDetailScreen extends ConsumerWidget {
       ),
       body: wordAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => Center(child: Text('ردی یے بوت: $err')),
+        error: (err, _) =>
+            Center(child: Text(l10n.errorOccurredWithDetail('$err'))),
         data: (word) {
           if (word == null) {
-            return const Center(child: Text('گال دست نہ کپت'));
+            return Center(child: Text(l10n.wordNotFoundTitle));
           }
 
           final hasSymbols =
@@ -148,7 +153,7 @@ class WordDetailScreen extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                'سادگیں نبشتانک: ${word.fullWord}',
+                                l10n.plainSpellingLabel(word.fullWord),
                                 style: theme.textTheme.labelMedium?.copyWith(
                                   color: colorScheme.primary,
                                 ),

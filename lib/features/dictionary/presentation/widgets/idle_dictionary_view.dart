@@ -7,6 +7,7 @@ import 'discovery/editorial_discovery_grid.dart';
 import 'flashcards/flashcard_deck_section.dart';
 import 'quiz/daily_quiz_card.dart';
 import 'word_of_the_day_card.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class IdleDictionaryView extends StatelessWidget {
   final AsyncValue<List<String>> recentAsync;
@@ -24,6 +25,7 @@ class IdleDictionaryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final bottomInset = MediaQuery.paddingOf(context).bottom;
@@ -61,7 +63,10 @@ class IdleDictionaryView extends StatelessWidget {
                           color: colorScheme.onSurfaceVariant,
                         ),
                         const SizedBox(width: 6),
-                        Text('نوکیں شوهاز', style: theme.textTheme.labelMedium),
+                        Text(
+                          l10n.recentSearchesTitle,
+                          style: theme.textTheme.labelMedium,
+                        ),
                       ],
                     ),
                     TextButton(
@@ -70,7 +75,7 @@ class IdleDictionaryView extends StatelessWidget {
                         visualDensity: VisualDensity.compact,
                         foregroundColor: colorScheme.primary,
                       ),
-                      child: const Text('ساپ کنگ'),
+                      child: Text(l10n.clearHistoryShort),
                     ),
                   ],
                 ),

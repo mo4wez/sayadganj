@@ -62,5 +62,246 @@
     }
   },
   "checkLatestVersionSubtitle": "گڈّی ورژن ءَ چکّاس کن",
-  "appIsUpToDateSnack": "تئی پریام گڈّی ورژن اِنت"
+  "appIsUpToDateSnack": "تئی پریام گڈّی ورژن اِنت",
+  "channelTelegram": "تلگرام (Telegram)",
+  "channelInstagram": "اینستاگرام (Instagram)",
+  "channelYoutube": "یوتیوب (YouTube)",
+  "channelCastbox": "کست باکس (CastBox)",
+  "linkCopiedSnack": "لینک کُپی بوت",
+  "aboutSayadGanjDescription": "سیدگنج، سیدھاشمی ءِ مستریں جھد پہ بلوچی زبان ءَ اِنت کہ تاکبند کندیل ءَ آئی دیتابیس، اندروید ءِ تہ ءَ مُدرنے رنگے ءَ دیم ءَ آرتگ، ما واجہ شبیر کلمتی ءُ آئی ھمراھاں کہ اے دیتابیس دیجیتالایز کتگ ءُ کارمرز کنگ ءِ موکل داتگ، منتوار ایں۔",
+  "totalWordsCount": "سرجمیں گال: {count}",
+  "@totalWordsCount": {
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+  "takbandTitle": "تاکبند کندیل (TakbandQandeel)",
+  "takbandSubtitle": "بلوچی زبان ءُ لبزانک ءِ دوزواهانی گَل",
+  "takbandDescription": "ما بلوچی زبان ءُ لبزانک ءِ کسانیں نودربر ءُ دوزواھانی گَلے ایں کہ پہ بلوچی زبان ءِ دیمروئی، زانتکاری ءَ کار کنگ ءَ ایں۔",
+  "ourChannelsAndPodcast": "مئے تاک ءُ پادکست",
+  "madeWithLove": "گوں مھر ءَ",
+  "takbandName": "تاکبند کندیل",
+  "dailyWordNotificationTitle": "روچ ءِ گال ءِ جار",
+  "dailyWordNotificationSubtitle": "هر روچ یک نوکیں بلوچی گالے گوں آئی ءِ مانا ءَ دیم دیگ بیت",
+  "notificationPermissionDeniedSnack": "پہ جار جنگ ءَ چہ موبائل ءِ کاربوج ءِ تہ ءَ اجازت بہ دئے",
+  "notificationTimeTitle": "جار ءِ وهد",
+  "themeModeSectionTitle": "شپ ءُ روچ ءِ دروشم (Theme mode)",
+  "themeModeAutoOption": "سیستم ءِ حساب ءَ (Auto)",
+  "themeModeLightOption": "روچ ءِ دروشم (Light)",
+  "themeModeDarkOption": "شپ ءِ دروشم (Dark)",
+  "pureBlackSectionTitle": "تہاریں شپ ءِ دروشم (Pure black mode)",
+  "standardDarkOption": "سادگیں شپ (Standard)",
+  "standardDarkSubtitle": "نرمیں سیاہ ءُ نیلیں پشت‌در",
+  "pureBlackOption": "پُرتہاریں شپ (Pure black)",
+  "pureBlackSubtitle": "سرجمیں سیاہ (AMOLED) پہ شپ ءِ وانگ ءَ",
+  "themeColorSectionTitle": "رنگ ءِ گچین (Theme color)",
+  "bottomBarSectionTitle": "چیردیمی بار (Bottom bar)",
+  "wordsStartingWithLetter": "آب «{letter}» ءِ گال",
+  "@wordsStartingWithLetter": {
+    "placeholders": {
+      "letter": { "type": "String" }
+    }
+  },
+  "changeAction": "بدل کن",
+  "noWordsFoundTitle": "هچ گالے دست نہ کپت",
+  "noWordsFoundSearchSubtitle": "دگہ گالے یا کسانیں بھرے بہ شوهاز",
+  "noWordsFoundLetterSubtitle": "اے آب ءَ هچ گال نیست",
+  "alphabetDialTooltip": "چرخِ آب ءُ ب",
+  "bookmarksTab": "نشان کتگیں",
+  "recentSearchesTitle": "نوکیں شوهاز",
+  "clearHistoryShort": "ساپ کنگ",
+  "newWordAction": "نوکیں گال",
+  "todayLabel": "مرچی",
+  "totalViewedLabel": "کل دیستگیں",
+  "flashcardsTitle": "گالانی تاکدیم",
+  "curatedShort": "گچین کتگیں",
+  "previousTooltip": "پێشتر",
+  "nextTooltip": "دیمتر",
+  "newDeckAction": "نوکیں تاکدیم",
+  "swipeOrTapHint": "پہ دیمتر ءَ کشّ یا بہ ٹپّ",
+  "tapToViewMeaning": "بزانت ءِ چارگ ءَ بہ ٹپّ",
+  "fullMeaningShort": "سرجمیں بزانت",
+  "wordQuizBadge": "گال چکّاس",
+  "quizPointsCount": "{score} دَرَجَگ",
+  "@quizPointsCount": {
+    "placeholders": {
+      "score": { "type": "int" }
+    }
+  },
+  "dailyQuizTitle": "وتی بلوچی گالانی زانت ءَ بہ چکّاس",
+  "dailyQuizSubtitle": "۵ جُست ءِ تہ ءَ گالانی راستیں بزانت ءَ گچین کن ءُ وتی دَرَجَگ ءَ گیش کن۔",
+  "startQuizAction": "چکّاس ءَ بندات کن",
+  "errorOccurredWithDetail": "ردی یے بوت: {error}",
+  "@errorOccurredWithDetail": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "categorySubtitleWithCount": "{subtitle} ({count} گال)",
+  "@categorySubtitleWithCount": {
+    "placeholders": {
+      "subtitle": { "type": "String" },
+      "count": { "type": "int" }
+    }
+  },
+  "wordDetailTitle": "گال ءِ بزانت",
+  "removeBookmarkTooltip": "نشان دور کنگ",
+  "addBookmarkTooltip": "نشان کنگ",
+  "wordBookmarkedSnack": "گال نشان کنگ بوت",
+  "wordUnbookmarkedSnack": "گال چہ نشاناں دور کنگ بوت",
+  "copyTooltip": "کپی کنگ",
+  "wordAndMeaningCopiedSnack": "گال ءُ مانا کپی بوت انت",
+  "shareTooltip": "بهر کنگ",
+  "shareFooterSignature": "— سیدگنج بلوچی بزانت‌بلد",
+  "wordNotFoundTitle": "گال دست نہ کپت",
+  "plainSpellingLabel": "سادگیں نبشتانک: {word}",
+  "@plainSpellingLabel": {
+    "placeholders": {
+      "word": { "type": "String" }
+    }
+  },
+  "noQuizWordsFound": "پہ چکّاس ءَ گال دست نہ کپت",
+  "quizQuestionPrompt": "اے گال ءِ راستیں مانا کجام اِنت؟",
+  "seeResultsAction": "آسر ءَ بچار",
+  "nextQuestionAction": "دیمتر ءِ جست",
+  "quizFeedbackHigh": "باز وش! تئی بلوچی زانت مزن اِنت",
+  "quizFeedbackMid": "شاباش! دیمتر ءَ انگت گهتر بئے",
+  "quizFeedbackLow": "جُهد ءَ برجاہ بدار، هر جستے نوکیں گالے",
+  "quizCompleteTitle": "چکّاس سرجم بوت!",
+  "roundCorrectAnswersLabel": "اے دور ءِ راستیں پسّو",
+  "totalScoreLabel": "سرجمیں دَرَجَگ",
+  "playNewRoundAction": "نوکیں دَورے بندات کن",
+  "backToDictionaryAction": "واتر پہ بزانت بلد ءَ",
+  "quickPeekBadge": "زوتیں چارگ",
+  "specificWordNotFound": "گال «{word}» دست نہ کپت",
+  "@specificWordNotFound": {
+    "placeholders": {
+      "word": { "type": "String" }
+    }
+  },
+  "openFullPageAction": "سرجمیں تاکدیم ءَ پچ کن",
+  "relatedWordsQuickPeek": "همگرنچیں گال (زوتیں چارگ)",
+  "seeWordLabel": "بچار: {word}",
+  "@seeWordLabel": {
+    "placeholders": {
+      "word": { "type": "String" }
+    }
+  },
+  "errorOccurredTitle": "ردی یے بوت",
+  "allWordsShownCount": "سرجمیں {count} گال پیش دارگ بوت انت",
+  "@allWordsShownCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "alphabetDialTitle": "آب ءُ ب ءِ چَهر",
+  "wordCountShort": "{count} گال",
+  "@wordCountShort": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "viewWordsForLetterAction": "آب «{letter}» ءِ گالاں بچار",
+  "@viewWordsForLetterAction": {
+    "placeholders": {
+      "letter": { "type": "String" }
+    }
+  },
+  "allNotationsTitle": "گْونڈگال ءُ ٹِکّانی سرجمیں لڑ",
+  "entryNotationsTitle": "گْونڈگال ءُ ٹِکانی بزانت",
+  "fullListAction": "سرجمیں لڑ",
+  "fullAbbreviationsListAction": "سرجمیں گْونڈگالانی لڑ",
+  "definitionHeaderTitle": "بزانت ءُ گیشوار",
+  "structuredViewLabel": "بھر کتگیں دروشم",
+  "rawTextViewLabel": "سرجمیں نبشتانک",
+  "letterSequenceLabel": "آبانی رِد: {spelling}",
+  "@letterSequenceLabel": {
+    "placeholders": {
+      "spelling": { "type": "String" }
+    }
+  },
+  "coreMeaningLabel": "بُنی بزانت",
+  "compoundsAndSubEntriesCount": "گالرد ءُ بن‌تہر ({count})",
+  "@compoundsAndSubEntriesCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "allItemsCount": "کل ({count})",
+  "@allItemsCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "wordRemovedFromBookmarksSnack": "«{word}» چہ نشاناں دور کنگ بوت",
+  "@wordRemovedFromBookmarksSnack": {
+    "placeholders": {
+      "word": { "type": "String" }
+    }
+  },
+  "undoAction": "پدا بیار",
+  "bookmarksScreenTitle": "نشان کتگیں گال",
+  "listViewTooltip": "لڑ ءِ دروشم",
+  "carouselViewTooltip": "تاکدیم ءِ دروشم",
+  "noBookmarksTitle": "انگت هچ گالے نشان نہ بوتگ",
+  "noBookmarksSubtitle": "وتی دوست داشتگیں گالاں پہ زوت دست گرگ ءَ نشان بہ کن",
+  "removeAction": "دور کنگ",
+  "telegramShort": "تلگرام",
+  "instagramShort": "اینستاگرام",
+  "youtubeShort": "یوتیوب",
+  "castboxShort": "کست باکس",
+  "followTakbandTitle": "تاکبندکندیل ءِ همراه بہ بئے",
+  "followTakbandSubtitle": "اگاں سیدگنج پہ تو کارآمد بوتگ، مئے کسانیں لبزانکی گَبل ءِ تاک ءُ پادکستاں هم بچار دانکہ بلوچی زبان ءِ نوکیں کاراں سرپد بہ بئے.",
+  "dontShowAgainAction": "دگہ پیش مدار",
+  "maybeLaterAction": "پدا بچاراں",
+  "splashSubtitle": "بلوچی ءَ پہ بلوچی بزانت‌بلد",
+  "newVersionAvailableTitle": "نوکیں ورژن دست کپت (v{version})",
+  "@newVersionAvailableTitle": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  },
+  "currentVersionLabel": "تئی انّوگیں ورژن: v{version}",
+  "@currentVersionLabel": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  },
+  "whatsNewLabel": "نوکیں بدلی:",
+  "laterAction": "پدا",
+  "downloadAction": "اِیرگیج کن",
+  "appNewVersionBannerTitle": "سیدگنج ءِ نوکیں ورژن (v{version})",
+  "@appNewVersionBannerTitle": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  },
+  "tapToDownloadSubtitle": "اِیرگیج کنگ ءِ ھاترا ٹپّ بہ جن",
+  "closeTooltip": "بند کن",
+  "accentTeal": "تیل سبز",
+  "accentEmerald": "شونز/سبز",
+  "accentBlue": "نیل",
+  "accentViolet": "جَمو/وانگڑی",
+  "accentAmber": "زاپرانی",
+  "accentRose": "گُلابی",
+  "accentInk": "سیاهی",
+  "colorStyleVividTitle": "روشن (Vivid)",
+  "colorStyleVividSubtitle": "ساپ ءُ تچکیں رنگ پہ گیشتر زاهری ءَ",
+  "colorStyleSoftTitle": "نرم (Soft)",
+  "colorStyleSoftSubtitle": "آرامیں ءُ کم‌تیزیں رنگ پہ دراجیں وانگ ءَ",
+  "colorStyleTintedTitle": "رنگین (Tinted)",
+  "colorStyleTintedSubtitle": "تاکدیم ءُ پشت‌در گوں گچین کتگیں رنگ ءِ ساھگ ءَ",
+  "colorStyleMonochromeTitle": "سادگ (Monochrome)",
+  "colorStyleMonochromeSubtitle": "کاگد ءُ سیاہی ءِ سادگیں دروشم بید ء گیشیں رنگ ءَ",
+  "bottomBarDockedTitle": "لِچّتگیں (Docked)",
+  "bottomBarDockedSubtitle": "چیر ءِ سیمسر ءَ لِچّتگیں سرجمیں بار",
+  "bottomBarFloatingTitle": "بالو (Floating)",
+  "bottomBarFloatingSubtitle": "کپسول ءِ دروشم ءَ آزادیں بار",
+  "fontVazirmatnTitle": "وزیرمتن (Vazirmatn)",
+  "fontVazirmatnSubtitle": "ساده، واناک ءُ مدرنیں کِشک پہ روچمرّگی وانگ ءَ",
+  "fontDroshumTitle": "دروشم بلوچی (Droshum Balochi)",
+  "fontDroshumSubtitle": "بلوچی هاسیں کِشک پہ ادبی نبشتانک ءُ بزانت‌بلد ءَ",
+  "fontSystemTitle": "سیستم ءِ وتی کِشک (Default)",
+  "fontSystemSubtitle": "موبائل ءِ بنیادی کِشک",
+  "colorStyleSettingTitle": "رنگ ءِ انداز (Color Style)"
 }

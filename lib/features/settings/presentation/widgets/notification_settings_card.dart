@@ -5,12 +5,13 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../../core/notifications/word_notification_service.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../providers/notification_settings_provider.dart';
 
 class NotificationSettingsCard extends ConsumerWidget {
   const NotificationSettingsCard({super.key});
 
-  String _formatBalochiTime(TimeOfDay time) {
+  String _formatTime(TimeOfDay time) {
     final hh = time.hour.toString().padLeft(2, '0');
     final mm = time.minute.toString().padLeft(2, '0');
     return '$hh:$mm';
@@ -19,6 +20,7 @@ class NotificationSettingsCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifState = ref.watch(notificationSettingsProvider);
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -44,10 +46,8 @@ class NotificationSettingsCard extends ConsumerWidget {
                 size: 20,
               ),
             ),
-            title: const Text('روچ ءِ گال ءِ جار'),
-            subtitle: const Text(
-              'هر روچ یک نوکیں بلوچی گالے گوں آئی ءِ مانا ءَ دیم دیگ بیت',
-            ),
+            title: Text(l10n.dailyWordNotificationTitle),
+            subtitle: Text(l10n.dailyWordNotificationSubtitle),
             value: notifState.enabled,
             onChanged: (value) async {
               HapticFeedback.selectionClick();
@@ -57,10 +57,8 @@ class NotificationSettingsCard extends ConsumerWidget {
 
               if (!ok && context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'پہ جار جنگ ءَ چہ  موبائل ءِ کاربوج ءِ تہ ءَ اجازت بہ دئے',
-                    ),
+                  SnackBar(
+                    content: Text(l10n.notificationPermissionDeniedSnack),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
@@ -79,7 +77,7 @@ class NotificationSettingsCard extends ConsumerWidget {
                 size: 19,
                 color: colorScheme.primary,
               ),
-              title: const Text('جار ءِ وهد'),
+              title: Text(l10n.notificationTimeTitle),
               trailing: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12,
@@ -92,7 +90,7 @@ class NotificationSettingsCard extends ConsumerWidget {
                 child: Directionality(
                   textDirection: TextDirection.ltr,
                   child: Text(
-                    _formatBalochiTime(notifState.timeOfDay),
+                    _formatTime(notifState.timeOfDay),
                     style: theme.textTheme.labelMedium?.copyWith(
                       color: colorScheme.primary,
                       fontWeight: FontWeight.w700,

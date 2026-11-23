@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../dictionary/domain/word_entry.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'bookmark_carousel_card.dart';
 
 class BookmarksCarouselView extends StatefulWidget {
@@ -31,6 +32,7 @@ class _BookmarksCarouselViewState extends State<BookmarksCarouselView> {
     final total = widget.words.length;
     final safeIndex = _currentIndex.clamp(0, total - 1);
     final hasMultiple = total > 1;
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -103,7 +105,7 @@ class _BookmarksCarouselViewState extends State<BookmarksCarouselView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton.outlined(
-                tooltip: 'پێشتر',
+                tooltip: l10n.previousTooltip,
                 onPressed: hasMultiple
                     ? () {
                         HapticFeedback.selectionClick();
@@ -116,11 +118,11 @@ class _BookmarksCarouselViewState extends State<BookmarksCarouselView> {
                 icon: const Icon(LucideIcons.chevronRight, size: 20),
               ),
               Text(
-                'پہ دیمتر ءَ کشّ یا بہ ٹپّ',
+                l10n.swipeOrTapHint,
                 style: theme.textTheme.bodyMedium?.copyWith(fontSize: 12),
               ),
               IconButton.outlined(
-                tooltip: 'دیمتر',
+                tooltip: l10n.nextTooltip,
                 onPressed: hasMultiple
                     ? () {
                         HapticFeedback.selectionClick();

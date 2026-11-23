@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/theme/theme_appearance_provider.dart';
 import '../../../../core/theme/theme_mode_provider.dart';
 import '../../../../core/theme/theme_settings.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'widgets/accent_color_picker_card.dart';
 import 'widgets/theme_mini_preview.dart';
 
@@ -16,19 +17,20 @@ class ThemeSettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final appearance = ref.watch(themeAppearanceProvider);
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final activeAccent = colorScheme.primary;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('ظاهری رنگ ءُ دروشم')),
+      appBar: AppBar(title: Text(l10n.appearanceSectionTitle)),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
         children: [
           // 1. Theme Mode (Auto / Light / Dark)
           _SectionLabel(
             icon: LucideIcons.sunMedium,
-            title: 'شپ ءُ روچ ءِ دروشم (Theme mode)',
+            title: l10n.themeModeSectionTitle,
           ),
           const SizedBox(height: 10),
           Card(
@@ -36,7 +38,7 @@ class ThemeSettingsScreen extends ConsumerWidget {
             child: Column(
               children: [
                 ThemePreviewOptionTile(
-                  title: 'سیستم ءِ حساب ءَ (Auto)',
+                  title: l10n.themeModeAutoOption,
                   previewKind: MiniPreviewKind.autoSplit,
                   accentColor: activeAccent,
                   selected: themeMode == ThemeMode.system,
@@ -49,7 +51,7 @@ class ThemeSettingsScreen extends ConsumerWidget {
                 ),
                 const Divider(),
                 ThemePreviewOptionTile(
-                  title: 'روچ ءِ دروشم (Light)',
+                  title: l10n.themeModeLightOption,
                   previewKind: MiniPreviewKind.light,
                   accentColor: activeAccent,
                   selected: themeMode == ThemeMode.light,
@@ -62,7 +64,7 @@ class ThemeSettingsScreen extends ConsumerWidget {
                 ),
                 const Divider(),
                 ThemePreviewOptionTile(
-                  title: 'شپ ءِ دروشم (Dark)',
+                  title: l10n.themeModeDarkOption,
                   previewKind: MiniPreviewKind.standardDark,
                   accentColor: activeAccent,
                   selected: themeMode == ThemeMode.dark,
@@ -81,7 +83,7 @@ class ThemeSettingsScreen extends ConsumerWidget {
           // 2. Pure Black Mode (Standard / Pure Black AMOLED)
           _SectionLabel(
             icon: LucideIcons.monitor,
-            title: 'تہاریں شپ ءِ دروشم (Pure black mode)',
+            title: l10n.pureBlackSectionTitle,
           ),
           const SizedBox(height: 10),
           Card(
@@ -89,8 +91,8 @@ class ThemeSettingsScreen extends ConsumerWidget {
             child: Column(
               children: [
                 ThemePreviewOptionTile(
-                  title: 'سادگیں شپ (Standard)',
-                  subtitle: 'نرمیں سیاہ ءُ نیلیں پشت‌در',
+                  title: l10n.standardDarkOption,
+                  subtitle: l10n.standardDarkSubtitle,
                   previewKind: MiniPreviewKind.standardDark,
                   accentColor: activeAccent,
                   selected: !appearance.isPureBlack,
@@ -103,8 +105,8 @@ class ThemeSettingsScreen extends ConsumerWidget {
                 ),
                 const Divider(),
                 ThemePreviewOptionTile(
-                  title: 'پُرتہاریں شپ (Pure black)',
-                  subtitle: 'سرجمیں سیاہ (AMOLED) پہ شپ ءِ وانگ ءَ',
+                  title: l10n.pureBlackOption,
+                  subtitle: l10n.pureBlackSubtitle,
                   previewKind: MiniPreviewKind.pureBlack,
                   accentColor: activeAccent,
                   selected: appearance.isPureBlack,
@@ -123,7 +125,7 @@ class ThemeSettingsScreen extends ConsumerWidget {
           // 3. Theme Color & Color Style
           _SectionLabel(
             icon: LucideIcons.palette,
-            title: 'رنگ ءِ گچین (Theme color)',
+            title: l10n.themeColorSectionTitle,
           ),
           const SizedBox(height: 10),
           AccentColorPickerCard(
@@ -140,7 +142,7 @@ class ThemeSettingsScreen extends ConsumerWidget {
           // 4. Bottom Bar Style (Docked / Floating)
           _SectionLabel(
             icon: LucideIcons.panelBottom,
-            title: 'چیردیمی بار (Bottom bar)',
+            title: l10n.bottomBarSectionTitle,
           ),
           const SizedBox(height: 10),
           Card(
@@ -165,9 +167,9 @@ class ThemeSettingsScreen extends ConsumerWidget {
                           ? colorScheme.primary
                           : colorScheme.onSurfaceVariant,
                     ),
-                    title: Text(BottomBarStyle.values[i].title),
+                    title: Text(BottomBarStyle.values[i].localizedTitle(l10n)),
                     subtitle: Text(
-                      BottomBarStyle.values[i].subtitle,
+                      BottomBarStyle.values[i].localizedSubtitle(l10n),
                       style: theme.textTheme.bodyMedium?.copyWith(fontSize: 12),
                     ),
                     trailing:

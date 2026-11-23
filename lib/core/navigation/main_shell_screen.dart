@@ -9,6 +9,7 @@ import '../../features/settings/presentation/settings_screen.dart';
 import '../theme/font_family_provider.dart';
 import '../theme/theme_appearance_provider.dart';
 import '../theme/theme_settings.dart';
+import '../../l10n/app_localizations.dart';
 
 class SelectedTabNotifier extends Notifier<int> {
   @override
@@ -38,6 +39,7 @@ class MainShellScreen extends ConsumerWidget {
     final currentIndex = ref.watch(selectedTabProvider);
     final selectedFont = ref.watch(fontFamilyProvider);
     final appearance = ref.watch(themeAppearanceProvider);
+    final l10n = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final isFloating = appearance.bottomBarStyle == BottomBarStyle.floating;
 
@@ -63,10 +65,10 @@ class MainShellScreen extends ConsumerWidget {
         fontWeight: FontWeight.w700,
         color: colorScheme.primary,
       ),
-      tabs: const [
-        GButton(icon: LucideIcons.bookOpen, text: 'بزانت‌بلد'),
-        GButton(icon: LucideIcons.bookmark, text: 'نشان کتگیں'),
-        GButton(icon: LucideIcons.settings, text: 'کاربوج'),
+      tabs: [
+        GButton(icon: LucideIcons.bookOpen, text: l10n.dictionaryTab),
+        GButton(icon: LucideIcons.bookmark, text: l10n.bookmarksTab),
+        GButton(icon: LucideIcons.settings, text: l10n.settingsTitle),
       ],
     );
 

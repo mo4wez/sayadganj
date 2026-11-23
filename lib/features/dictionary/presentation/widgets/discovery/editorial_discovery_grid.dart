@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../domain/discovery_category.dart';
 import '../../discovery_collection_screen.dart';
+import '../../../../../l10n/app_localizations.dart';
 import 'discovery_category_card.dart';
 
 class EditorialDiscoveryGrid extends StatelessWidget {
@@ -22,7 +23,7 @@ class EditorialDiscoveryGrid extends StatelessWidget {
             Icon(LucideIcons.compass, size: 16, color: colorScheme.primary),
             const SizedBox(width: 6),
             Text(
-              'گچین کتگیں گال',
+              AppLocalizations.of(context).curatedWords,
               style: theme.textTheme.labelMedium?.copyWith(
                 color: colorScheme.primary,
               ),

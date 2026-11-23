@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../providers/quiz_provider.dart';
 import '../../quiz_screen.dart';
+import '../../../../../l10n/app_localizations.dart';
 
 class DailyQuizCard extends ConsumerWidget {
   const DailyQuizCard({super.key});
@@ -40,6 +41,7 @@ class DailyQuizCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final score = ref.watch(quizScoreProvider);
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -85,7 +87,7 @@ class DailyQuizCard extends ConsumerWidget {
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          'گال چکّاس',
+                          l10n.wordQuizBadge,
                           style: theme.textTheme.labelMedium?.copyWith(
                             color: colorScheme.primary,
                           ),
@@ -113,7 +115,7 @@ class DailyQuizCard extends ConsumerWidget {
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          '$score دَرَجَگ',
+                          l10n.quizPointsCount(score),
                           style: theme.textTheme.labelMedium?.copyWith(
                             color: colorScheme.primary,
                           ),
@@ -127,16 +129,13 @@ class DailyQuizCard extends ConsumerWidget {
 
               // Title & Subtitle
               Text(
-                'وتی بلوچی گالانی زانت ءَ بہ چکّاس',
+                l10n.dailyQuizTitle,
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                '۵ جُست ءِ تہ ءَ گالانی راستیں بزانت ءَ گچین کن ءُ وتی دَرَجَگ ءَ گیش کن۔',
-                style: theme.textTheme.bodyMedium,
-              ),
+              Text(l10n.dailyQuizSubtitle, style: theme.textTheme.bodyMedium),
               const SizedBox(height: 16),
 
               // Prominent Start Quiz CTA Button
@@ -151,8 +150,8 @@ class DailyQuizCard extends ConsumerWidget {
                   ),
                 ),
                 icon: const Icon(LucideIcons.play, size: 17),
-                label: const Text(
-                  'چکّاس ءَ بندات کن',
+                label: Text(
+                  l10n.startQuizAction,
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
               ),

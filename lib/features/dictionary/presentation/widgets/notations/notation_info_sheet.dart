@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../domain/dictionary_notation.dart';
+import '../../../../../l10n/app_localizations.dart';
 import 'all_notations_sheet.dart';
 
 class NotationInfoSheet extends StatelessWidget {
@@ -21,6 +22,7 @@ class NotationInfoSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -107,7 +109,7 @@ class NotationInfoSheet extends StatelessWidget {
                   AllNotationsSheet.show(context);
                 },
                 icon: const Icon(LucideIcons.listOrdered, size: 16),
-                label: const Text('سرجمیں گْونڈگالانی لڑ'),
+                label: Text(l10n.fullAbbreviationsListAction),
               ),
             ),
           ],

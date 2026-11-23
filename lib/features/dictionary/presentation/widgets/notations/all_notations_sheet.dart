@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../domain/dictionary_notation.dart';
+import '../../../../../l10n/app_localizations.dart';
 
 class AllNotationsSheet extends StatelessWidget {
   const AllNotationsSheet({super.key});
@@ -17,6 +18,7 @@ class AllNotationsSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -59,10 +61,7 @@ class AllNotationsSheet extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'گْونڈگال ءُ ٹِکّانی سرجمیں لڑ',
-                  style: theme.textTheme.titleLarge,
-                ),
+                Text(l10n.allNotationsTitle, style: theme.textTheme.titleLarge),
                 IconButton(
                   onPressed: () => Navigator.of(context).pop(),
                   icon: const Icon(LucideIcons.x, size: 18),

@@ -2,6 +2,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../../../../l10n/app_localizations.dart';
+
 class QuizSummaryView extends StatelessWidget {
   final int roundCorrect;
   final int totalQuestions;
@@ -18,15 +20,16 @@ class QuizSummaryView extends StatelessWidget {
     required this.onFinish,
   });
 
-  String get _feedbackTitle {
+  String _feedbackTitle(AppLocalizations l10n) {
     final ratio = roundCorrect / totalQuestions;
-    if (ratio >= 0.8) return 'باز وش! تئی بلوچی زانت مزن اِنت';
-    if (ratio >= 0.5) return 'شاباش! دیمتر ءَ انگت گهتر بئے';
-    return 'جُهد ءَ برجاہ بدار، هر جستے نوکیں گالے';
+    if (ratio >= 0.8) return l10n.quizFeedbackHigh;
+    if (ratio >= 0.5) return l10n.quizFeedbackMid;
+    return l10n.quizFeedbackLow;
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -62,13 +65,13 @@ class QuizSummaryView extends StatelessWidget {
                     .fadeIn(duration: 220.ms),
                 const SizedBox(height: 18),
                 Text(
-                  'چکّاس سرجم بوت!',
+                  l10n.quizCompleteTitle,
                   style: theme.textTheme.titleLarge,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  _feedbackTitle,
+                  _feedbackTitle(l10n),
                   style: theme.textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -94,7 +97,7 @@ class QuizSummaryView extends StatelessWidget {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              'اے دور ءِ راستیں پسّو',
+                              l10n.roundCorrectAnswersLabel,
                               style: theme.textTheme.labelMedium?.copyWith(
                                 color: colorScheme.primary,
                               ),
@@ -120,7 +123,7 @@ class QuizSummaryView extends StatelessWidget {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              'سرجمیں دَرَجَگ',
+                              l10n.totalScoreLabel,
                               style: theme.textTheme.labelMedium,
                             ),
                           ],
@@ -145,7 +148,7 @@ class QuizSummaryView extends StatelessWidget {
                       ),
                     ),
                     icon: const Icon(LucideIcons.rotateCcw, size: 18),
-                    label: const Text('نوکیں دَورے بندات کن'),
+                    label: Text(l10n.playNewRoundAction),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -160,7 +163,7 @@ class QuizSummaryView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    child: const Text('واتر پہ بزانت بلد ءَ'),
+                    child: Text(l10n.backToDictionaryAction),
                   ),
                 ),
               ],

@@ -7,6 +7,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../bookmarks/providers/bookmarks_provider.dart';
 import '../../../settings/providers/settings_provider.dart';
 import '../../providers/dictionary_providers.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../word_detail_screen.dart';
 
 class QuickPeekSheet extends ConsumerWidget {
@@ -28,6 +29,7 @@ class QuickPeekSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final wordAsync = ref.watch(crossReferenceWordProvider(targetWord));
     final fontScale = ref.watch(fontScaleProvider);
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -83,7 +85,7 @@ class QuickPeekSheet extends ConsumerWidget {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        'زوتیں چارگ',
+                        l10n.quickPeekBadge,
                         style: theme.textTheme.labelMedium?.copyWith(
                           color: colorScheme.primary,
                         ),
@@ -112,7 +114,9 @@ class QuickPeekSheet extends ConsumerWidget {
                 ),
                 error: (err, _) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 24),
-                  child: Center(child: Text('ردی یے بوت: $err')),
+                  child: Center(
+                    child: Text(l10n.errorOccurredWithDetail('$err')),
+                  ),
                 ),
                 data: (word) {
                   if (word == null) {
@@ -128,7 +132,7 @@ class QuickPeekSheet extends ConsumerWidget {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            'گال «$targetWord» دست نہ کپت',
+                            l10n.specificWordNotFound(targetWord),
                             style: theme.textTheme.titleMedium,
                             textAlign: TextAlign.center,
                           ),
@@ -158,7 +162,9 @@ class QuickPeekSheet extends ConsumerWidget {
                               ),
                             ),
                             IconButton(
-                              tooltip: isSaved ? 'نشان دور کنگ' : 'نشان کنگ',
+                              tooltip: isSaved
+                                  ? l10n.removeBookmarkTooltip
+                                  : l10n.addBookmarkTooltip,
                               onPressed: () async {
                                 HapticFeedback.selectionClick();
                                 await ref
@@ -206,9 +212,9 @@ class QuickPeekSheet extends ConsumerWidget {
                             ),
                           ),
                           icon: const Icon(LucideIcons.arrowUpLeft, size: 18),
-                          label: const Text(
-                            'سرجمیں تاکدیم ءَ پچ کن',
-                            style: TextStyle(fontWeight: FontWeight.w700),
+                          label: Text(
+                            l10n.openFullPageAction,
+                            style: const TextStyle(fontWeight: FontWeight.w700),
                           ),
                         ),
                       ],

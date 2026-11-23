@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../providers/reading_activity_provider.dart';
 import '../../word_detail_screen.dart';
+import '../../../../../l10n/app_localizations.dart';
 
 class ReadingStreakCard extends ConsumerWidget {
   const ReadingStreakCard({super.key});
@@ -13,6 +14,7 @@ class ReadingStreakCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final activityAsync = ref.watch(readingActivityProvider);
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -46,7 +48,7 @@ class ReadingStreakCard extends ConsumerWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'گالے پچ کن دانکہ تئی وانگ ءِ رِد ءُ تازگیں دیستگیں گال بنگیج بہ بنت',
+                      l10n.emptyStreakPrompt,
                       style: theme.textTheme.bodyMedium,
                     ),
                   ),
@@ -89,7 +91,7 @@ class ReadingStreakCard extends ConsumerWidget {
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              '${summary.streakDays} روچ رِد',
+                              l10n.streakDays(summary.streakDays),
                               style: theme.textTheme.labelMedium?.copyWith(
                                 color: colorScheme.onPrimary,
                               ),
@@ -98,10 +100,13 @@ class ReadingStreakCard extends ConsumerWidget {
                         ),
                       ),
                       const Spacer(),
-                      _StatPill(label: 'مرچی', value: '${summary.todayCount}'),
+                      _StatPill(
+                        label: l10n.todayLabel,
+                        value: '${summary.todayCount}',
+                      ),
                       const SizedBox(width: 8),
                       _StatPill(
-                        label: 'کل دیستگیں',
+                        label: l10n.totalViewedLabel,
                         value: '${summary.totalUniqueCount}',
                       ),
                     ],
@@ -130,7 +135,7 @@ class ReadingStreakCard extends ConsumerWidget {
                             ),
                             const SizedBox(width: 6),
                             Text(
-                              'نوکیں دیستگیں گال',
+                              l10n.recentlyViewedWords,
                               style: theme.textTheme.labelMedium?.copyWith(
                                 color: colorScheme.primary,
                               ),
@@ -153,7 +158,7 @@ class ReadingStreakCard extends ConsumerWidget {
                               vertical: 2,
                             ),
                             child: Text(
-                              'گار کنگ',
+                              l10n.clearAction,
                               style: theme.textTheme.labelMedium,
                             ),
                           ),

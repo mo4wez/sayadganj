@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../domain/search_scope.dart';
 import '../../domain/word_entry.dart';
 import '../../providers/paginated_words_provider.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'word_card.dart';
 
 class PaginatedWordListView extends StatelessWidget {
@@ -43,6 +44,7 @@ class PaginatedWordListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final bottomInset = MediaQuery.paddingOf(context).bottom;
@@ -51,7 +53,7 @@ class PaginatedWordListView extends StatelessWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, _) => _EmptyListPlaceholder(
         icon: LucideIcons.circleAlert,
-        title: 'ردی یے بوت',
+        title: l10n.errorOccurredTitle,
         subtitle: '$err',
         useSliverOverlap: useSliverOverlap,
       ),
@@ -109,7 +111,7 @@ class PaginatedWordListView extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Center(
                             child: Text(
-                              'سرجمیں ${words.length} گال پیش دارگ بوت انت',
+                              l10n.allWordsShownCount(words.length),
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 fontSize: 12,
                                 color: colorScheme.onSurfaceVariant,

@@ -2,8 +2,10 @@ import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../l10n/app_localizations.dart';
 
 class _SocialChannel {
   final String title;
@@ -24,34 +26,34 @@ class AboutAppCard extends StatelessWidget {
 
   const AboutAppCard({super.key, required this.wordCountAsync});
 
-  static const List<_SocialChannel> _channels = [
+  List<_SocialChannel> _buildChannels(AppLocalizations l10n) => [
     _SocialChannel(
-      title: 'تلگرام (Telegram)',
+      title: l10n.channelTelegram,
       handle: '@takband_qandeel',
       url: 'https://t.me/takband_qandeel',
       icon: LucideIcons.send,
     ),
     _SocialChannel(
-      title: 'اینستاگرام (Instagram)',
+      title: l10n.channelInstagram,
       handle: '@takband.qandeel',
       url: 'https://www.instagram.com/takband.qandeel',
       icon: LucideIcons.camera,
     ),
     _SocialChannel(
-      title: 'یوتیوب (YouTube)',
+      title: l10n.channelYoutube,
       handle: '@takband_qandeel',
       url: 'https://www.youtube.com/@takband_qandeel',
       icon: LucideIcons.video,
     ),
     _SocialChannel(
-      title: 'کست باکس (CastBox)',
+      title: l10n.channelCastbox,
       handle: 'TakbandQandeel Podcast',
       url: 'https://castbox.fm/va/7074852',
       icon: LucideIcons.headphones,
     ),
   ];
 
-  String _toBalochiDigits(String input) {
+  String _toEasternDigits(String input) {
     const western = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     const eastern = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
     var output = input;
@@ -92,9 +94,10 @@ class AboutAppCard extends StatelessWidget {
   Future<void> _copyLink(BuildContext context, String url) async {
     await Clipboard.setData(ClipboardData(text: url));
     if (!context.mounted) return;
+    final l10n = AppLocalizations.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('لینک کُپی بوت'),
+      SnackBar(
+        content: Text(l10n.linkCopiedSnack),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -102,8 +105,10 @@ class AboutAppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final channels = _buildChannels(l10n);
 
     return Card(
       child: Padding(
@@ -132,19 +137,19 @@ class AboutAppCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'سیدگنج — بلوچی بزانت‌بلد',
+                        l10n.appSubtitle,
                         style: theme.textTheme.titleMedium,
                       ),
                       const SizedBox(height: 2),
                       FutureBuilder<PackageInfo>(
                         future: PackageInfo.fromPlatform(),
                         builder: (context, snapshot) {
-                          final version = _toBalochiDigits(
+                          final version = _toEasternDigits(
                             snapshot.data?.version ?? '',
                           );
                           final label = version.isEmpty
-                              ? '۱۰۰٪ آفلاین'
-                              : 'ورژن $version • ۱۰۰٪ آفلاین';
+                              ? l10n.offlineBadge
+                              : l10n.versionLabel(version);
                           return Text(
                             label,
                             style: theme.textTheme.labelMedium?.copyWith(
@@ -160,7 +165,7 @@ class AboutAppCard extends StatelessWidget {
             ),
             const SizedBox(height: 14),
             Text(
-              'سیدگنج، سیدھاشمی ءِ مستریں جھد پہ بلوچی زبان ءَ اِنت کہ تاکبند کندیل ءَ آئی دیتابیس، اندروید ءِ تہ ءَ مُدرنے رنگے ءَ دیم ءَ آرتگ، ما واجہ شبیر کلمتی ءُ آئی ھمراھاں کہ اے دیتابیس دیجیتالایز کتگ ءُ کارمرز کنگ ءِ موکل داتگ، منتوار ایں۔',
+              l10n.aboutSayadGanjDescription,
               style: theme.textTheme.bodyMedium,
             ),
             const SizedBox(height: 12),
@@ -181,9 +186,11 @@ class AboutAppCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     wordCountAsync.when(
-                      data: (count) => 'سرجمیں گال: $count',
-                      loading: () => 'سرجمیں گال: ...',
-                      error: (_, __) => 'سرجمیں گال: —',
+                      data: (count) => l10n.totalWordsCount(
+                        _toEasternDigits(count.toString()),
+                      ),
+                      loading: () => l10n.totalWordsCount('...'),
+                      error: (_, __) => l10n.totalWordsCount('—'),
                     ),
                     style: theme.textTheme.labelMedium?.copyWith(
                       color: colorScheme.primary,
@@ -218,14 +225,14 @@ class AboutAppCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'تاکبند کندیل (TakbandQandeel)',
+                        l10n.takbandTitle,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontSize: 15.5,
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'بلوچی زبان ءُ لبزانک ءِ دوزواهانی گَل',
+                        l10n.takbandSubtitle,
                         style: theme.textTheme.labelMedium?.copyWith(
                           color: colorScheme.primary,
                         ),
@@ -236,25 +243,22 @@ class AboutAppCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            Text(
-              'ما بلوچی زبان ءُ لبزانک ءِ کسانیں نودربر ءُ دوزواھانی گَلے ایں کہ پہ بلوچی زبان ءِ دیمروئی، زانتکاری ءَ کار کنگ ءَ ایں۔',
-              style: theme.textTheme.bodyMedium,
-            ),
+            Text(l10n.takbandDescription, style: theme.textTheme.bodyMedium),
             const SizedBox(height: 14),
 
             // Social & Podcast Links
             Text(
-              'مئے تاک ءُ پادکست',
+              l10n.ourChannelsAndPodcast,
               style: theme.textTheme.labelMedium?.copyWith(
                 color: colorScheme.primary,
               ),
             ),
             const SizedBox(height: 8),
-            ...List.generate(_channels.length, (index) {
-              final channel = _channels[index];
+            ...List.generate(channels.length, (index) {
+              final channel = channels[index];
               return Padding(
                 padding: EdgeInsets.only(
-                  bottom: index == _channels.length - 1 ? 0 : 8,
+                  bottom: index == channels.length - 1 ? 0 : 8,
                 ),
                 child: Material(
                   color: theme.scaffoldBackgroundColor,
@@ -336,7 +340,7 @@ class AboutAppCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'گوں مھر ءَ',
+                    l10n.madeWithLove,
                     style: theme.textTheme.labelMedium?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                     ),
@@ -349,7 +353,7 @@ class AboutAppCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    'تاکبند کندیل',
+                    l10n.takbandName,
                     style: theme.textTheme.labelMedium?.copyWith(
                       color: colorScheme.primary,
                       fontWeight: FontWeight.w700,

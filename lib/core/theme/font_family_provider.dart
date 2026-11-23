@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/preferences_provider.dart';
+import '../../l10n/app_localizations.dart';
 
 enum AppFont {
   vazirmatn(
@@ -40,6 +41,18 @@ enum AppFont {
       orElse: () => AppFont.vazirmatn,
     );
   }
+
+  String localizedTitle(AppLocalizations l10n) => switch (this) {
+    AppFont.vazirmatn => l10n.fontVazirmatnTitle,
+    AppFont.droshumBalochi => l10n.fontDroshumTitle,
+    AppFont.system => l10n.fontSystemTitle,
+  };
+
+  String localizedSubtitle(AppLocalizations l10n) => switch (this) {
+    AppFont.vazirmatn => l10n.fontVazirmatnSubtitle,
+    AppFont.droshumBalochi => l10n.fontDroshumSubtitle,
+    AppFont.system => l10n.fontSystemSubtitle,
+  };
 }
 
 class FontFamilyNotifier extends Notifier<AppFont> {

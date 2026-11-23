@@ -1,5 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
+import '../../l10n/app_localizations.dart';
+
 enum AppAccentColor {
   teal(
     id: 'teal',
@@ -62,6 +64,16 @@ enum AppAccentColor {
       orElse: () => AppAccentColor.teal,
     );
   }
+
+  String localizedLabel(AppLocalizations l10n) => switch (this) {
+    AppAccentColor.teal => l10n.accentTeal,
+    AppAccentColor.emerald => l10n.accentEmerald,
+    AppAccentColor.blue => l10n.accentBlue,
+    AppAccentColor.violet => l10n.accentViolet,
+    AppAccentColor.amber => l10n.accentAmber,
+    AppAccentColor.rose => l10n.accentRose,
+    AppAccentColor.ink => l10n.accentInk,
+  };
 }
 
 enum AppColorStyle {
@@ -102,6 +114,20 @@ enum AppColorStyle {
       orElse: () => AppColorStyle.vivid,
     );
   }
+
+  String localizedTitle(AppLocalizations l10n) => switch (this) {
+    AppColorStyle.vivid => l10n.colorStyleVividTitle,
+    AppColorStyle.soft => l10n.colorStyleSoftTitle,
+    AppColorStyle.tinted => l10n.colorStyleTintedTitle,
+    AppColorStyle.monochrome => l10n.colorStyleMonochromeTitle,
+  };
+
+  String localizedSubtitle(AppLocalizations l10n) => switch (this) {
+    AppColorStyle.vivid => l10n.colorStyleVividSubtitle,
+    AppColorStyle.soft => l10n.colorStyleSoftSubtitle,
+    AppColorStyle.tinted => l10n.colorStyleTintedSubtitle,
+    AppColorStyle.monochrome => l10n.colorStyleMonochromeSubtitle,
+  };
 }
 
 enum BottomBarStyle {
@@ -132,6 +158,16 @@ enum BottomBarStyle {
       orElse: () => BottomBarStyle.docked,
     );
   }
+
+  String localizedTitle(AppLocalizations l10n) => switch (this) {
+    BottomBarStyle.docked => l10n.bottomBarDockedTitle,
+    BottomBarStyle.floating => l10n.bottomBarFloatingTitle,
+  };
+
+  String localizedSubtitle(AppLocalizations l10n) => switch (this) {
+    BottomBarStyle.docked => l10n.bottomBarDockedSubtitle,
+    BottomBarStyle.floating => l10n.bottomBarFloatingSubtitle,
+  };
 }
 
 class ThemeAppearanceState {

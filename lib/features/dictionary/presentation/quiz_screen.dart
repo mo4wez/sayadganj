@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../domain/quiz_question.dart';
 import '../providers/quiz_provider.dart';
+import '../../../l10n/app_localizations.dart';
 import 'widgets/quiz/quiz_option_tile.dart';
 import 'widgets/quiz/quiz_summary_view.dart';
 import 'word_detail_screen.dart';
@@ -75,6 +76,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   Widget build(BuildContext context) {
     final quizAsync = ref.watch(quizQuestionProvider);
     final lifetimeScore = ref.watch(quizScoreProvider);
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isRoundComplete = _questionIndex >= _totalQuestions;
@@ -86,7 +88,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('گال چکّاس'),
+        title: Text(l10n.wordQuizBadge),
         actions: [
           if (!isRoundComplete)
             Container(
@@ -165,13 +167,12 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                   : quizAsync.when(
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
-                      error: (err, _) =>
-                          Center(child: Text('ردی یے بوت: $err')),
+                      error: (err, _) => Center(
+                        child: Text(l10n.errorOccurredWithDetail('$err')),
+                      ),
                       data: (question) {
                         if (question == null) {
-                          return const Center(
-                            child: Text('پہ چکّاس ءَ گال دست نہ کپت'),
-                          );
+                          return Center(child: Text(l10n.noQuizWordsFound));
                         }
 
                         final target = question.targetWord;
@@ -223,7 +224,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'اے گال ءِ راستیں مانا کجام اِنت؟',
+                                        l10n.quizQuestionPrompt,
                                         style: theme.textTheme.bodyMedium,
                                       ),
                                       const SizedBox(height: 8),
@@ -319,7 +320,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                                             LucideIcons.bookOpen,
                                             size: 16,
                                           ),
-                                          label: const Text('سرجمیں بزانت'),
+                                          label: Text(l10n.fullMeaningShort),
                                         ),
                                         const SizedBox(width: 10),
                                         Expanded(
@@ -346,8 +347,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                                             label: Text(
                                               _questionIndex + 1 >=
                                                       _totalQuestions
-                                                  ? 'آسر ءَ بچار'
-                                                  : 'دیمتر ءِ جست',
+                                                  ? l10n.seeResultsAction
+                                                  : l10n.nextQuestionAction,
                                             ),
                                           ),
                                         ),

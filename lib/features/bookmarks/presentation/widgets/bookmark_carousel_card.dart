@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../dictionary/domain/word_entry.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../dictionary/presentation/word_detail_screen.dart';
 
 class BookmarkCarouselCard extends StatelessWidget {
@@ -19,6 +20,7 @@ class BookmarkCarouselCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final headword = word.fullWordWithSymbols.isNotEmpty
@@ -72,7 +74,7 @@ class BookmarkCarouselCard extends StatelessWidget {
                   ),
                   const Spacer(),
                   IconButton(
-                    tooltip: 'کُپی کنگ',
+                    tooltip: l10n.copyTooltip,
                     visualDensity: VisualDensity.compact,
                     icon: const Icon(LucideIcons.copy, size: 17),
                     onPressed: () {
@@ -81,8 +83,8 @@ class BookmarkCarouselCard extends StatelessWidget {
                         ClipboardData(text: '$headword\n${word.definition}'),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('گال ءُ بزانت کُپی بوت انت'),
+                        SnackBar(
+                          content: Text(l10n.wordAndMeaningCopiedSnack),
                           behavior: SnackBarBehavior.floating,
                           duration: Duration(seconds: 2),
                         ),
@@ -90,7 +92,7 @@ class BookmarkCarouselCard extends StatelessWidget {
                     },
                   ),
                   IconButton(
-                    tooltip: 'دور کنگ',
+                    tooltip: l10n.removeAction,
                     visualDensity: VisualDensity.compact,
                     icon: Icon(
                       LucideIcons.trash2,
@@ -161,7 +163,7 @@ class BookmarkCarouselCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    'سرجمیں بزانت ءَ بوان',
+                    l10n.readFullDefinition,
                     style: theme.textTheme.labelMedium?.copyWith(
                       color: colorScheme.primary,
                     ),
