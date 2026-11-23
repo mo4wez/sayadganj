@@ -140,7 +140,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           ),
                         ),
                         child: Text(
-                          'بلوچی ءَ پہ بلوچی لبزبلد',
+                          'بلوچی ءَ پہ بلوچی بزانت‌بلد',
                           textAlign: TextAlign.center,
                           style: theme.textTheme.labelMedium?.copyWith(
                             color: colorScheme.primary,

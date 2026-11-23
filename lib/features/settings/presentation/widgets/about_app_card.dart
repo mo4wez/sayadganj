@@ -126,7 +126,7 @@ class AboutAppCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'نسخہ ۱.۰.۰ • ۱۰۰٪ آفلاین',
+                        'ورژن ۱.۱.۱ • ۱۰۰٪ آفلاین',
                         style: theme.textTheme.labelMedium?.copyWith(
                           color: colorScheme.primary,
                         ),

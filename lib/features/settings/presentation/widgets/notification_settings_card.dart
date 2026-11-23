@@ -44,7 +44,7 @@ class NotificationSettingsCard extends ConsumerWidget {
                 size: 20,
               ),
             ),
-            title: const Text('روچ ءِ لبز ءِ یات‌دھانی'),
+            title: const Text('روچ ءِ لبز ءِ جار'),
             subtitle: const Text(
               'هر روچ یک نوکیں بلوچی لبزے گوں آئی ءِ مانا ءَ دیم دیگ بیت',
             ),
@@ -59,7 +59,7 @@ class NotificationSettingsCard extends ConsumerWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text(
-                      'پہ یات‌دھانی ءَ چہ تنظیمات ءِ تہ ءَ اجازت بہ دئے',
+                      'پہ جار جنگ ءَ چہ  موبائل ءِ کاربوج ءِ تہ ءَ اجازت بہ دئے',
                     ),
                     behavior: SnackBarBehavior.floating,
                   ),
@@ -79,7 +79,7 @@ class NotificationSettingsCard extends ConsumerWidget {
                 size: 19,
                 color: colorScheme.primary,
               ),
-              title: const Text('یات‌دھانی ءِ وهد'),
+              title: const Text('جار ءِ وهد'),
               trailing: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12,
@@ -126,7 +126,7 @@ class NotificationSettingsCard extends ConsumerWidget {
                 size: 19,
                 color: colorScheme.primary,
               ),
-              title: const Text('تستِ یات‌دھانی (۵ سیکنڈ)'),
+              title: const Text('جار ءِ تِست (۵ سیکنڈ)'),
               subtitle: const Text('فقط در حالت Debug نمایش داده می‌شود'),
               onTap: () async {
                 HapticFeedback.selectionClick();
@@ -135,7 +135,7 @@ class NotificationSettingsCard extends ConsumerWidget {
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(error ?? '۵ سیکنڈ ءَ رند یات‌دھانی کیت...'),
+                    content: Text(error ?? '۵ سیکنڈ ءَ جار کیت...'),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
