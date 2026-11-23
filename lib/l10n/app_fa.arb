@@ -1,0 +1,23 @@
+{
+  "@@locale": "fa",
+  "appTitle": "سیدگنج",
+  "appSubtitle": "سیدگنج — فرهنگ واژگان بلوچی",
+  "searchHint": "جستجوی واژه...",
+  "wordOfTheDay": "واژه روز",
+  "luckyWord": "واژه تصادفی",
+  "readFullDefinition": "مشاهده معنی کامل",
+  "streakDays": "{count} روز پیوسته",
+  "todayCount": "امروز: {count}",
+  "totalViewedCount": "کل دیده‌شده: {count}",
+  "recentlyViewedWords": "واژه‌های اخیر",
+  "clearAction": "پاک کردن",
+  "emptyStreakPrompt": "واژه‌ای را باز کنید تا روند مطالعه و واژه‌های اخیر شما آغاز شود",
+  "curatedWords": "واژه‌های برگزیده",
+  "dictionaryTab": "واژه‌نامه",
+  "settingsTitle": "تنظیمات",
+  "languageSettingTitle": "زبان برنامه",
+  "languageBalochi": "بلوچی",
+  "languagePersian": "فارسی",
+  "offlineBadge": "۱۰۰٪ آفلاین",
+  "versionLabel": "نسخه {version} • ۱۰۰٪ آفلاین"
+}

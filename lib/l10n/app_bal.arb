@@ -1,0 +1,43 @@
+{
+  "@@locale": "bal",
+  "appTitle": "سیدگنج",
+  "appSubtitle": "سیدگنج — بلوچی بزانت‌بلد",
+  "searchHint": "گالے بہ شوهاز...",
+  "wordOfTheDay": "روچ ءِ گال",
+  "luckyWord": "پدیمیں گال",
+  "readFullDefinition": "سرجمیں بزانت ءَ بوان",
+  "streakDays": "{count} روچ رِد",
+  "@streakDays": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "todayCount": "مرچی: {count}",
+  "@todayCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "totalViewedCount": "کل دیستگیں: {count}",
+  "@totalViewedCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "recentlyViewedWords": "نوکیں دیستگیں گال",
+  "clearAction": "گار کنگ",
+  "emptyStreakPrompt": "گالے پچ کن دانکہ تئی وانگ ءِ رِد ءُ تازگیں دیستگیں گال بنگیج بہ بنت",
+  "curatedWords": "گچین کتگیں گال",
+  "dictionaryTab": "بزانت‌بلد",
+  "settingsTitle": "کاربوج",
+  "languageSettingTitle": "زبان / زُبان",
+  "languageBalochi": "بلوچی",
+  "languagePersian": "فارسی",
+  "offlineBadge": "۱۰۰٪ آفلاین",
+  "versionLabel": "ورژن {version} • ۱۰۰٪ آفلاین",
+  "@versionLabel": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  }
+}

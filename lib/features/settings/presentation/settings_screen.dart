@@ -7,10 +7,12 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../core/theme/font_family_provider.dart';
 import '../../../core/theme/theme_appearance_provider.dart';
 import '../../../core/theme/theme_mode_provider.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../community/presentation/widgets/takband_follow_sheet.dart';
 import '../../community/providers/community_prompt_provider.dart';
 import '../../dictionary/providers/dictionary_providers.dart';
 import '../providers/settings_provider.dart';
+import '../providers/locale_provider.dart';
 import 'theme/theme_settings_screen.dart';
 import 'widgets/about_app_card.dart';
 import 'widgets/notification_settings_card.dart';
@@ -27,6 +29,8 @@ class SettingsScreen extends ConsumerWidget {
     final selectedFont = ref.watch(fontFamilyProvider);
     final fontScale = ref.watch(fontScaleProvider);
     final wordCountAsync = ref.watch(totalWordCountProvider);
+    final locale = ref.watch(localeProvider);
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -37,7 +41,7 @@ class SettingsScreen extends ConsumerWidget {
     };
 
     return Scaffold(
-      appBar: AppBar(title: const Text('کاربوج')),
+      appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: ListView(
         padding: EdgeInsets.fromLTRB(
           16,
@@ -99,6 +103,89 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                 );
               },
+            ),
+          ),
+          const SizedBox(height: 22),
+          // --- Language Switcher ---
+          Text(l10n.languageSettingTitle, style: theme.textTheme.labelMedium),
+          const SizedBox(height: 10),
+          Card(
+            clipBehavior: Clip.antiAlias,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: colorScheme.secondary,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      LucideIcons.languages,
+                      color: colorScheme.primary,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.languageSettingTitle,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontSize: 15,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          locale.languageCode == 'fa'
+                              ? l10n.languagePersian
+                              : l10n.languageBalochi,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      color: colorScheme.secondary,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _LanguagePill(
+                          label: l10n.languageBalochi,
+                          selected: locale.languageCode == 'bal',
+                          onTap: () {
+                            HapticFeedback.selectionClick();
+                            ref
+                                .read(localeProvider.notifier)
+                                .setLocale(const Locale('bal'));
+                          },
+                        ),
+                        _LanguagePill(
+                          label: l10n.languagePersian,
+                          selected: locale.languageCode == 'fa',
+                          onTap: () {
+                            HapticFeedback.selectionClick();
+                            ref
+                                .read(localeProvider.notifier)
+                                .setLocale(const Locale('fa'));
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 22),
@@ -510,6 +597,44 @@ class _FontPreviewCard extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LanguagePill extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _LanguagePill({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOutCubic,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: selected ? colorScheme.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(100),
+        ),
+        child: Text(
+          label,
+          style: theme.textTheme.labelMedium?.copyWith(
+            color: selected ? colorScheme.onPrimary : colorScheme.onSurface,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
           ),
         ),
       ),

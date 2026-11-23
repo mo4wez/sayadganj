@@ -1,7 +1,13 @@
+// ignore_for_file: depend_on_referenced_packages
+import 'package:cupertino_ui/cupertino_ui.dart'
+    show GlobalCupertinoLocalizations;
+import 'package:flutter_localizations/flutter_localizations.dart'
+    hide GlobalMaterialLocalizations, GlobalCupertinoLocalizations;
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'core/localization/balochi_intl_delegates.dart';
 import 'core/navigation/main_shell_screen.dart';
 import 'core/notifications/word_notification_service.dart';
 import 'core/services/preferences_provider.dart';
@@ -10,9 +16,11 @@ import 'core/theme/font_family_provider.dart';
 import 'core/theme/theme_appearance_provider.dart';
 import 'core/theme/theme_mode_provider.dart';
 import 'features/community/providers/community_prompt_provider.dart';
+import 'features/settings/providers/locale_provider.dart';
 import 'features/settings/providers/notification_settings_provider.dart';
 import 'features/splash/presentation/splash_screen.dart';
 import 'features/updates/providers/app_update_provider.dart';
+import 'l10n/app_localizations.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -66,8 +74,20 @@ class _SayadGanjAppState extends ConsumerState<SayadGanjApp> {
     final themeMode = ref.watch(themeModeProvider);
     final selectedFont = ref.watch(fontFamilyProvider);
     final appearance = ref.watch(themeAppearanceProvider);
+    final locale = ref.watch(localeProvider);
 
     return MaterialApp(
+      locale: locale,
+      supportedLocales: const [Locale('bal'), Locale('fa')],
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        BalochiMaterialLocalizationsDelegate(),
+        BalochiCupertinoLocalizationsDelegate(),
+        BalochiWidgetsLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
       navigatorKey: rootNavigatorKey,
       title: 'سیدگنج',
       debugShowCheckedModeBanner: false,
