@@ -211,23 +211,30 @@ class UserDbService {
     );
     final totalUnique = (countRow.first['total'] as num?)?.toInt() ?? 0;
 
+    final now = DateTime.now();
+    final startOfToday = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).millisecondsSinceEpoch;
+
+    final todayRow = await db.rawQuery(
+      'SELECT COUNT(*) AS today_total FROM viewed_words WHERE viewed_at >= ?',
+      [startOfToday],
+    );
+    final todayCount = (todayRow.first['today_total'] as num?)?.toInt() ?? 0;
+
     final dayRows = await db.query('reading_days', orderBy: 'day_key DESC');
 
-    final now = DateTime.now();
     final todayKey = _dayKey(now);
     final yesterdayKey = _dayKey(now.subtract(const Duration(days: 1)));
 
-    int todayCount = 0;
     final activeDays = <String>{};
-
     for (final row in dayRows) {
       final key = (row['day_key'] as String?) ?? '';
       final count = (row['views_count'] as num?)?.toInt() ?? 0;
       if (key.isNotEmpty && count > 0) {
         activeDays.add(key);
-        if (key == todayKey) {
-          todayCount = count;
-        }
       }
     }
 
