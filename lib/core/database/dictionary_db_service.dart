@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../features/dictionary/domain/word_entry.dart';
@@ -132,33 +134,60 @@ class DictionaryDbService {
     return WordEntry.fromMap(rows.first);
   }
 
-  Future<WordEntry?> getWordOfTheDay() async {
+  static const String _dailySeedKey = 'user_daily_word_seed';
+  static const String _eligibleWordFilter =
+      "TRIM(full_word) != '' AND LENGTH(TRIM(definition)) >= 12";
+
+  int? _cachedUserSeed;
+
+  /// Generates and persists a unique random seed once per app installation.
+  Future<int> _getUserDailySeed() async {
+    if (_cachedUserSeed != null) return _cachedUserSeed!;
+
+    final prefs = await SharedPreferences.getInstance();
+    var seed = prefs.getInt(_dailySeedKey);
+    if (seed == null) {
+      seed = Random.secure().nextInt(1 << 30) + 1;
+      await prefs.setInt(_dailySeedKey, seed);
+    }
+    _cachedUserSeed = seed;
+    return seed;
+  }
+
+  /// Picks a personalized, deterministic word for [date] unique to this user.
+  Future<WordEntry?> getWordForDate(DateTime date) async {
     final db = await database;
 
     final countResult = await db.rawQuery(
-      'SELECT COUNT(*) AS total FROM sayadganj',
+      'SELECT COUNT(*) AS total FROM sayadganj WHERE $_eligibleWordFilter',
     );
     final total = (countResult.first['total'] as num?)?.toInt() ?? 0;
     if (total == 0) return null;
 
-    // Deterministic daily index based on year, month, and day
-    final now = DateTime.now();
-    final daySeed = now.year * 10000 + now.month * 100 + now.day;
-    final offset = daySeed % total;
+    final userSeed = await _getUserDailySeed();
+    final daysSinceEpoch =
+        DateTime.utc(date.year, date.month, date.day).millisecondsSinceEpoch ~/
+        Duration.millisecondsPerDay;
 
-    final rows = await db.query('sayadganj', limit: 1, offset: offset);
+    // Mix user seed and day number so consecutive days jump across all letters
+    final mixed =
+        ((daysSinceEpoch * 2654435761) ^ (userSeed * 2246822519)) & 0x7fffffff;
+    final offset = mixed % total;
+
+    final rows = await db.query(
+      'sayadganj',
+      where: _eligibleWordFilter,
+      orderBy: 'id ASC',
+      limit: 1,
+      offset: offset,
+    );
 
     if (rows.isEmpty) return null;
     return WordEntry.fromMap(rows.first);
   }
 
-  Future<WordEntry?> getRandomWord() async {
-    final db = await database;
-
-    final rows = await db.query('sayadganj', orderBy: 'RANDOM()', limit: 1);
-
-    if (rows.isEmpty) return null;
-    return WordEntry.fromMap(rows.first);
+  Future<WordEntry?> getWordOfTheDay() async {
+    return getWordForDate(DateTime.now());
   }
 
   Future<int> getTotalWordCount() async {
@@ -427,20 +456,12 @@ class DictionaryDbService {
         return rows.map((row) => WordEntry.fromMap(row)).toList();
 
       case DiscoveryCategory.pastWeekWords:
-        final total = await getTotalWordCount();
-        if (total <= 0) return const [];
-
         final now = DateTime.now();
-        final todayDays =
-            DateTime(now.year, now.month, now.day).millisecondsSinceEpoch ~/
-            Duration.millisecondsPerDay;
-
         final results = <WordEntry>[];
         for (int i = 1; i <= 7; i++) {
-          final offset = (todayDays - i).abs() % total;
-          final rows = await db.query('sayadganj', limit: 1, offset: offset);
-          if (rows.isNotEmpty) {
-            results.add(WordEntry.fromMap(rows.first));
+          final word = await getWordForDate(now.subtract(Duration(days: i)));
+          if (word != null) {
+            results.add(word);
           }
         }
         return results;
