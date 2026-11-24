@@ -109,10 +109,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get fontSizePreviewText => 'زبان بلوچی هویت ماست';
 
   @override
-  String get notificationsSectionTitle => 'یادآورها (اعلان‌ها)';
+  String get notificationsSectionTitle => 'یادآورها (Notifications)';
 
   @override
-  String get historySectionTitle => 'تاریخچه';
+  String get historySectionTitle => 'تاریخچه (History)';
 
   @override
   String get clearSearchHistoryTitle => 'پاک کردن تاریخچه جستجو';
@@ -661,4 +661,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get searchScopeInDefinitions => 'در معنی‌ها';
+
+  @override
+  String wordOfTheDayNotificationTitle(String word) {
+    return 'واژه روز: $word';
+  }
 }

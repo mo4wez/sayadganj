@@ -360,5 +360,13 @@
   "colorStyleSettingTitle": "رنگ ءِ انداز (Color Style)",
   "searchScopeContainsHeadword": "گال ءِ تہ ءَ",
   "searchScopeStartsWith": "بندات گوں",
-  "searchScopeInDefinitions": "بزانت ءِ تہ ءَ"
+  "searchScopeInDefinitions": "بزانت ءِ تہ ءَ",
+  "wordOfTheDayNotificationTitle": "روچ ءِ گال: {word}",
+  "@wordOfTheDayNotificationTitle": {
+    "placeholders": {
+      "word": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -10,6 +10,7 @@ import 'package:timezone/timezone.dart' as tz;
 import '../../features/dictionary/domain/quiz_question.dart';
 import '../../features/dictionary/domain/word_entry.dart';
 import '../../features/dictionary/presentation/word_detail_screen.dart';
+import '../../l10n/app_localizations.dart';
 import '../database/dictionary_db_service.dart';
 
 class WordNotificationService {
@@ -125,7 +126,7 @@ class WordNotificationService {
     );
   }
 
-  /// Requests OS notification permission when the user enables notifications.
+  /// Requests OS notification + Android exact-alarm permissions.
   Future<bool> requestPermission() async {
     final androidImpl = _plugin
         .resolvePlatformSpecificImplementation<
@@ -133,7 +134,14 @@ class WordNotificationService {
         >();
     if (androidImpl != null) {
       final granted = await androidImpl.requestNotificationsPermission();
-      return granted ?? true;
+      if (granted == false) return false;
+
+      final canExact =
+          await androidImpl.canScheduleExactNotifications() ?? false;
+      if (!canExact) {
+        await androidImpl.requestExactAlarmsPermission();
+      }
+      return true;
     }
 
     final iosImpl = _plugin
@@ -156,15 +164,31 @@ class WordNotificationService {
   Future<void> scheduleRollingWordOfTheDay({
     required int hour,
     required int minute,
+    Locale locale = const Locale('bal'),
   }) async {
     await cancelAll();
 
+    if (Platform.isAndroid) {
+      final androidImpl = _plugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
+      if (androidImpl != null) {
+        final canExact =
+            await androidImpl.canScheduleExactNotifications() ?? false;
+        if (!canExact) {
+          await androidImpl.requestExactAlarmsPermission();
+        }
+      }
+    }
+
+    final l10n = lookupAppLocalizations(locale);
     final words = await _pickDailyWords(_queueDays);
     if (words.isEmpty) return;
 
     final now = DateTime.now();
     var firstSlot = DateTime(now.year, now.month, now.day, hour, minute);
-    if (!firstSlot.isAfter(now.add(const Duration(minutes: 1)))) {
+    if (!firstSlot.isAfter(now)) {
       firstSlot = firstSlot.add(const Duration(days: 1));
     }
 
@@ -175,7 +199,7 @@ class WordNotificationService {
           ? entry.fullWordWithSymbols
           : entry.fullWord;
       final cleanMeaning = QuizQuestion.formatOptionDefinition(entry);
-      final titleText = 'روچ ءِ گال: $headword';
+      final titleText = l10n.wordOfTheDayNotificationTitle(headword);
 
       if (Platform.isAndroid) {
         await _rtlChannel.invokeMethod<void>('scheduleNotification', {
@@ -215,6 +239,7 @@ class WordNotificationService {
   /// reason if permission/scheduling was blocked.
   Future<String?> triggerDebugWordNotification({
     Duration delay = const Duration(seconds: 5),
+    Locale locale = const Locale('bal'),
   }) async {
     try {
       final granted = await requestPermission();
@@ -235,6 +260,7 @@ class WordNotificationService {
         }
       }
 
+      final l10n = lookupAppLocalizations(locale);
       final words = await _pickDailyWords(1);
       if (words.isEmpty) {
         return 'گال دست نہ کپت';
@@ -245,7 +271,7 @@ class WordNotificationService {
           ? entry.fullWordWithSymbols
           : entry.fullWord;
       final cleanMeaning = QuizQuestion.formatOptionDefinition(entry);
-      final titleText = 'روچ ءِ گال: $headword';
+      final titleText = l10n.wordOfTheDayNotificationTitle(headword);
       final triggerTime = DateTime.now().add(delay);
 
       if (Platform.isAndroid) {

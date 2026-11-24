@@ -30,8 +30,8 @@
   "fontSizeSectionTitle": "اندازه متن",
   "resetFontSize": "بازنشانی به ۱۰۰٪",
   "fontSizePreviewText": "زبان بلوچی هویت ماست",
-  "notificationsSectionTitle": "یادآورها (اعلان‌ها)",
-  "historySectionTitle": "تاریخچه",
+  "notificationsSectionTitle": "یادآورها (Notifications)",
+  "historySectionTitle": "تاریخچه (History)",
   "clearSearchHistoryTitle": "پاک کردن تاریخچه جستجو",
   "clearSearchHistorySubtitle": "جستجوهای اخیر از حافظه حذف می‌شوند",
   "clearSearchHistoryDialogTitle": "تاریخچه جستجو پاک شود؟",
@@ -196,5 +196,6 @@
   "colorStyleSettingTitle": "سبک رنگ (Color Style)",
   "searchScopeContainsHeadword": "در سرواژه",
   "searchScopeStartsWith": "شروع با",
-  "searchScopeInDefinitions": "در معنی‌ها"
+  "searchScopeInDefinitions": "در معنی‌ها",
+  "wordOfTheDayNotificationTitle": "واژه روز: {word}"
 }

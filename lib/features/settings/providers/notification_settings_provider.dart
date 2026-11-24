@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:sayadganj/features/settings/providers/locale_provider.dart';
 
 import '../../../core/notifications/word_notification_service.dart';
 import '../../../core/services/preferences_provider.dart';
@@ -34,6 +35,17 @@ class NotificationSettingsNotifier extends Notifier<NotificationSettingsState> {
   @override
   NotificationSettingsState build() {
     final prefs = ref.read(sharedPreferencesProvider);
+
+    ref.listen<Locale>(localeProvider, (previous, next) {
+      if (previous != null && previous != next && state.enabled) {
+        WordNotificationService.instance.scheduleRollingWordOfTheDay(
+          hour: state.hour,
+          minute: state.minute,
+          locale: next,
+        );
+      }
+    });
+
     return NotificationSettingsState(
       enabled: prefs.getBool(_enabledKey) ?? false,
       hour: prefs.getInt(_hourKey) ?? 9,
@@ -54,11 +66,13 @@ class NotificationSettingsNotifier extends Notifier<NotificationSettingsState> {
         return false;
       }
 
+      final locale = ref.read(localeProvider);
       await prefs.setBool(_enabledKey, true);
       state = state.copyWith(enabled: true);
       await WordNotificationService.instance.scheduleRollingWordOfTheDay(
         hour: state.hour,
         minute: state.minute,
+        locale: locale,
       );
       return true;
     } else {
@@ -71,6 +85,7 @@ class NotificationSettingsNotifier extends Notifier<NotificationSettingsState> {
 
   Future<void> setReminderTime(TimeOfDay time) async {
     final prefs = ref.read(sharedPreferencesProvider);
+    final locale = ref.read(localeProvider);
     await prefs.setInt(_hourKey, time.hour);
     await prefs.setInt(_minuteKey, time.minute);
 
@@ -80,6 +95,7 @@ class NotificationSettingsNotifier extends Notifier<NotificationSettingsState> {
       await WordNotificationService.instance.scheduleRollingWordOfTheDay(
         hour: state.hour,
         minute: state.minute,
+        locale: locale,
       );
     }
   }

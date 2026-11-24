@@ -660,4 +660,9 @@ class AppLocalizationsBal extends AppLocalizations {
 
   @override
   String get searchScopeInDefinitions => 'بزانت ءِ تہ ءَ';
+
+  @override
+  String wordOfTheDayNotificationTitle(String word) {
+    return 'روچ ءِ گال: $word';
+  }
 }

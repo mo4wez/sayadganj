@@ -129,7 +129,9 @@ class NotificationSettingsCard extends ConsumerWidget {
               onTap: () async {
                 HapticFeedback.selectionClick();
                 final error = await WordNotificationService.instance
-                    .triggerDebugWordNotification();
+                    .triggerDebugWordNotification(
+                      locale: Localizations.localeOf(context),
+                    );
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

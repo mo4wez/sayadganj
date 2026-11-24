@@ -1279,6 +1279,12 @@ abstract class AppLocalizations {
   /// In bal, this message translates to:
   /// **'بزانت ءِ تہ ءَ'**
   String get searchScopeInDefinitions;
+
+  /// No description provided for @wordOfTheDayNotificationTitle.
+  ///
+  /// In bal, this message translates to:
+  /// **'روچ ءِ گال: {word}'**
+  String wordOfTheDayNotificationTitle(String word);
 }
 
 class _AppLocalizationsDelegate
