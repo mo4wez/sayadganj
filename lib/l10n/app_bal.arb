@@ -126,7 +126,7 @@
   "noWordsFoundTitle": "هچ گالے دست نہ کپت",
   "noWordsFoundSearchSubtitle": "دگہ گالے یا کسانیں بھرے بہ شوهاز",
   "noWordsFoundLetterSubtitle": "اے آب ءَ هچ گال نیست",
-  "alphabetDialTooltip": "چرخِ آب ءُ ب",
+  "alphabetDialTooltip": "آب ءُ ب ءِ چَهر",
   "bookmarksTab": "نشان کتگیں",
   "recentSearchesTitle": "نوکیں شوهاز",
   "clearHistoryShort": "ساپ کنگ",
@@ -135,7 +135,7 @@
   "totalViewedLabel": "کل دیستگیں",
   "flashcardsTitle": "گالانی تاکدیم",
   "curatedShort": "گچین کتگیں",
-  "previousTooltip": "پێشتر",
+  "previousTooltip": "پیشتر",
   "nextTooltip": "دیمتر",
   "newDeckAction": "نوکیں تاکدیم",
   "swipeOrTapHint": "پہ دیمتر ءَ کشّ یا بہ ٹپّ",
@@ -299,7 +299,7 @@
   "youtubeShort": "یوتیوب",
   "castboxShort": "کست باکس",
   "followTakbandTitle": "تاکبندکندیل ءِ همراه بہ بئے",
-  "followTakbandSubtitle": "اگاں سیدگنج پہ تو کارآمد بوتگ، مئے کسانیں لبزانکی گَبل ءِ تاک ءُ پادکستاں هم بچار دانکہ بلوچی زبان ءِ نوکیں کاراں سرپد بہ بئے.",
+  "followTakbandSubtitle": "اگاں سیدگنج پہ تو کارآمد بوتگ، مئے کسانیں لبزانکی گَل ءِ تاک ءُ پادکستاں هم بچار دانکہ بلوچی زبان ءِ نوکیں کاراں سرپد بہ بئے.",
   "dontShowAgainAction": "دگہ پیش مدار",
   "maybeLaterAction": "پدا بچاراں",
   "splashSubtitle": "بلوچی ءَ پہ بلوچی بزانت‌بلد",
@@ -368,5 +368,11 @@
         "type": "String"
       }
     }
-  }
+  },
+  "timePickerHelpText": "وهد ءِ گچین",
+  "confirmAction": "هو",
+  "cancelTimeAction": "بندگ",
+  "timePickerHourLabel": "ساهت",
+  "timePickerMinuteLabel": "ملٹ",
+  "errorInvalidTimeText": "راستیں وهدے گچین بکن"
 }

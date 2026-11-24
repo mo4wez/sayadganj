@@ -563,7 +563,7 @@ abstract class AppLocalizations {
   /// No description provided for @alphabetDialTooltip.
   ///
   /// In bal, this message translates to:
-  /// **'چرخِ آب ءُ ب'**
+  /// **'آب ءُ ب ءِ چَهر'**
   String get alphabetDialTooltip;
 
   /// No description provided for @bookmarksTab.
@@ -617,7 +617,7 @@ abstract class AppLocalizations {
   /// No description provided for @previousTooltip.
   ///
   /// In bal, this message translates to:
-  /// **'پێشتر'**
+  /// **'پیشتر'**
   String get previousTooltip;
 
   /// No description provided for @nextTooltip.
@@ -1037,7 +1037,7 @@ abstract class AppLocalizations {
   /// No description provided for @followTakbandSubtitle.
   ///
   /// In bal, this message translates to:
-  /// **'اگاں سیدگنج پہ تو کارآمد بوتگ، مئے کسانیں لبزانکی گَبل ءِ تاک ءُ پادکستاں هم بچار دانکہ بلوچی زبان ءِ نوکیں کاراں سرپد بہ بئے.'**
+  /// **'اگاں سیدگنج پہ تو کارآمد بوتگ، مئے کسانیں لبزانکی گَل ءِ تاک ءُ پادکستاں هم بچار دانکہ بلوچی زبان ءِ نوکیں کاراں سرپد بہ بئے.'**
   String get followTakbandSubtitle;
 
   /// No description provided for @dontShowAgainAction.
@@ -1285,6 +1285,42 @@ abstract class AppLocalizations {
   /// In bal, this message translates to:
   /// **'روچ ءِ گال: {word}'**
   String wordOfTheDayNotificationTitle(String word);
+
+  /// No description provided for @timePickerHelpText.
+  ///
+  /// In bal, this message translates to:
+  /// **'وهد ءِ گچین'**
+  String get timePickerHelpText;
+
+  /// No description provided for @confirmAction.
+  ///
+  /// In bal, this message translates to:
+  /// **'هو'**
+  String get confirmAction;
+
+  /// No description provided for @cancelTimeAction.
+  ///
+  /// In bal, this message translates to:
+  /// **'بندگ'**
+  String get cancelTimeAction;
+
+  /// No description provided for @timePickerHourLabel.
+  ///
+  /// In bal, this message translates to:
+  /// **'ساهت'**
+  String get timePickerHourLabel;
+
+  /// No description provided for @timePickerMinuteLabel.
+  ///
+  /// In bal, this message translates to:
+  /// **'ملٹ'**
+  String get timePickerMinuteLabel;
+
+  /// No description provided for @errorInvalidTimeText.
+  ///
+  /// In bal, this message translates to:
+  /// **'راستیں وهدے گچین بکن'**
+  String get errorInvalidTimeText;
 }
 
 class _AppLocalizationsDelegate

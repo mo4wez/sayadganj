@@ -666,4 +666,22 @@ class AppLocalizationsFa extends AppLocalizations {
   String wordOfTheDayNotificationTitle(String word) {
     return 'واژه روز: $word';
   }
+
+  @override
+  String get timePickerHelpText => 'انتخاب زمان';
+
+  @override
+  String get confirmAction => 'تایید';
+
+  @override
+  String get cancelTimeAction => 'لغو';
+
+  @override
+  String get timePickerHourLabel => 'ساعت';
+
+  @override
+  String get timePickerMinuteLabel => 'دقیقه';
+
+  @override
+  String get errorInvalidTimeText => 'زمان معتبری وارد کنید';
 }

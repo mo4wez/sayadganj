@@ -262,7 +262,7 @@ class AppLocalizationsBal extends AppLocalizations {
   String get noWordsFoundLetterSubtitle => 'اے آب ءَ هچ گال نیست';
 
   @override
-  String get alphabetDialTooltip => 'چرخِ آب ءُ ب';
+  String get alphabetDialTooltip => 'آب ءُ ب ءِ چَهر';
 
   @override
   String get bookmarksTab => 'نشان کتگیں';
@@ -289,7 +289,7 @@ class AppLocalizationsBal extends AppLocalizations {
   String get curatedShort => 'گچین کتگیں';
 
   @override
-  String get previousTooltip => 'پێشتر';
+  String get previousTooltip => 'پیشتر';
 
   @override
   String get nextTooltip => 'دیمتر';
@@ -528,7 +528,7 @@ class AppLocalizationsBal extends AppLocalizations {
 
   @override
   String get followTakbandSubtitle =>
-      'اگاں سیدگنج پہ تو کارآمد بوتگ، مئے کسانیں لبزانکی گَبل ءِ تاک ءُ پادکستاں هم بچار دانکہ بلوچی زبان ءِ نوکیں کاراں سرپد بہ بئے.';
+      'اگاں سیدگنج پہ تو کارآمد بوتگ، مئے کسانیں لبزانکی گَل ءِ تاک ءُ پادکستاں هم بچار دانکہ بلوچی زبان ءِ نوکیں کاراں سرپد بہ بئے.';
 
   @override
   String get dontShowAgainAction => 'دگہ پیش مدار';
@@ -665,4 +665,22 @@ class AppLocalizationsBal extends AppLocalizations {
   String wordOfTheDayNotificationTitle(String word) {
     return 'روچ ءِ گال: $word';
   }
+
+  @override
+  String get timePickerHelpText => 'وهد ءِ گچین';
+
+  @override
+  String get confirmAction => 'هو';
+
+  @override
+  String get cancelTimeAction => 'بندگ';
+
+  @override
+  String get timePickerHourLabel => 'ساهت';
+
+  @override
+  String get timePickerMinuteLabel => 'ملٹ';
+
+  @override
+  String get errorInvalidTimeText => 'راستیں وهدے گچین بکن';
 }

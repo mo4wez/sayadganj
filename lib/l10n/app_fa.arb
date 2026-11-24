@@ -197,5 +197,11 @@
   "searchScopeContainsHeadword": "در سرواژه",
   "searchScopeStartsWith": "شروع با",
   "searchScopeInDefinitions": "در معنی‌ها",
-  "wordOfTheDayNotificationTitle": "واژه روز: {word}"
+  "wordOfTheDayNotificationTitle": "واژه روز: {word}",
+  "timePickerHelpText": "انتخاب زمان",
+  "confirmAction": "تایید",
+  "cancelTimeAction": "لغو",
+  "timePickerHourLabel": "ساعت",
+  "timePickerMinuteLabel": "دقیقه",
+  "errorInvalidTimeText": "زمان معتبری وارد کنید"
 }

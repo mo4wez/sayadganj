@@ -103,6 +103,12 @@ class NotificationSettingsCard extends ConsumerWidget {
                 final picked = await showTimePicker(
                   context: context,
                   initialTime: notifState.timeOfDay,
+                  helpText: l10n.timePickerHelpText,
+                  confirmText: l10n.confirmAction,
+                  cancelText: l10n.cancelTimeAction,
+                  hourLabelText: l10n.timePickerHourLabel,
+                  minuteLabelText: l10n.timePickerMinuteLabel,
+                  errorInvalidText: l10n.errorInvalidTimeText,
                 );
                 if (picked != null) {
                   await ref
