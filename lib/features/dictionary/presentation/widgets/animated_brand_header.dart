@@ -266,8 +266,9 @@ class _AnimatedBrandHeaderState extends State<AnimatedBrandHeader>
     required double opacity,
     Offset offset = Offset.zero,
     double blur = 0,
+    TextStyle? style,
   }) {
-    Widget w = Text(text, maxLines: 1, softWrap: false);
+    Widget w = Text(text, maxLines: 1, softWrap: false, style: style);
     if (blur > 0.05) {
       w = ImageFiltered(
         imageFilter: ImageFilter.blur(
@@ -294,6 +295,10 @@ class _AnimatedBrandHeaderState extends State<AnimatedBrandHeader>
     final gap = (textStyle.fontSize ?? 16) * 0.3;
     final swapping = _swap.isAnimating;
     final items = <Widget>[];
+    final descStyle = textStyle.copyWith(
+      fontSize: (textStyle.fontSize ?? 20) * 0.80,
+      fontWeight: FontWeight.w500,
+    );
 
     if (swapping) {
       final t = _swap.value;
@@ -301,6 +306,7 @@ class _AnimatedBrandHeaderState extends State<AnimatedBrandHeader>
       if (t < _swapMid) {
         // EXIT: previous text lifts up and blurs away, staggered from the
         // reading-start side.
+        final isDescription = !_showDescription;
         final words = _wordsOf(!_showDescription);
         final step = words.length > 1
             ? math.min(0.06, 0.2 / (words.length - 1))
@@ -313,11 +319,13 @@ class _AnimatedBrandHeaderState extends State<AnimatedBrandHeader>
               opacity: 1 - e,
               offset: Offset(0, -0.55 * e),
               blur: e * 5,
+              style: isDescription ? descStyle : null,
             ),
           );
         }
       } else {
         // ENTER: new text rises from below and sharpens.
+        final isDescription = _showDescription;
         final words = _wordsOf(_showDescription);
         final step = words.length > 1
             ? math.min(0.08, 0.24 / (words.length - 1))
@@ -331,6 +339,7 @@ class _AnimatedBrandHeaderState extends State<AnimatedBrandHeader>
               opacity: p,
               offset: Offset(0, 0.55 * (1 - p)),
               blur: (1 - p) * 5,
+              style: isDescription ? descStyle : null,
             ),
           );
         }
@@ -338,6 +347,7 @@ class _AnimatedBrandHeaderState extends State<AnimatedBrandHeader>
     } else {
       // SETTLED (also drives the first-launch intro): words blur in and slide
       // from the reading-start side.
+      final isDescription = _showDescription;
       final words = _wordsOf(_showDescription);
       final intro = _intro.value;
       for (var i = 0; i < words.length; i++) {
@@ -354,6 +364,7 @@ class _AnimatedBrandHeaderState extends State<AnimatedBrandHeader>
             opacity: t,
             offset: Offset(dir * 0.4 * (1 - t), 0),
             blur: (1 - t) * 6,
+            style: isDescription ? descStyle : null,
           ),
         );
       }

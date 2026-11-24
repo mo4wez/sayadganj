@@ -16,7 +16,7 @@ class AppLocalizationsBal extends AppLocalizations {
   String get appSubtitle => 'سیدگنج — بلوچی بزانت‌بلد';
 
   @override
-  String get appDescription => 'بلوچی زبان ءِ اَولی لبز بلد';
+  String get appDescription => 'بلوچی زبان ءِ اَولی بزانت بلد';
 
   @override
   String get searchHint => 'گالے بہ شوهاز...';

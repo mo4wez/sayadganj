@@ -113,7 +113,7 @@ abstract class AppLocalizations {
   /// No description provided for @appDescription.
   ///
   /// In bal, this message translates to:
-  /// **'بلوچی زبان ءِ اَولی لبز بلد'**
+  /// **'بلوچی زبان ءِ اَولی بزانت بلد'**
   String get appDescription;
 
   /// No description provided for @searchHint.
