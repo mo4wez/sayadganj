@@ -3,57 +3,32 @@ import 'package:material_ui/material_ui.dart';
 import '../../l10n/app_localizations.dart';
 
 enum AppAccentColor {
-  teal(
-    id: 'teal',
-    label: 'تیل سبز',
-    lightColor: Color(0xFF0F766E),
-    darkColor: Color(0xFF2DD4BF),
-  ),
+  teal(id: 'teal', lightColor: Color(0xFF0F766E), darkColor: Color(0xFF2DD4BF)),
   emerald(
     id: 'emerald',
-    label: 'شونز/سبز',
     lightColor: Color(0xFF15803D),
     darkColor: Color(0xFF4ADE80),
   ),
-  blue(
-    id: 'blue',
-    label: 'نیل',
-    lightColor: Color(0xFF1D4ED8),
-    darkColor: Color(0xFF60A5FA),
-  ),
+  blue(id: 'blue', lightColor: Color(0xFF1D4ED8), darkColor: Color(0xFF60A5FA)),
   violet(
     id: 'violet',
-    label: 'جَمو/وانگڑی',
     lightColor: Color(0xFF6D28D9),
     darkColor: Color(0xFFA78BFA),
   ),
   amber(
     id: 'amber',
-    label: 'زاپرانی',
     lightColor: Color(0xFFB45309),
     darkColor: Color(0xFFFBBF24),
   ),
-  rose(
-    id: 'rose',
-    label: 'گُلابی',
-    lightColor: Color(0xFFBE123C),
-    darkColor: Color(0xFFFB7185),
-  ),
-  ink(
-    id: 'ink',
-    label: 'سیاهی',
-    lightColor: Color(0xFF334155),
-    darkColor: Color(0xFFCBD5E1),
-  );
+  rose(id: 'rose', lightColor: Color(0xFFBE123C), darkColor: Color(0xFFFB7185)),
+  ink(id: 'ink', lightColor: Color(0xFF334155), darkColor: Color(0xFFCBD5E1));
 
   final String id;
-  final String label;
   final Color lightColor;
   final Color darkColor;
 
   const AppAccentColor({
     required this.id,
-    required this.label,
     required this.lightColor,
     required this.darkColor,
   });
@@ -77,36 +52,14 @@ enum AppAccentColor {
 }
 
 enum AppColorStyle {
-  vivid(
-    id: 'vivid',
-    title: 'روشن (Vivid)',
-    subtitle: 'ساپ ءُ تچکیں رنگ پہ گیشتر زاهری ءَ',
-  ),
-  soft(
-    id: 'soft',
-    title: 'نرم (Soft)',
-    subtitle: 'آرامیں ءُ کم‌تیزیں رنگ پہ دراجیں وانگ ءَ',
-  ),
-  tinted(
-    id: 'tinted',
-    title: 'رنگین (Tinted)',
-    subtitle: 'تاکدیم ءُ پشت‌در گوں گچین کتگیں رنگ ءِ ساھگ ءَ',
-  ),
-  monochrome(
-    id: 'monochrome',
-    title: 'سادگ (Monochrome)',
-    subtitle: 'کاگد ءُ سیاہی ءِ سادگیں دروشم بید ء گیشیں رنگ ءَ',
-  );
+  vivid(id: 'vivid'),
+  soft(id: 'soft'),
+  tinted(id: 'tinted'),
+  monochrome(id: 'monochrome');
 
   final String id;
-  final String title;
-  final String subtitle;
 
-  const AppColorStyle({
-    required this.id,
-    required this.title,
-    required this.subtitle,
-  });
+  const AppColorStyle({required this.id});
 
   static AppColorStyle fromId(String? id) {
     return AppColorStyle.values.firstWhere(
@@ -131,26 +84,12 @@ enum AppColorStyle {
 }
 
 enum BottomBarStyle {
-  docked(
-    id: 'docked',
-    title: 'لِچّتگیں (Docked)',
-    subtitle: 'چیر ءِ سیمسر ءَ لِچّتگیں سرجمیں بار',
-  ),
-  floating(
-    id: 'floating',
-    title: 'بالو (Floating)',
-    subtitle: 'کپسیول ءِ دروشم ءَ آزادیں بار',
-  );
+  docked(id: 'docked'),
+  floating(id: 'floating');
 
   final String id;
-  final String title;
-  final String subtitle;
 
-  const BottomBarStyle({
-    required this.id,
-    required this.title,
-    required this.subtitle,
-  });
+  const BottomBarStyle({required this.id});
 
   static BottomBarStyle fromId(String? id) {
     return BottomBarStyle.values.firstWhere(

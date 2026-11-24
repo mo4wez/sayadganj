@@ -75,7 +75,7 @@ class SettingsScreen extends ConsumerWidget {
               ),
               title: Text(l10n.appearanceSectionTitle),
               subtitle: Text(
-                '$modeLabel • ${appearance.accentColor.label} • ${appearance.colorStyle.title.split(' ').first}',
+                '$modeLabel • ${appearance.accentColor.localizedLabel(l10n)} • ${appearance.colorStyle.localizedTitle(l10n).split(' ').first}',
               ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
