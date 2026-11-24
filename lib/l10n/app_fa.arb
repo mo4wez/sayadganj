@@ -192,5 +192,8 @@
   "fontDroshumSubtitle": "فونت ویژه بلوچی برای متون ادبی و فرهنگ واژگان",
   "fontSystemTitle": "فونت پیش‌فرض سیستم (Default)",
   "fontSystemSubtitle": "فونت پایه گوشی",
-  "colorStyleSettingTitle": "سبک رنگ (Color Style)"
+  "colorStyleSettingTitle": "سبک رنگ (Color Style)",
+  "searchScopeContainsHeadword": "در سرواژه",
+  "searchScopeStartsWith": "شروع با",
+  "searchScopeInDefinitions": "در معنی‌ها"
 }

@@ -648,4 +648,13 @@ class AppLocalizationsBal extends AppLocalizations {
 
   @override
   String get colorStyleSettingTitle => 'رنگ ءِ انداز (Color Style)';
+
+  @override
+  String get searchScopeContainsHeadword => 'گال ءِ تہ ءَ';
+
+  @override
+  String get searchScopeStartsWith => 'بندات گوں';
+
+  @override
+  String get searchScopeInDefinitions => 'بزانت ءِ تہ ءَ';
 }

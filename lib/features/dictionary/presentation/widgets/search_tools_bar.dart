@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/search_scope.dart';
 import '../../providers/dictionary_providers.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class SearchToolsBar extends ConsumerWidget {
   final ValueChanged<String> onInsertChar;
@@ -26,6 +27,7 @@ class SearchToolsBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final activeScope = ref.watch(searchScopeProvider);
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -64,7 +66,7 @@ class SearchToolsBar extends ConsumerWidget {
                         ),
                       ),
                       child: Text(
-                        scope.label,
+                        scope.localizedLabel(l10n),
                         style: theme.textTheme.labelMedium?.copyWith(
                           color: selected
                               ? colorScheme.onPrimary

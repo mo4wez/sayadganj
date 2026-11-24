@@ -1,8 +1,13 @@
-enum SearchScope {
-  containsHeadword('گال ءِ تہ ءَ'),
-  startsWith('بندات گوں'),
-  inDefinitions('بزانت ءِ تہ ءَ');
+import '../../../l10n/app_localizations.dart';
 
-  final String label;
-  const SearchScope(this.label);
+enum SearchScope {
+  containsHeadword,
+  startsWith,
+  inDefinitions;
+
+  String localizedLabel(AppLocalizations l10n) => switch (this) {
+    SearchScope.containsHeadword => l10n.searchScopeContainsHeadword,
+    SearchScope.startsWith => l10n.searchScopeStartsWith,
+    SearchScope.inDefinitions => l10n.searchScopeInDefinitions,
+  };
 }

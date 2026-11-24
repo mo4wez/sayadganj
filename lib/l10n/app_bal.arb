@@ -356,5 +356,8 @@
   "fontDroshumSubtitle": "بلوچی هاسیں کِشک پہ ادبی نبشتانک ءُ بزانت‌بلد ءَ",
   "fontSystemTitle": "سیستم ءِ وتی کِشک (Default)",
   "fontSystemSubtitle": "موبائل ءِ بنیادی کِشک",
-  "colorStyleSettingTitle": "رنگ ءِ انداز (Color Style)"
+  "colorStyleSettingTitle": "رنگ ءِ انداز (Color Style)",
+  "searchScopeContainsHeadword": "گال ءِ تہ ءَ",
+  "searchScopeStartsWith": "بندات گوں",
+  "searchScopeInDefinitions": "بزانت ءِ تہ ءَ"
 }

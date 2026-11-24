@@ -649,4 +649,13 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get colorStyleSettingTitle => 'سبک رنگ (Color Style)';
+
+  @override
+  String get searchScopeContainsHeadword => 'در سرواژه';
+
+  @override
+  String get searchScopeStartsWith => 'شروع با';
+
+  @override
+  String get searchScopeInDefinitions => 'در معنی‌ها';
 }

@@ -1255,6 +1255,24 @@ abstract class AppLocalizations {
   /// In bal, this message translates to:
   /// **'رنگ ءِ انداز (Color Style)'**
   String get colorStyleSettingTitle;
+
+  /// No description provided for @searchScopeContainsHeadword.
+  ///
+  /// In bal, this message translates to:
+  /// **'گال ءِ تہ ءَ'**
+  String get searchScopeContainsHeadword;
+
+  /// No description provided for @searchScopeStartsWith.
+  ///
+  /// In bal, this message translates to:
+  /// **'بندات گوں'**
+  String get searchScopeStartsWith;
+
+  /// No description provided for @searchScopeInDefinitions.
+  ///
+  /// In bal, this message translates to:
+  /// **'بزانت ءِ تہ ءَ'**
+  String get searchScopeInDefinitions;
 }
 
 class _AppLocalizationsDelegate
