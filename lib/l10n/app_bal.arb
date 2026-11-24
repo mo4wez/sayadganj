@@ -41,6 +41,13 @@
   "languagePersian": "فارسی",
   "offlineBadge": "۱۰۰٪ آفلاین",
   "versionLabel": "ورژن {version} • ۱۰۰٪ آفلاین",
+  "@versionLabel": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "appearanceSectionTitle": "زاهری رنگ ءُ دروشم",
   "themeModeSystem": "سیستم",
   "themeModeLight": "روچ",

@@ -74,7 +74,7 @@ class AppLocalizationsBal extends AppLocalizations {
   String get offlineBadge => '۱۰۰٪ آفلاین';
 
   @override
-  String versionLabel(Object version) {
+  String versionLabel(String version) {
     return 'ورژن $version • ۱۰۰٪ آفلاین';
   }
 

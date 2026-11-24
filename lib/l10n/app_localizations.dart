@@ -216,7 +216,7 @@ abstract class AppLocalizations {
   ///
   /// In bal, this message translates to:
   /// **'ورژن {version} • ۱۰۰٪ آفلاین'**
-  String versionLabel(Object version);
+  String versionLabel(String version);
 
   /// No description provided for @appearanceSectionTitle.
   ///
