@@ -144,19 +144,23 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                   primary: false,
                   floating: true,
                   snap: true,
+                  toolbarHeight: 52,
+                  titleSpacing: 16,
                   elevation: 0,
                   scrolledUnderElevation: 0,
                   backgroundColor: theme.scaffoldBackgroundColor,
-                  title: AnimatedBrandHeader(
-                    title: l10n.appTitle,
-                    description: l10n.appDescription,
-                    onTap: () {
-                      if (hasSearchQuery || hasLetterFilter) {
-                        _controller.clear();
-                        ref.read(searchQueryProvider.notifier).clear();
-                        ref.read(selectedLetterProvider.notifier).clear();
-                      }
-                    },
+                  title: FittedBox(
+                    child: AnimatedBrandHeader(
+                      title: l10n.appTitle,
+                      description: l10n.appDescription,
+                      onTap: () {
+                        if (hasSearchQuery || hasLetterFilter) {
+                          _controller.clear();
+                          ref.read(searchQueryProvider.notifier).clear();
+                          ref.read(selectedLetterProvider.notifier).clear();
+                        }
+                      },
+                    ),
                   ),
                 ),
                 SliverOverlapAbsorber(
@@ -166,15 +170,18 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                   sliver: PinnedHeaderSliver(
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: theme.scaffoldBackgroundColor,
-                        border: innerBoxIsScrolled
-                            ? Border(
-                                bottom: BorderSide(
-                                  color: colorScheme.outlineVariant,
-                                  width: 1,
-                                ),
-                              )
-                            : null,
+                        gradient: LinearGradient(
+                          begin: AlignmentGeometry.topCenter,
+                          end: AlignmentGeometry.bottomCenter,
+                          colors: [
+                            theme.scaffoldBackgroundColor,
+                            theme.scaffoldBackgroundColor,
+                            theme.scaffoldBackgroundColor.withValues(
+                              alpha: 0.0,
+                            ),
+                          ],
+                          stops: const [0.0, 0.88, 1.0],
+                        ),
                       ),
                       child: TapRegion(
                         onTapOutside: (_) {
@@ -186,62 +193,96 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+                              padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
                               child: Row(
                                 children: [
                                   Expanded(
-                                    child: TextField(
-                                      controller: _controller,
-                                      focusNode: _searchFocusNode,
-                                      textInputAction: TextInputAction.search,
-                                      decoration: InputDecoration(
-                                        hintText: l10n.searchHint,
-                                        prefixIcon: const Icon(
-                                          LucideIcons.search,
-                                          size: 20,
+                                    child: SizedBox(
+                                      height: 46,
+                                      child: TextField(
+                                        controller: _controller,
+                                        focusNode: _searchFocusNode,
+                                        textInputAction: TextInputAction.search,
+                                        decoration: InputDecoration(
+                                          hintText: l10n.searchHint,
+                                          filled: true,
+                                          fillColor: colorScheme.surface
+                                              .withValues(alpha: 0.75),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                horizontal: 14,
+                                                vertical: 0,
+                                              ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              14,
+                                            ),
+                                            borderSide: BorderSide(
+                                              color: colorScheme.outlineVariant
+                                                  .withValues(alpha: 0.45),
+                                              width: 1,
+                                            ),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              14,
+                                            ),
+                                            borderSide: BorderSide(
+                                              color: colorScheme.primary
+                                                  .withValues(alpha: 0.55),
+                                              width: 1.2,
+                                            ),
+                                          ),
+                                          prefixIcon: const Icon(
+                                            LucideIcons.search,
+                                            size: 18,
+                                          ),
+                                          suffixIcon: query.isNotEmpty
+                                              ? IconButton(
+                                                  icon: const Icon(
+                                                    LucideIcons.x,
+                                                    size: 17,
+                                                  ),
+                                                  onPressed: () {
+                                                    _controller.clear();
+                                                    ref
+                                                        .read(
+                                                          searchQueryProvider
+                                                              .notifier,
+                                                        )
+                                                        .clear();
+                                                  },
+                                                )
+                                              : null,
                                         ),
-                                        suffixIcon: query.isNotEmpty
-                                            ? IconButton(
-                                                icon: const Icon(
-                                                  LucideIcons.x,
-                                                  size: 18,
-                                                ),
-                                                onPressed: () {
-                                                  _controller.clear();
-                                                  ref
-                                                      .read(
-                                                        searchQueryProvider
-                                                            .notifier,
-                                                      )
-                                                      .clear();
-                                                },
-                                              )
-                                            : null,
-                                      ),
-                                      onChanged: (text) {
-                                        if (text.isNotEmpty &&
-                                            hasLetterFilter) {
+                                        onChanged: (text) {
+                                          if (text.isNotEmpty &&
+                                              hasLetterFilter) {
+                                            ref
+                                                .read(
+                                                  selectedLetterProvider
+                                                      .notifier,
+                                                )
+                                                .clear();
+                                          }
                                           ref
                                               .read(
-                                                selectedLetterProvider.notifier,
+                                                searchQueryProvider.notifier,
                                               )
-                                              .clear();
-                                        }
-                                        ref
-                                            .read(searchQueryProvider.notifier)
-                                            .update(text);
-                                      },
-                                      onSubmitted: (text) {
-                                        ref
-                                            .read(
-                                              searchHistoryControllerProvider
-                                                  .notifier,
-                                            )
-                                            .save(text);
-                                      },
+                                              .update(text);
+                                        },
+                                        onSubmitted: (text) {
+                                          ref
+                                              .read(
+                                                searchHistoryControllerProvider
+                                                    .notifier,
+                                              )
+                                              .save(text);
+                                        },
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(width: 10),
+                                  const SizedBox(width: 8),
                                   _AlphabetDialButton(
                                     activeLetter: selectedLetter,
                                     onTap: () =>
@@ -404,14 +445,18 @@ class _AlphabetDialButton extends StatelessWidget {
       message: AppLocalizations.of(context).alphabetDialTooltip,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        width: 52,
-        height: 52,
+        width: 46,
+        height: 46,
         decoration: BoxDecoration(
-          color: isActive ? colorScheme.primary : colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
+          color: isActive
+              ? colorScheme.primary
+              : colorScheme.surface.withValues(alpha: 0.75),
+          borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isActive ? colorScheme.primary : colorScheme.outline,
-            width: isActive ? 1.6 : 1,
+            color: isActive
+                ? colorScheme.primary
+                : colorScheme.outlineVariant.withValues(alpha: 0.45),
+            width: isActive ? 1.4 : 1,
           ),
         ),
         child: Material(
