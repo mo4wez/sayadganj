@@ -110,6 +110,12 @@ abstract class AppLocalizations {
   /// **'سیدگنج — بلوچی بزانت‌بلد'**
   String get appSubtitle;
 
+  /// No description provided for @appDescription.
+  ///
+  /// In bal, this message translates to:
+  /// **'بلوچی زبان ءِ اَولی لبز بلد'**
+  String get appDescription;
+
   /// No description provided for @searchHint.
   ///
   /// In bal, this message translates to:

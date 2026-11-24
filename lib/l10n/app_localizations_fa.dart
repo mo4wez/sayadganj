@@ -16,6 +16,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get appSubtitle => 'سیدگنج — فرهنگ واژگان بلوچی';
 
   @override
+  String get appDescription => 'اولین فرهنگ واژگان زبان بلوچی';
+
+  @override
   String get searchHint => 'جستجوی واژه...';
 
   @override

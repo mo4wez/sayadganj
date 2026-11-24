@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:sayadganj/features/dictionary/presentation/widgets/animated_brand_header.dart';
 
 import '../providers/dictionary_providers.dart';
 import '../providers/paginated_words_provider.dart';
@@ -146,23 +147,16 @@ class _DictionaryScreenState extends ConsumerState<DictionaryScreen>
                   elevation: 0,
                   scrolledUnderElevation: 0,
                   backgroundColor: theme.scaffoldBackgroundColor,
-                  title: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: colorScheme.secondary,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Icon(
-                          LucideIcons.bookOpenText,
-                          size: 20,
-                          color: colorScheme.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(l10n.appTitle),
-                    ],
+                  title: AnimatedBrandHeader(
+                    title: l10n.appTitle,
+                    description: l10n.appDescription,
+                    onTap: () {
+                      if (hasSearchQuery || hasLetterFilter) {
+                        _controller.clear();
+                        ref.read(searchQueryProvider.notifier).clear();
+                        ref.read(selectedLetterProvider.notifier).clear();
+                      }
+                    },
                   ),
                 ),
                 SliverOverlapAbsorber(
