@@ -1073,7 +1073,7 @@ abstract class AppLocalizations {
   /// No description provided for @laterAction.
   ///
   /// In bal, this message translates to:
-  /// **'پدا'**
+  /// **'رندا'**
   String get laterAction;
 
   /// No description provided for @downloadAction.

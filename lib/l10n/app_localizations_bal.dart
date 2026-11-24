@@ -550,7 +550,7 @@ class AppLocalizationsBal extends AppLocalizations {
   String get whatsNewLabel => 'نوکیں بدلی:';
 
   @override
-  String get laterAction => 'پدا';
+  String get laterAction => 'رندا';
 
   @override
   String get downloadAction => 'اِیرگیج کن';

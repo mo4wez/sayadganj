@@ -9,19 +9,25 @@
   "streakDays": "{count} روچ رِد",
   "@streakDays": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "todayCount": "مرچی: {count}",
   "@todayCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "totalViewedCount": "کُل دیستگیں: {count}",
   "@totalViewedCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "recentlyViewedWords": "نوکیں دیستگیں گال",
@@ -58,7 +64,9 @@
   "updateAvailableSubtitle": "نوکیں ورژن v{version} دست کپت!",
   "@updateAvailableSubtitle": {
     "placeholders": {
-      "version": { "type": "String" }
+      "version": {
+        "type": "String"
+      }
     }
   },
   "checkLatestVersionSubtitle": "گڈّی ورژن ءَ چکّاس",
@@ -72,7 +80,9 @@
   "totalWordsCount": "سرجمیں گال: {count}",
   "@totalWordsCount": {
     "placeholders": {
-      "count": { "type": "String" }
+      "count": {
+        "type": "String"
+      }
     }
   },
   "takbandTitle": "تاکبند کندیل (TakbandQandeel)",
@@ -99,7 +109,9 @@
   "wordsStartingWithLetter": "آب «{letter}» ءِ گال",
   "@wordsStartingWithLetter": {
     "placeholders": {
-      "letter": { "type": "String" }
+      "letter": {
+        "type": "String"
+      }
     }
   },
   "changeAction": "بدل کن",
@@ -125,7 +137,9 @@
   "quizPointsCount": "{score} دَرَجَگ",
   "@quizPointsCount": {
     "placeholders": {
-      "score": { "type": "int" }
+      "score": {
+        "type": "int"
+      }
     }
   },
   "dailyQuizTitle": "وتی بلوچی گالانی زانت ءَ بہ چکّاس",
@@ -134,14 +148,20 @@
   "errorOccurredWithDetail": "ردی یے بوت: {error}",
   "@errorOccurredWithDetail": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "categorySubtitleWithCount": "{subtitle} ({count} گال)",
   "@categorySubtitleWithCount": {
     "placeholders": {
-      "subtitle": { "type": "String" },
-      "count": { "type": "int" }
+      "subtitle": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
     }
   },
   "wordDetailTitle": "گال ءِ بزانت",
@@ -157,7 +177,9 @@
   "plainSpellingLabel": "سادگیں نبشتانک: {word}",
   "@plainSpellingLabel": {
     "placeholders": {
-      "word": { "type": "String" }
+      "word": {
+        "type": "String"
+      }
     }
   },
   "noQuizWordsFound": "پہ چکّاس ءَ گال دست نہ کپت",
@@ -176,7 +198,9 @@
   "specificWordNotFound": "گال «{word}» دست نہ کپت",
   "@specificWordNotFound": {
     "placeholders": {
-      "word": { "type": "String" }
+      "word": {
+        "type": "String"
+      }
     }
   },
   "openFullPageAction": "سرجمیں تاکدیم ءَ پچ کن",
@@ -184,27 +208,35 @@
   "seeWordLabel": "بچار: {word}",
   "@seeWordLabel": {
     "placeholders": {
-      "word": { "type": "String" }
+      "word": {
+        "type": "String"
+      }
     }
   },
   "errorOccurredTitle": "ردی یے بوت",
   "allWordsShownCount": "سرجمیں {count} گال پیش دارگ بوت انت",
   "@allWordsShownCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "alphabetDialTitle": "آب ءُ ب ءِ چَهر",
   "wordCountShort": "{count} گال",
   "@wordCountShort": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "viewWordsForLetterAction": "آب «{letter}» ءِ گالاں بچار",
   "@viewWordsForLetterAction": {
     "placeholders": {
-      "letter": { "type": "String" }
+      "letter": {
+        "type": "String"
+      }
     }
   },
   "allNotationsTitle": "گْونڈگال ءُ ٹِکّانی سرجمیں لڑ",
@@ -217,26 +249,34 @@
   "letterSequenceLabel": "آبانی رِد: {spelling}",
   "@letterSequenceLabel": {
     "placeholders": {
-      "spelling": { "type": "String" }
+      "spelling": {
+        "type": "String"
+      }
     }
   },
   "coreMeaningLabel": "بُنی بزانت",
   "compoundsAndSubEntriesCount": "گالرد ءُ بن‌تہر ({count})",
   "@compoundsAndSubEntriesCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "allItemsCount": "کل ({count})",
   "@allItemsCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "wordRemovedFromBookmarksSnack": "«{word}» چہ نشاناں دور کنگ بوت",
   "@wordRemovedFromBookmarksSnack": {
     "placeholders": {
-      "word": { "type": "String" }
+      "word": {
+        "type": "String"
+      }
     }
   },
   "undoAction": "پدا بیار",
@@ -258,22 +298,28 @@
   "newVersionAvailableTitle": "نوکیں ورژن دست کپت (v{version})",
   "@newVersionAvailableTitle": {
     "placeholders": {
-      "version": { "type": "String" }
+      "version": {
+        "type": "String"
+      }
     }
   },
   "currentVersionLabel": "تئی انّوگیں ورژن: v{version}",
   "@currentVersionLabel": {
     "placeholders": {
-      "version": { "type": "String" }
+      "version": {
+        "type": "String"
+      }
     }
   },
   "whatsNewLabel": "نوکیں بدلی:",
-  "laterAction": "پدا",
+  "laterAction": "رندا",
   "downloadAction": "اِیرگیج کن",
   "appNewVersionBannerTitle": "سیدگنج ءِ نوکیں ورژن (v{version})",
   "@appNewVersionBannerTitle": {
     "placeholders": {
-      "version": { "type": "String" }
+      "version": {
+        "type": "String"
+      }
     }
   },
   "tapToDownloadSubtitle": "اِیرگیج کنگ ءِ ھاترا ٹپّ بہ جن",
