@@ -191,7 +191,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get ourChannelsAndPodcast => 'کانال‌ها و پادکست ما';
 
   @override
-  String get madeWithLove => 'ساخته‌شده با عشق';
+  String get madeWithLove => 'ساخته‌شده با';
 
   @override
   String get takbandName => 'تاکبند کندیل';
