@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    tags:
-      - "v*"
   workflow_dispatch:
 
 permissions:
@@ -19,6 +17,24 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from pubspec.yaml
+        id: version
+        run: |
+          RAW_VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}' | tr -d '\r')
+          SEMVER="${RAW_VERSION%%+*}"
+          TAG="v${SEMVER}"
+          echo "raw=$RAW_VERSION" >> "$GITHUB_OUTPUT"
+          echo "semver=$SEMVER" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "is_new_version=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_new_version=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Set up Java
         uses: actions/setup-java@v6
@@ -55,31 +71,27 @@ jobs:
 
       - name: Rename release APKs
         run: |
-          REF="${GITHUB_REF_NAME}"
+          TAG="${{ steps.version.outputs.tag }}"
           DIR="build/app/outputs/flutter-apk"
-          mv "$DIR/app-arm64-v8a-release.apk" "$DIR/SayadGanj-${REF}-arm64-v8a.apk"
-          mv "$DIR/app-armeabi-v7a-release.apk" "$DIR/SayadGanj-${REF}-armeabi-v7a.apk"
-          mv "$DIR/app-x86_64-release.apk" "$DIR/SayadGanj-${REF}-x86_64.apk"
+          mv "$DIR/app-arm64-v8a-release.apk" "$DIR/SayadGanj-${TAG}-arm64-v8a.apk"
+          mv "$DIR/app-armeabi-v7a-release.apk" "$DIR/SayadGanj-${TAG}-armeabi-v7a.apk"
+          mv "$DIR/app-x86_64-release.apk" "$DIR/SayadGanj-${TAG}-x86_64.apk"
 
       - name: Upload APKs as Workflow Artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: sayadganj-release-apks
+          name: sayadganj-release-apks-${{ steps.version.outputs.tag }}
           path: build/app/outputs/flutter-apk/SayadGanj-*.apk
           retention-days: 30
 
-      - name: Publish GitHub Release (on version tags)
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Create Tag & Publish GitHub Release
+        if: steps.version.outputs.is_new_version == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
-            gh release upload "${GITHUB_REF_NAME}" \
-              build/app/outputs/flutter-apk/SayadGanj-*.apk \
-              --clobber
-          else
-            gh release create "${GITHUB_REF_NAME}" \
-              build/app/outputs/flutter-apk/SayadGanj-*.apk \
-              --title "SayadGanj ${GITHUB_REF_NAME}" \
-              --generate-notes
-          fi
+          TAG="${{ steps.version.outputs.tag }}"
+          gh release create "$TAG" \
+            build/app/outputs/flutter-apk/SayadGanj-*.apk \
+            --target "${{ github.sha }}" \
+            --title "SayadGanj $TAG" \
+            --generate-notes
